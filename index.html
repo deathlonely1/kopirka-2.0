@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Копирка 2.0</title>
+<meta name="theme-color" content="#eef1f7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ======================= ТЕМЫ ======================= */
+:root{
+  color-scheme: light;
+  --bg:#eef1f7;
+  --text:#0a0a0f;
+  --text-2:rgba(60,60,67,.62);
+  --text-3:rgba(60,60,67,.36);
+  --card:rgba(255,255,255,.60);
+  --card-border:rgba(255,255,255,.80);
+  --field:rgba(120,120,128,.12);
+  --field-hover:rgba(120,120,128,.18);
+  --dash:rgba(60,60,67,.18);
+  --accent:#0a84ff;
+  --accent2:#5e5ce6;
+  --danger:#ff3b30;
+  --ring:rgba(10,132,255,.22);
+  --shadow:0 8px 28px rgba(20,25,60,.09), 0 1px 3px rgba(20,25,60,.05);
+  --toast:#1c1c1e;
+  --brand-a:#0a84ff;
+  --brand-b:#5e5ce6;
+  --blob1:#8ab4ff;
+  --blob2:#c9a7ff;
+  --blob3:#8ee7ff;
+  --blob-op:.55;
+}
+[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#000000;
+  --text:#ffffff;
+  --text-2:rgba(235,235,245,.62);
+  --text-3:rgba(235,235,245,.32);
+  --card:rgba(28,28,32,.62);
+  --card-border:rgba(255,255,255,.09);
+  --field:rgba(120,120,128,.24);
+  --field-hover:rgba(120,120,128,.32);
+  --dash:rgba(235,235,245,.16);
+  --ring:rgba(10,132,255,.38);
+  --shadow:0 10px 30px rgba(0,0,0,.55);
+  --toast:#2c2c2e;
+  --brand-a:#4fa8ff;
+  --brand-b:#a58bff;
+  --blob1:#0b3f8f;
+  --blob2:#4a1f8f;
+  --blob3:#0a5a6b;
+  --blob-op:.60;
+}
+
+/* ======================= БАЗА ======================= */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:'Manrope',-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  transition:background .45s ease, color .3s ease;
+}
+
+/* ======================= ФОНОВЫЕ ПЯТНА ======================= */
+.bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.blob{
+  position:absolute;border-radius:50%;filter:blur(90px);
+  opacity:var(--blob-op);
+  transition:background .5s ease, opacity .5s ease;
+}
+.blob-1{width:520px;height:520px;background:var(--blob1);top:-190px;left:-140px}
+.blob-2{width:470px;height:470px;background:var(--blob2);bottom:-180px;right:-150px}
+.blob-3{width:400px;height:400px;background:var(--blob3);top:42%;left:52%}
+
+/* ======================= ШАПКА ======================= */
+.topbar{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 20px;
+  background:linear-gradient(to bottom, var(--bg) 20%, transparent);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{
+  flex:0 0 auto;
+  filter:drop-shadow(0 6px 14px rgba(90,110,255,.32));
+  border-radius:11px;
+}
+.brand-name{
+  font-family:'Unbounded','Manrope',sans-serif;
+  font-weight:600;
+  font-size:18px;
+  letter-spacing:-.02em;
+  line-height:1;
+  white-space:nowrap;
+  background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.brand-name .ver{
+  font-size:.78em;
+  opacity:.9;
+}
+
+.theme-toggle{
+  flex:0 0 auto;
+  width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center;
+  border:1px solid var(--card-border);
+  background:var(--card);
+  color:var(--text);
+  cursor:pointer;
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow);
+  transition:transform .18s ease, background .3s ease;
+}
+.theme-toggle:active{transform:scale(.9)}
+.theme-toggle svg{transition:transform .45s cubic-bezier(.4,0,.2,1), opacity .3s}
+[data-theme="light"] .icon-moon{display:none}
+[data-theme="dark"]  .icon-sun{display:none}
+
+/* ======================= КОНТЕЙНЕР ======================= */
+main{
+  flex:1 0 auto;
+  width:100%;
+  max-width:640px;
+  margin:0 auto;
+  padding:6px 20px 26px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+/* ======================= КАРТОЧКА ВВОДА ======================= */
+.composer{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+  border-radius:26px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:var(--shadow);
+}
+
+.field{
+  width:100%;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:500;
+  color:var(--text);
+  background:var(--field);
+  border:none;
+  border-radius:16px;
+  padding:13px 15px;
+  outline:none;
+  transition:box-shadow .25s ease, background .25s ease;
+}
+.field::placeholder{color:var(--text-3);font-weight:400}
+.field:focus{box-shadow:0 0 0 3px var(--ring)}
+
+textarea.field{
+  resize:none;
+  min-height:52px;
+  max-height:260px;
+  line-height:1.45;
+  overflow-y:hidden;
+  display:block;
+}
+
+.row{display:flex;gap:10px;align-items:stretch}
+.row .field{flex:1 1 auto;min-width:0}
+
+.confirm{
+  flex:0 0 52px;
+  width:52px;
+  border:none;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  box-shadow:0 6px 18px rgba(10,132,255,.35);
+  transition:transform .15s ease, opacity .2s ease, box-shadow .2s ease;
+}
+.confirm:active{transform:scale(.93)}
+.confirm:disabled{opacity:.38;box-shadow:none;cursor:default}
+.confirm:disabled:active{transform:none}
+
+/* ======================= СПИСОК КНОПОК ======================= */
+.list{display:flex;flex-direction:column;gap:10px}
+
+.item{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:6px;
+  border-radius:20px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:var(--shadow);
+  animation:pop .34s cubic-bezier(.2,.9,.3,1.15);
+}
+@keyframes pop{
+  from{opacity:0;transform:translateY(10px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+.item.removing{animation:disappear .22s ease forwards}
+@keyframes disappear{
+  to{opacity:0;transform:scale(.94);margin-bottom:-10px}
+}
+
+.item-main{
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  text-align:left;
+  padding:12px 14px;
+  border:none;
+  border-radius:14px;
+  background:transparent;
+  color:var(--text);
+  font-family:inherit;
+  cursor:pointer;
+  transition:background .18s ease;
+}
+.item-main:hover{background:var(--field)}
+.item-main:active{background:var(--field-hover)}
+.item-name{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.item-text{
+  font-size:12.5px;
+  font-weight:500;
+  color:var(--text-2);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.item.copied{animation:pulse .42s ease}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}
+  100%{box-shadow:0 0 0 14px rgba(48,209,88,0)}
+}
+
+.item-del{
+  flex:0 0 34px;
+  width:34px;height:34px;
+  margin-right:4px;
+  border:none;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  color:var(--text-3);
+  cursor:pointer;
+  transition:background .2s ease, color .2s ease, transform .15s ease;
+}
+.item-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.item-del:active{transform:scale(.88)}
+
+/* ======================= ПУСТОЕ СОСТОЯНИЕ ======================= */
+.empty{
+  padding:44px 22px;
+  text-align:center;
+  font-size:14px;
+  font-weight:500;
+  line-height:1.5;
+  color:var(--text-3);
+  border:1.5px dashed var(--dash);
+  border-radius:24px;
+}
+
+/* ======================= ТОСТ ======================= */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:calc(28px + env(safe-area-inset-bottom));
+  transform:translate(-50%,16px);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 20px;
+  border-radius:999px;
+  background:var(--toast);
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:-.01em;
+  opacity:0;
+  pointer-events:none;
+  z-index:100;
+  box-shadow:0 12px 34px rgba(0,0,0,.28);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  transition:opacity .26s ease, transform .26s cubic-bezier(.2,.9,.3,1.2);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast svg{flex:0 0 auto;color:#30d158}
+
+/* ======================= ПОДВАЛ ======================= */
+footer{
+  flex:0 0 auto;
+  width:100%;
+  max-width:640px;
+  margin:0 auto;
+  padding:0 20px calc(22px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:1px;
+  color:var(--text-3);
+  font-size:11.5px;
+  font-weight:400;
+  letter-spacing:.005em;
+  line-height:1.55;
+  user-select:none;
+}
+
+/* ======================= АНИМАЦИЯ ОШИБКИ ======================= */
+.shake{animation:shake .45s ease}
+@keyframes shake{
+  10%,90%{transform:translateX(-1px)}
+  20%,80%{transform:translateX(2px)}
+  30%,50%,70%{transform:translateX(-4px)}
+  40%,60%{transform:translateX(4px)}
+}
+
+@media (max-width:420px){
+  .brand-name{font-size:16px}
+  main{padding:6px 14px 20px}
+  footer{padding:0 14px calc(18px + env(safe-area-inset-bottom))}
+  .topbar{padding:12px 14px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important;transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="logo" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+      <defs>
+        <linearGradient id="lgBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#3fa9ff"/>
+          <stop offset="1" stop-color="#7a5cff"/>
+        </linearGradient>
+        <linearGradient id="lgSheet" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffffff" stop-opacity=".98"/>
+          <stop offset="1" stop-color="#ffffff" stop-opacity=".78"/>
+        </linearGradient>
+      </defs>
+      <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
+      <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
+      <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none"
+            stroke="url(#lgSheet)" stroke-width="2"/>
+      <rect x="9" y="13" width="13" height="13" rx="4" fill="url(#lgSheet)"/>
+    </svg>
+    <span class="brand-name">Копирка&nbsp;<span class="ver">2.0</span></span>
+  </div>
+
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему">
+    <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4.1"/>
+      <path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/>
+    </svg>
+    <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20.6 14.3A8.6 8.6 0 0 1 9.7 3.4a8.6 8.6 0 1 0 10.9 10.9z"/>
+    </svg>
+  </button>
+</header>
+
+<main>
+  <section class="composer">
+    <textarea id="textInput" class="field" rows="1"
+              placeholder="Текст, который будет копироваться…"
+              aria-label="Текст для копирования"></textarea>
+
+    <div class="row">
+      <input id="nameInput" class="field" type="text"
+             placeholder="Название кнопки"
+             aria-label="Название кнопки"
+             autocomplete="off" spellcheck="false">
+      <button id="addBtn" class="confirm" type="button" aria-label="Добавить кнопку" disabled>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.5 12.6l5 5L19.5 6.6"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <section class="list" id="list"></section>
+  <div class="empty" id="empty">Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.</div>
+</main>
+
+<footer>
+  <span>Идея взята из разработки Ивана Першина</span>
+  <span>2026 Собственная доработка deathlonely</span>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4.5 12.6l5 5L19.5 6.6"/>
+  </svg>
+  <span id="toastText">Скопировано</span>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ======================= КЛЮЧИ ХРАНИЛИЩА ======================= */
+  var ITEMS_KEY = 'kopirka2.items';
+  var THEME_KEY = 'kopirka2.theme';
+
+  /* ======================= ЭЛЕМЕНТЫ ======================= */
+  var listEl      = document.getElementById('list');
+  var emptyEl     = document.getElementById('empty');
+  var textEl      = document.getElementById('textInput');
+  var nameEl      = document.getElementById('nameInput');
+  var addBtn      = document.getElementById('addBtn');
+  var themeToggle = document.getElementById('themeToggle');
+  var toastEl     = document.getElementById('toast');
+  var toastText   = document.getElementById('toastText');
+  var metaTheme   = document.querySelector('meta[name="theme-color"]');
+
+  /* ======================= СОСТОЯНИЕ ======================= */
+  var items = [];
+  try {
+    var raw = JSON.parse(localStorage.getItem(ITEMS_KEY));
+    if (Array.isArray(raw)) items = raw;
+  } catch (e) { items = []; }
+
+  function save() {
+    try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch (e) {}
+  }
+
+  /* ======================= ТЕМА ======================= */
+  function applyTheme(theme, persist) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'dark' ? '#000000' : '#eef1f7');
+    }
+    if (persist) {
+      try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+    }
+  }
+
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
+  if (savedTheme !== 'dark' && savedTheme !== 'light') {
+    savedTheme = (window.matchMedia &&
+                  window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  }
+  applyTheme(savedTheme, false);
+
+  themeToggle.addEventListener('click', function () {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next, true);
+  });
+
+  /* ======================= ТОСТ ======================= */
+  var toastTimer = null;
+  function showToast(message) {
+    toastText.textContent = message;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('show');
+    }, 1500);
+  }
+
+  /* ======================= АВТОРАСШИРЕНИЕ TEXTAREA ======================= */
+  var MAX_H = 260;
+  function autoGrow() {
+    textEl.style.height = 'auto';
+    var h = textEl.scrollHeight;
+    textEl.style.height = Math.min(h, MAX_H) + 'px';
+    textEl.style.overflowY = h > MAX_H ? 'auto' : 'hidden';
+  }
+
+  /* ======================= ВАЛИДАЦИЯ КНОПКИ ✓ ======================= */
+  function updateAddState() {
+    addBtn.disabled = textEl.value.trim().length === 0;
+  }
+  textEl.addEventListener('input', function () {
+    autoGrow();
+    updateAddState();
+  });
+
+  /* ======================= КОПИРОВАНИЕ ======================= */
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function copyText(text, itemEl) {
+    function success() {
+      showToast('Скопировано');
+      if (itemEl) {
+        itemEl.classList.remove('copied');
+        void itemEl.offsetWidth;
+        itemEl.classList.add('copied');
+        setTimeout(function () { itemEl.classList.remove('copied'); }, 460);
+      }
+    }
+    function failure() { showToast('Не удалось скопировать'); }
+
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(success).catch(function () {
+        if (legacyCopy(text)) success(); else failure();
+      });
+    } else {
+      if (legacyCopy(text)) success(); else failure();
+    }
+  }
+
+  /* ======================= РЕНДЕР СПИСКА ======================= */
+  var X_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+              'stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+  function preview(text) {
+    return text.replace(/\s+/g, ' ').trim();
+  }
+
+  function render() {
+    listEl.innerHTML = '';
+
+    if (items.length === 0) {
+      emptyEl.style.display = 'block';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'item';
+      row.dataset.id = it.id;
+
+      var main = document.createElement('button');
+      main.type = 'button';
+      main.className = 'item-main';
+      main.title = 'Нажмите, чтобы скопировать';
+
+      var nameSpan = document.createElement('span');
+      nameSpan.className = 'item-name';
+      nameSpan.textContent = it.name;
+
+      var textSpan = document.createElement('span');
+      textSpan.className = 'item-text';
+      textSpan.textContent = preview(it.text);
+
+      main.appendChild(nameSpan);
+      main.appendChild(textSpan);
+      main.addEventListener('click', function () { copyText(it.text, row); });
+
+      var del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'item-del';
+      del.setAttribute('aria-label', 'Удалить «' + it.name + '»');
+      del.innerHTML = X_SVG;
+      del.addEventListener('click', function (e) {
+        e.stopPropagation();
+        removeItem(it.id, row);
+      });
+
+      row.appendChild(main);
+      row.appendChild(del);
+      listEl.appendChild(row);
+    });
+  }
+
+  /* ======================= ДОБАВЛЕНИЕ ======================= */
+  function addItem() {
+    var text = textEl.value.trim();
+    if (!text) {
+      textEl.classList.remove('shake');
+      void textEl.offsetWidth;
+      textEl.classList.add('shake');
+      textEl.focus();
+      return;
+    }
+
+    var name = nameEl.value.trim() || 'Копировать';
+
+    items.unshift({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      name: name,
+      text: text
+    });
+
+    save();
+    render();
+
+    textEl.value = '';
+    nameEl.value = '';
+    autoGrow();
+    updateAddState();
+    textEl.focus();
+    showToast('Кнопка добавлена');
+  }
+
+  addBtn.addEventListener('click', addItem);
+
+  nameEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addItem();
+    }
+  });
+
+  /* ======================= УДАЛЕНИЕ ======================= */
+  function removeItem(id, rowEl) {
+    rowEl.classList.add('removing');
+    setTimeout(function () {
+      items = items.filter(function (i) { return i.id !== id; });
+      save();
+      render();
+      showToast('Удалено');
+    }, 200);
+  }
+
+  /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
+  autoGrow();
+  updateAddState();
+  render();
+})();
+</script>
+</body>
+</html>
