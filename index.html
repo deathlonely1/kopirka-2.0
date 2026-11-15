@@ -166,6 +166,8 @@ body.modal-open{overflow:hidden}
 }
 .brand-name .ver{font-size:.78em;opacity:.9}
 
+.topbar-actions{display:flex;align-items:center;gap:8px}
+
 .theme-toggle{
   flex:0 0 auto;
   width:42px;height:42px;border-radius:50%;
@@ -178,6 +180,8 @@ body.modal-open{overflow:hidden}
   -webkit-backdrop-filter:blur(24px) saturate(180%);
   box-shadow:var(--shadow);
   transition:transform .18s ease, background .3s ease;
+  font-size:20px;
+  line-height:1;
 }
 .theme-toggle:active{transform:scale(.9)}
 .theme-toggle svg{transition:transform .45s cubic-bezier(.4,0,.2,1), opacity .3s}
@@ -654,6 +658,186 @@ select.field option{background:var(--bg);color:var(--text)}
   font-weight:500;
 }
 
+/* ======================= ИГРА-КЛИКЕР ======================= */
+.game-modal{
+  max-width:420px;
+  max-height:88vh;
+}
+.game-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.game-head h3{margin:0}
+.game-close{
+  width:32px;height:32px;
+  border:none;border-radius:50%;
+  background:var(--field);
+  color:var(--text);
+  cursor:pointer;
+  display:grid;place-items:center;
+  font-size:15px;
+  font-family:inherit;
+  transition:background .2s ease, transform .15s ease;
+}
+.game-close:hover{background:var(--field-hover)}
+.game-close:active{transform:scale(.9)}
+
+.game-score-display{
+  text-align:center;
+  padding:4px 0 14px;
+}
+.game-score{
+  font-family:'Unbounded','Manrope',sans-serif;
+  font-weight:600;
+  font-size:36px;
+  background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  line-height:1;
+}
+.game-rate{
+  font-size:12px;
+  color:var(--text-2);
+  font-weight:500;
+  margin-top:6px;
+}
+
+.game-clicker{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  width:100%;
+  padding:26px 0;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:inherit;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(10,132,255,.35);
+  transition:transform .1s ease;
+  overflow:hidden;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+}
+.game-clicker:active{transform:scale(.97)}
+.game-clicker-emoji{font-size:44px;line-height:1}
+.game-clicker-label{font-size:13px;font-weight:700;opacity:.92}
+
+.game-plus{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:18px;
+  font-weight:800;
+  color:#fff;
+  pointer-events:none;
+  text-shadow:0 2px 10px rgba(0,0,0,.35);
+  animation:floatUp .8s ease-out forwards;
+}
+@keyframes floatUp{
+  from{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  to{opacity:0;transform:translate(-50%,-190%) scale(1.35)}
+}
+
+.game-stats{
+  display:flex;
+  justify-content:space-around;
+  gap:8px;
+  font-size:12px;
+  color:var(--text-2);
+  font-weight:500;
+  margin:12px 0;
+  padding:10px 8px;
+  background:var(--field);
+  border-radius:12px;
+  text-align:center;
+}
+.game-stats > div{flex:1 1 0;min-width:0}
+.game-stats strong{
+  display:block;
+  color:var(--text);
+  font-weight:700;
+  font-size:14px;
+  margin-top:2px;
+}
+
+.game-section-label{
+  font-size:11.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  color:var(--text-2);
+  margin:4px 4px 8px;
+}
+
+.game-upgrades{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-bottom:14px;
+}
+.game-upgrade{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  background:var(--field);
+  border:none;
+  cursor:pointer;
+  color:var(--text);
+  font-family:inherit;
+  text-align:left;
+  transition:background .2s ease, opacity .2s ease, transform .1s ease;
+}
+.game-upgrade:hover:not(:disabled){background:var(--field-hover)}
+.game-upgrade:active:not(:disabled){transform:scale(.98)}
+.game-upgrade:disabled{opacity:.55;cursor:default}
+.game-upgrade-icon{font-size:22px;flex:0 0 auto;line-height:1}
+.game-upgrade-body{flex:1 1 auto;min-width:0}
+.game-upgrade-name{
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.game-upgrade-name .game-upgrade-level{
+  font-size:10.5px;
+  font-weight:600;
+  color:var(--text-3);
+  background:var(--card);
+  padding:1px 6px;
+  border-radius:999px;
+  margin-left:4px;
+}
+.game-upgrade-desc{
+  font-size:11px;
+  color:var(--text-2);
+  font-weight:500;
+  margin-top:1px;
+}
+.game-upgrade-cost{
+  flex:0 0 auto;
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent);
+}
+.game-upgrade:disabled .game-upgrade-cost{color:var(--text-3)}
+
+.game-footer{
+  display:flex;
+  justify-content:center;
+  margin-top:4px;
+}
+.game-footer .btn-secondary{padding:8px 16px;font-size:12.5px}
+
 /* ======================= ТОСТ ======================= */
 .toast{
   position:fixed;
@@ -715,12 +899,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   .fab{padding:10px 14px;font-size:13px;gap:6px}
   footer{font-size:10.5px;padding:6px 12px calc(8px + env(safe-area-inset-bottom));max-width:230px}
+  .game-score{font-size:30px}
+  .game-clicker-emoji{font-size:38px}
 }
 @media (max-width:420px){
   .brand-name{font-size:16px}
   .topbar{padding:12px 14px}
   footer{font-size:10px;max-width:200px}
   .fab{font-size:12.5px}
+  .theme-toggle{width:38px;height:38px;font-size:18px}
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
@@ -778,17 +965,20 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     <span class="brand-name">Копирка&nbsp;<span class="ver">2.0</span></span>
   </div>
 
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему">
-    <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <circle cx="12" cy="12" r="4.1"/>
-      <path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/>
-    </svg>
-    <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none"
-         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M20.6 14.3A8.6 8.6 0 0 1 9.7 3.4a8.6 8.6 0 1 0 10.9 10.9z"/>
-    </svg>
-  </button>
+  <div class="topbar-actions">
+    <button class="theme-toggle" id="gameBtn" type="button" aria-label="Игра-кликер" title="Клик-Копирка">🎮</button>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему">
+      <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.1"/>
+        <path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M18.7 5.3l-1.5 1.5M6.8 17.2l-1.5 1.5"/>
+      </svg>
+      <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.6 14.3A8.6 8.6 0 0 1 9.7 3.4a8.6 8.6 0 1 0 10.9 10.9z"/>
+      </svg>
+    </button>
+  </div>
 </header>
 
 <!-- ======================= ОСНОВНОЕ ======================= -->
@@ -851,13 +1041,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </section>
 </main>
 
-<!-- ======================= ПОДПИСЬ (низ-лево) ======================= -->
+<!-- ======================= ПОДПИСЬ ======================= -->
 <footer>
   <span>Идея взята из разработки Ивана Першина</span>
   <span>2026 Собственная доработка deathlonely</span>
 </footer>
 
-<!-- ======================= FAB (низ-право) ======================= -->
+<!-- ======================= FAB ======================= -->
 <div class="fab-stack">
   <button class="fab fab-note" id="addNoteFab" type="button">
     <span class="fab-emoji">📝</span>
@@ -905,14 +1095,50 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <h4>Заметки</h4>
       <p>Кнопка «Добавить заметку» в правом нижнем углу открывает окно ввода. Заметки отображаются отдельными карточками ниже списка кнопок. Их можно редактировать (иконка карандаша) и удалять (крестик).</p>
 
+      <h4>Игра «Клик-Копирка»</h4>
+      <p>Кнопка 🎮 в правом верхнем углу открывает мини-игру-кликер. Кликайте по большой карточке, чтобы зарабатывать очки, и покупайте улучшения (сила клика и автокликер). Пассивный доход начисляется даже когда окно закрыто. Прогресс сохраняется.</p>
+
       <h4>Темы</h4>
       <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается.</p>
 
       <h4>Сохранение</h4>
-      <p>Все кнопки, категории и заметки сохраняются в localStorage браузера. Они остаются после закрытия вкладки, но привязаны к этому устройству и браузеру. Очистка данных сайта удалит всё.</p>
+      <p>Все кнопки, категории, заметки и прогресс игры сохраняются в localStorage браузера. Они остаются после закрытия вкладки, но привязаны к этому устройству и браузеру. Очистка данных сайта удалит всё.</p>
     </div>
     <div class="modal-actions">
       <button class="btn-primary" id="infoClose" type="button">Понятно</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= МОДАЛКА: ИГРА ======================= -->
+<div class="modal-backdrop" id="gameModal">
+  <div class="modal game-modal">
+    <div class="game-head">
+      <h3>🎮 Клик-Копирка</h3>
+      <button class="game-close" id="gameClose" type="button" aria-label="Закрыть">✕</button>
+    </div>
+
+    <div class="game-score-display">
+      <div class="game-score" id="gameScore">0</div>
+      <div class="game-rate" id="gameRate">0 в секунду</div>
+    </div>
+
+    <button class="game-clicker" id="gameClicker" type="button">
+      <span class="game-clicker-emoji">📋</span>
+      <span class="game-clicker-label" id="gameClickerLabel">Кликни +1</span>
+    </button>
+
+    <div class="game-stats">
+      <div>Всего кликов<strong id="gameTotalClicks">0</strong></div>
+      <div>За клик<strong id="gamePerClick">1</strong></div>
+      <div>В секунду<strong id="gamePerSecond">0</strong></div>
+    </div>
+
+    <div class="game-section-label">Улучшения</div>
+    <div class="game-upgrades" id="gameUpgrades"></div>
+
+    <div class="game-footer">
+      <button class="btn-secondary" id="gameReset" type="button">Сбросить прогресс</button>
     </div>
   </div>
 </div>
@@ -934,6 +1160,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var ITEMS_KEY = 'kopirka2.items';
   var CATS_KEY  = 'kopirka2.categories';
   var NOTES_KEY = 'kopirka2.notes';
+  var GAME_KEY  = 'kopirka2.game';
   var THEME_KEY = 'kopirka2.theme';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
@@ -948,6 +1175,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var newCatInput   = document.getElementById('newCatInput');
   var newCatConfirm = document.getElementById('newCatConfirm');
   var themeToggle   = document.getElementById('themeToggle');
+  var gameBtn       = document.getElementById('gameBtn');
   var toastEl       = document.getElementById('toast');
   var toastText     = document.getElementById('toastText');
   var metaTheme     = document.querySelector('meta[name="theme-color"]');
@@ -963,10 +1191,35 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var noteSave      = document.getElementById('noteSave');
   var infoModal     = document.getElementById('infoModal');
   var infoClose     = document.getElementById('infoClose');
+  var gameModal     = document.getElementById('gameModal');
+  var gameClose     = document.getElementById('gameClose');
+  var gameScore     = document.getElementById('gameScore');
+  var gameRate      = document.getElementById('gameRate');
+  var gameClicker   = document.getElementById('gameClicker');
+  var gameClickLbl  = document.getElementById('gameClickerLabel');
+  var gameClicksEl  = document.getElementById('gameTotalClicks');
+  var gamePerClickEl= document.getElementById('gamePerClick');
+  var gamePerSecEl  = document.getElementById('gamePerSecond');
+  var gameUpgradesEl= document.getElementById('gameUpgrades');
+  var gameResetBtn  = document.getElementById('gameReset');
 
   /* ======================= ХЕЛПЕРЫ ======================= */
   function genId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+  function formatNum(n) {
+    n = Math.floor(n);
+    if (n < 1000) return String(n);
+    if (n < 1000000) {
+      var k = n / 1000;
+      return (k < 10 ? k.toFixed(1) : Math.floor(k)) + 'K';
+    }
+    if (n < 1000000000) {
+      var m = n / 1000000;
+      return (m < 10 ? m.toFixed(1) : Math.floor(m)) + 'M';
+    }
+    var b = n / 1000000000;
+    return (b < 10 ? b.toFixed(1) : Math.floor(b)) + 'B';
   }
 
   /* ======================= СОСТОЯНИЕ ======================= */
@@ -1440,7 +1693,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       card.dataset.id = note.id;
 
       if (editingNoteId === note.id) {
-        // Режим редактирования
         var ta = document.createElement('textarea');
         ta.className = 'note-edit-input';
         ta.value = note.text;
@@ -1498,7 +1750,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         card.appendChild(ta);
         card.appendChild(actions);
 
-        // Автовысота + фокус после вставки в DOM
         setTimeout(function () {
           ta.style.height = 'auto';
           ta.style.height = ta.scrollHeight + 'px';
@@ -1507,7 +1758,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         }, 0);
 
       } else {
-        // Просмотр
         var text = document.createElement('div');
         text.className = 'note-text';
         text.textContent = note.text;
@@ -1566,7 +1816,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }
 
-  [noteModal, infoModal].forEach(function (modal) {
+  [noteModal, infoModal, gameModal].forEach(function (modal) {
     modal.addEventListener('click', function (e) {
       if (e.target === modal) closeModal(modal);
     });
@@ -1574,7 +1824,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
-      if (noteModal.classList.contains('open')) closeModal(noteModal);
+      if (gameModal.classList.contains('open')) closeModal(gameModal);
+      else if (noteModal.classList.contains('open')) closeModal(noteModal);
       else if (infoModal.classList.contains('open')) closeModal(infoModal);
     }
   });
@@ -1620,12 +1871,211 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   });
   infoClose.addEventListener('click', function () { closeModal(infoModal); });
 
+  /* ======================= ИГРА-КЛИКЕР ======================= */
+  var UPGRADES = [
+    { id: 'click1', icon: '👆', name: 'Улучшить клик',  desc: '+1 за клик',     costBase: 10,   effect: 'perClick',  amount: 1 },
+    { id: 'auto1',  icon: '⚙️', name: 'Автокликер',      desc: '+1 в секунду',   costBase: 50,   effect: 'perSecond', amount: 1 },
+    { id: 'click5', icon: '💪', name: 'Мощный клик',    desc: '+5 за клик',     costBase: 100,  effect: 'perClick',  amount: 5 },
+    { id: 'auto5',  icon: '🏭', name: 'Копи-ферма',     desc: '+5 в секунду',   costBase: 400,  effect: 'perSecond', amount: 5 },
+    { id: 'auto25', icon: '🚀', name: 'Копи-фабрика',   desc: '+25 в секунду',  costBase: 2500, effect: 'perSecond', amount: 25 }
+  ];
+
+  var gameState = {
+    score: 0,
+    totalClicks: 0,
+    upgrades: {},
+    lastTick: Date.now()
+  };
+
+  try {
+    var rawGame = JSON.parse(localStorage.getItem(GAME_KEY));
+    if (rawGame && typeof rawGame === 'object') {
+      gameState.score = Number(rawGame.score) || 0;
+      gameState.totalClicks = Number(rawGame.totalClicks) || 0;
+      gameState.upgrades = (rawGame.upgrades && typeof rawGame.upgrades === 'object') ? rawGame.upgrades : {};
+      gameState.lastTick = Date.now();
+    }
+  } catch (e) { /* оставляем дефолт */ }
+
+  function saveGame() {
+    try {
+      localStorage.setItem(GAME_KEY, JSON.stringify({
+        score: gameState.score,
+        totalClicks: gameState.totalClicks,
+        upgrades: gameState.upgrades,
+        lastSaved: Date.now()
+      }));
+    } catch (e) {}
+  }
+
+  function getUpgradeLevel(id) {
+    return Math.max(0, Math.floor(Number(gameState.upgrades[id]) || 0));
+  }
+
+  function getUpgradeCost(up) {
+    var lvl = getUpgradeLevel(up.id);
+    return Math.floor(up.costBase * Math.pow(1.6, lvl));
+  }
+
+  function recalcGameStats() {
+    var perClick = 1;
+    var perSecond = 0;
+    UPGRADES.forEach(function (up) {
+      var lvl = getUpgradeLevel(up.id);
+      if (up.effect === 'perClick') perClick += up.amount * lvl;
+      if (up.effect === 'perSecond') perSecond += up.amount * lvl;
+    });
+    gameState.perClick = perClick;
+    gameState.perSecond = perSecond;
+  }
+
+  function updateGameUI() {
+    recalcGameStats();
+    gameScore.textContent = formatNum(gameState.score);
+    gameRate.textContent = gameState.perSecond + ' в секунду';
+    gameClicksEl.textContent = formatNum(gameState.totalClicks);
+    gamePerClickEl.textContent = formatNum(gameState.perClick);
+    gamePerSecEl.textContent = formatNum(gameState.perSecond);
+    gameClickLbl.textContent = 'Кликни +' + formatNum(gameState.perClick);
+
+    // Обновляем доступность/стоимость апгрейдов
+    var btns = gameUpgradesEl.querySelectorAll('.game-upgrade');
+    btns.forEach(function (btn) {
+      var id = btn.dataset.id;
+      var up = UPGRADES.find(function (u) { return u.id === id; });
+      if (!up) return;
+      var cost = getUpgradeCost(up);
+      var lvl = getUpgradeLevel(up.id);
+      btn.querySelector('.game-upgrade-level').textContent = 'ур. ' + lvl;
+      btn.querySelector('.game-upgrade-cost').textContent = formatNum(cost);
+      btn.disabled = gameState.score < cost;
+    });
+  }
+
+  function renderUpgrades() {
+    gameUpgradesEl.innerHTML = '';
+    UPGRADES.forEach(function (up) {
+      var lvl = getUpgradeLevel(up.id);
+      var cost = getUpgradeCost(up);
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'game-upgrade';
+      btn.dataset.id = up.id;
+      btn.innerHTML =
+        '<span class="game-upgrade-icon">' + up.icon + '</span>' +
+        '<span class="game-upgrade-body">' +
+          '<span class="game-upgrade-name">' + up.name +
+            ' <span class="game-upgrade-level">ур. ' + lvl + '</span>' +
+          '</span>' +
+          '<span class="game-upgrade-desc">' + up.desc + '</span>' +
+        '</span>' +
+        '<span class="game-upgrade-cost">' + formatNum(cost) + '</span>';
+
+      btn.addEventListener('click', function () { buyUpgrade(up); });
+      gameUpgradesEl.appendChild(btn);
+    });
+  }
+
+  function buyUpgrade(up) {
+    var cost = getUpgradeCost(up);
+    if (gameState.score < cost) {
+      showToast('Недостаточно очков');
+      return;
+    }
+    gameState.score -= cost;
+    gameState.upgrades[up.id] = getUpgradeLevel(up.id) + 1;
+    saveGame();
+    renderUpgrades();
+    updateGameUI();
+    showToast(up.name + ' улучшен');
+  }
+
+  function doGameClick() {
+    recalcGameStats();
+    gameState.score += gameState.perClick;
+    gameState.totalClicks++;
+
+    var plus = document.createElement('span');
+    plus.className = 'game-plus';
+    plus.textContent = '+' + formatNum(gameState.perClick);
+    gameClicker.appendChild(plus);
+    setTimeout(function () { plus.remove(); }, 800);
+
+    updateGameUI();
+    saveGame();
+  }
+
+  gameClicker.addEventListener('click', doGameClick);
+
+  // Пассивный доход. Тик каждые 500мс, но с учётом реального времени.
+  setInterval(function () {
+    recalcGameStats();
+    if (gameState.perSecond <= 0) {
+      gameState.lastTick = Date.now();
+      return;
+    }
+    var now = Date.now();
+    var elapsed = Math.min((now - gameState.lastTick) / 1000, 60); // до 60с догоняем
+    gameState.lastTick = now;
+    if (elapsed > 0) {
+      gameState.score += gameState.perSecond * elapsed;
+      updateGameUI();
+      saveGame();
+    }
+  }, 500);
+
+  // При возврате на вкладку — пересчитываем догон
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) {
+      var now = Date.now();
+      recalcGameStats();
+      if (gameState.perSecond > 0) {
+        var elapsed = Math.min((now - gameState.lastTick) / 1000, 60);
+        gameState.lastTick = now;
+        if (elapsed > 0) {
+          gameState.score += gameState.perSecond * elapsed;
+          updateGameUI();
+          saveGame();
+        }
+      } else {
+        gameState.lastTick = now;
+      }
+    }
+  });
+
+  gameResetBtn.addEventListener('click', function () {
+    var ok = true;
+    try { ok = window.confirm('Сбросить весь прогресс в игре? Это нельзя отменить.'); }
+    catch (e) { ok = true; }
+    if (!ok) return;
+
+    gameState.score = 0;
+    gameState.totalClicks = 0;
+    gameState.upgrades = {};
+    gameState.lastTick = Date.now();
+    saveGame();
+    renderUpgrades();
+    updateGameUI();
+    showToast('Прогресс сброшен');
+  });
+
+  gameBtn.addEventListener('click', function () {
+    renderUpgrades();
+    updateGameUI();
+    gameState.lastTick = Date.now();
+    openModal(gameModal);
+  });
+  gameClose.addEventListener('click', function () { closeModal(gameModal); });
+
   /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
   updateCategorySelect();
   autoGrow();
   updateAddState();
   render();
   renderNotes();
+  renderUpgrades();
+  updateGameUI();
 })();
 </script>
 </body>
