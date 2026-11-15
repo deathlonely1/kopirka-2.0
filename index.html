@@ -73,6 +73,7 @@ body{
   -moz-osx-font-smoothing:grayscale;
   transition:background .45s ease, color .3s ease;
 }
+body.intro-open{overflow:hidden}
 
 /* ======================= ФОНОВЫЕ ПЯТНА ======================= */
 .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
@@ -84,6 +85,55 @@ body{
 .blob-1{width:520px;height:520px;background:var(--blob1);top:-190px;left:-140px}
 .blob-2{width:470px;height:470px;background:var(--blob2);bottom:-180px;right:-150px}
 .blob-3{width:400px;height:400px;background:var(--blob3);top:42%;left:52%}
+
+/* ======================= ИНТРО ======================= */
+.intro{
+  position:fixed;inset:0;z-index:9999;
+  display:grid;place-items:center;
+  background:
+    radial-gradient(circle at 22% 18%, var(--blob1), transparent 55%),
+    radial-gradient(circle at 82% 82%, var(--blob2), transparent 55%),
+    var(--bg);
+  opacity:1;
+  transition:opacity .55s ease;
+  cursor:pointer;
+}
+.intro.hidden{opacity:0;pointer-events:none}
+.intro-inner{
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+  padding:0 24px;text-align:center;
+}
+.intro-logo{
+  filter:drop-shadow(0 14px 34px rgba(90,110,255,.45));
+  animation:introLogoIn .9s cubic-bezier(.2,.9,.3,1.15) both;
+}
+.intro-title{
+  font-family:'Unbounded','Manrope',sans-serif;
+  font-weight:600;
+  font-size:clamp(26px, 7vw, 38px);
+  letter-spacing:-.02em;
+  background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:introTextIn .8s .22s ease both;
+}
+.intro-tag{
+  font-size:14px;
+  font-weight:500;
+  color:var(--text-2);
+  max-width:320px;
+  line-height:1.45;
+  animation:introTextIn .8s .48s ease both;
+}
+@keyframes introLogoIn{
+  from{opacity:0;transform:scale(.6) rotate(-8deg)}
+  to{opacity:1;transform:none}
+}
+@keyframes introTextIn{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:none}
+}
 
 /* ======================= ШАПКА ======================= */
 .topbar{
@@ -110,10 +160,7 @@ body{
   background-clip:text;
   color:transparent;
 }
-.brand-name .ver{
-  font-size:.78em;
-  opacity:.9;
-}
+.brand-name .ver{font-size:.78em;opacity:.9}
 
 .theme-toggle{
   flex:0 0 auto;
@@ -139,10 +186,10 @@ main{
   width:100%;
   max-width:640px;
   margin:0 auto;
-  padding:6px 20px 26px;
+  padding:6px 20px 96px;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:18px;
 }
 
 /* ======================= КАРТОЧКА ВВОДА ======================= */
@@ -185,6 +232,7 @@ textarea.field{
 }
 
 .row{display:flex;gap:10px;align-items:stretch}
+.row[hidden]{display:none}
 .row .field{flex:1 1 auto;min-width:0}
 
 .confirm{
@@ -204,13 +252,89 @@ textarea.field{
 .confirm:disabled{opacity:.38;box-shadow:none;cursor:default}
 .confirm:disabled:active{transform:none}
 
-/* ======================= СПИСОК КНОПОК ======================= */
-.list{display:flex;flex-direction:column;gap:10px}
+/* ======================= SELECT + "+" ======================= */
+.select-wrap{position:relative;flex:1 1 auto;min-width:0;display:flex}
+.select-wrap::after{
+  content:'';
+  position:absolute;
+  right:16px;
+  top:50%;
+  width:9px;height:9px;
+  margin-top:-6px;
+  transform:rotate(45deg);
+  border-right:2px solid var(--text-3);
+  border-bottom:2px solid var(--text-3);
+  pointer-events:none;
+  transition:border-color .2s;
+}
+select.field{
+  appearance:none;
+  -webkit-appearance:none;
+  padding-right:40px;
+  cursor:pointer;
+}
+select.field option{background:var(--bg);color:var(--text)}
 
+.cat-add{
+  flex:0 0 52px;
+  width:52px;
+  border:1px solid var(--card-border);
+  border-radius:16px;
+  background:var(--field);
+  color:var(--text);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition:background .2s ease, transform .15s ease;
+}
+.cat-add:hover{background:var(--field-hover)}
+.cat-add:active{transform:scale(.94)}
+.cat-add svg{transition:transform .3s ease}
+.cat-add.open svg{transform:rotate(45deg)}
+
+/* ======================= СПИСОК / СЕКЦИИ ======================= */
+.list{display:flex;flex-direction:column;gap:20px}
+
+.section{display:flex;flex-direction:column;gap:8px}
+.section-head{
+  display:flex;align-items:center;gap:8px;
+  padding:2px 6px 0;
+}
+.section-name{
+  font-size:12.5px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.07em;
+  color:var(--text-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.section-count{
+  font-size:11px;font-weight:600;
+  color:var(--text-3);
+  background:var(--field);
+  padding:1px 7px;border-radius:999px;
+}
+.section-del{
+  margin-left:auto;
+  width:26px;height:26px;
+  border:none;border-radius:50%;
+  background:transparent;color:var(--text-3);
+  cursor:pointer;
+  display:grid;place-items:center;
+  transition:background .2s ease, color .2s ease, transform .15s ease;
+}
+.section-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.section-del:active{transform:scale(.9)}
+.section-items{display:flex;flex-direction:column;gap:8px}
+.section-empty{
+  padding:16px;text-align:center;
+  font-size:13px;font-weight:500;
+  color:var(--text-3);
+  border:1.5px dashed var(--dash);
+  border-radius:16px;
+}
+
+/* ======================= ЭЛЕМЕНТ ======================= */
 .item{
-  display:flex;
-  align-items:center;
-  gap:4px;
+  display:flex;align-items:center;gap:2px;
   padding:6px;
   border-radius:20px;
   background:var(--card);
@@ -225,43 +349,28 @@ textarea.field{
   to{opacity:1;transform:none}
 }
 .item.removing{animation:disappear .22s ease forwards}
-@keyframes disappear{
-  to{opacity:0;transform:scale(.94);margin-bottom:-10px}
-}
+@keyframes disappear{to{opacity:0;transform:scale(.94);margin-bottom:-10px}}
 
 .item-main{
-  flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:2px;
+  flex:1 1 auto;min-width:0;
+  display:flex;flex-direction:column;gap:2px;
   text-align:left;
   padding:12px 14px;
-  border:none;
-  border-radius:14px;
-  background:transparent;
-  color:var(--text);
-  font-family:inherit;
-  cursor:pointer;
+  border:none;border-radius:14px;
+  background:transparent;color:var(--text);
+  font-family:inherit;cursor:pointer;
   transition:background .18s ease;
 }
 .item-main:hover{background:var(--field)}
 .item-main:active{background:var(--field-hover)}
 .item-name{
-  font-size:15px;
-  font-weight:700;
-  letter-spacing:-.01em;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  font-size:15px;font-weight:700;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item-text{
-  font-size:12.5px;
-  font-weight:500;
+  font-size:12.5px;font-weight:500;
   color:var(--text-2);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item.copied{animation:pulse .42s ease}
 @keyframes pulse{
@@ -269,29 +378,29 @@ textarea.field{
   100%{box-shadow:0 0 0 14px rgba(48,209,88,0)}
 }
 
+.item-pin,
 .item-del{
-  flex:0 0 34px;
-  width:34px;height:34px;
-  margin-right:4px;
-  border:none;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
+  flex:0 0 32px;
+  width:32px;height:32px;
+  border:none;border-radius:50%;
+  display:grid;place-items:center;
   background:transparent;
   color:var(--text-3);
   cursor:pointer;
   transition:background .2s ease, color .2s ease, transform .15s ease;
 }
+.item-pin:hover{background:var(--field);color:var(--text)}
 .item-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.item-pin:active,
 .item-del:active{transform:scale(.88)}
+.item-pin.active{color:var(--accent)}
+.item-pin.active svg{fill:currentColor;fill-opacity:.16}
 
 /* ======================= ПУСТОЕ СОСТОЯНИЕ ======================= */
 .empty{
   padding:44px 22px;
   text-align:center;
-  font-size:14px;
-  font-weight:500;
-  line-height:1.5;
+  font-size:14px;font-weight:500;line-height:1.5;
   color:var(--text-3);
   border:1.5px dashed var(--dash);
   border-radius:24px;
@@ -301,20 +410,15 @@ textarea.field{
 .toast{
   position:fixed;
   left:50%;
-  bottom:calc(28px + env(safe-area-inset-bottom));
+  bottom:calc(72px + env(safe-area-inset-bottom));
   transform:translate(-50%,16px);
-  display:flex;
-  align-items:center;
-  gap:8px;
+  display:flex;align-items:center;gap:8px;
   padding:12px 20px;
   border-radius:999px;
   background:var(--toast);
   color:#fff;
-  font-size:14px;
-  font-weight:600;
-  letter-spacing:-.01em;
-  opacity:0;
-  pointer-events:none;
+  font-size:14px;font-weight:600;letter-spacing:-.01em;
+  opacity:0;pointer-events:none;
   z-index:100;
   box-shadow:0 12px 34px rgba(0,0,0,.28);
   backdrop-filter:blur(20px) saturate(180%);
@@ -324,24 +428,25 @@ textarea.field{
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast svg{flex:0 0 auto;color:#30d158}
 
-/* ======================= ПОДВАЛ ======================= */
+/* ======================= ПОДВАЛ (прибит влево-вниз) ======================= */
 footer{
-  flex:0 0 auto;
-  width:100%;
-  max-width:640px;
-  margin:0 auto;
-  padding:0 20px calc(22px + env(safe-area-inset-bottom));
+  position:fixed;
+  left:0;bottom:0;
+  z-index:5;
   display:flex;
   flex-direction:column;
   align-items:flex-start;
   gap:1px;
+  padding:8px 14px calc(10px + env(safe-area-inset-bottom));
   color:var(--text-3);
-  font-size:11.5px;
-  font-weight:400;
+  font-size:11.5px;font-weight:400;
   letter-spacing:.005em;
-  line-height:1.55;
+  line-height:1.5;
   user-select:none;
+  pointer-events:none;
+  max-width:280px;
 }
+footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
 /* ======================= АНИМАЦИЯ ОШИБКИ ======================= */
 .shake{animation:shake .45s ease}
@@ -354,8 +459,8 @@ footer{
 
 @media (max-width:420px){
   .brand-name{font-size:16px}
-  main{padding:6px 14px 20px}
-  footer{padding:0 14px calc(18px + env(safe-area-inset-bottom))}
+  main{padding:6px 14px 96px}
+  footer{padding:8px 12px calc(10px + env(safe-area-inset-bottom));font-size:11px}
   .topbar{padding:12px 14px}
 }
 @media (prefers-reduced-motion: reduce){
@@ -363,27 +468,48 @@ footer{
 }
 </style>
 </head>
-<body>
+<body class="intro-open">
 
+<!-- ======================= SVG DEFS (логотипы) ======================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lgBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3fa9ff"/>
+      <stop offset="1" stop-color="#7a5cff"/>
+    </linearGradient>
+    <linearGradient id="lgSheet" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".98"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity=".78"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- ======================= ИНТРО ======================= -->
+<div class="intro" id="intro" role="dialog" aria-label="Заставка">
+  <div class="intro-inner">
+    <svg class="intro-logo" width="104" height="104" viewBox="0 0 36 36" aria-hidden="true">
+      <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
+      <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
+      <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none"
+            stroke="url(#lgSheet)" stroke-width="2"/>
+      <rect x="9" y="13" width="13" height="13" rx="4" fill="url(#lgSheet)"/>
+    </svg>
+    <div class="intro-title">Копирка 2.0</div>
+    <div class="intro-tag">Работать с буфер-обмена проще чем ты думаешь</div>
+  </div>
+</div>
+
+<!-- ======================= ФОН ======================= -->
 <div class="bg-blobs" aria-hidden="true">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
   <div class="blob blob-3"></div>
 </div>
 
+<!-- ======================= ШАПКА ======================= -->
 <header class="topbar">
   <div class="brand">
     <svg class="logo" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
-      <defs>
-        <linearGradient id="lgBg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#3fa9ff"/>
-          <stop offset="1" stop-color="#7a5cff"/>
-        </linearGradient>
-        <linearGradient id="lgSheet" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#ffffff" stop-opacity=".98"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity=".78"/>
-        </linearGradient>
-      </defs>
       <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
       <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
       <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none"
@@ -406,6 +532,7 @@ footer{
   </button>
 </header>
 
+<!-- ======================= ОСНОВНОЕ ======================= -->
 <main>
   <section class="composer">
     <textarea id="textInput" class="field" rows="1"
@@ -424,17 +551,45 @@ footer{
         </svg>
       </button>
     </div>
+
+    <div class="row">
+      <div class="select-wrap">
+        <select id="categorySelect" class="field" aria-label="Категория">
+          <option value="">Без категории</option>
+        </select>
+      </div>
+      <button id="newCatBtn" class="cat-add" type="button" aria-label="Создать категорию">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="row" id="newCatRow" hidden>
+      <input id="newCatInput" class="field" type="text"
+             placeholder="Название категории…"
+             autocomplete="off" spellcheck="false">
+      <button id="newCatConfirm" class="confirm" type="button" aria-label="Создать категорию">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.5 12.6l5 5L19.5 6.6"/>
+        </svg>
+      </button>
+    </div>
   </section>
 
   <section class="list" id="list"></section>
   <div class="empty" id="empty">Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.</div>
 </main>
 
+<!-- ======================= ПОДПИСЬ (низ-лево) ======================= -->
 <footer>
   <span>Идея взята из разработки Ивана Першина</span>
   <span>2026 Собственная доработка deathlonely</span>
 </footer>
 
+<!-- ======================= ТОСТ ======================= -->
 <div class="toast" id="toast" role="status" aria-live="polite">
   <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -447,30 +602,71 @@ footer{
 (function () {
   'use strict';
 
-  /* ======================= КЛЮЧИ ХРАНИЛИЩА ======================= */
+  /* ======================= КЛЮЧИ ======================= */
   var ITEMS_KEY = 'kopirka2.items';
+  var CATS_KEY  = 'kopirka2.categories';
   var THEME_KEY = 'kopirka2.theme';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
-  var listEl      = document.getElementById('list');
-  var emptyEl     = document.getElementById('empty');
-  var textEl      = document.getElementById('textInput');
-  var nameEl      = document.getElementById('nameInput');
-  var addBtn      = document.getElementById('addBtn');
-  var themeToggle = document.getElementById('themeToggle');
-  var toastEl     = document.getElementById('toast');
-  var toastText   = document.getElementById('toastText');
-  var metaTheme   = document.querySelector('meta[name="theme-color"]');
+  var listEl        = document.getElementById('list');
+  var emptyEl       = document.getElementById('empty');
+  var textEl        = document.getElementById('textInput');
+  var nameEl        = document.getElementById('nameInput');
+  var addBtn        = document.getElementById('addBtn');
+  var catSelect     = document.getElementById('categorySelect');
+  var newCatBtn     = document.getElementById('newCatBtn');
+  var newCatRow     = document.getElementById('newCatRow');
+  var newCatInput   = document.getElementById('newCatInput');
+  var newCatConfirm = document.getElementById('newCatConfirm');
+  var themeToggle   = document.getElementById('themeToggle');
+  var toastEl       = document.getElementById('toast');
+  var toastText     = document.getElementById('toastText');
+  var metaTheme     = document.querySelector('meta[name="theme-color"]');
+  var introEl       = document.getElementById('intro');
+
+  /* ======================= ХЕЛПЕРЫ ======================= */
+  function genId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
 
   /* ======================= СОСТОЯНИЕ ======================= */
   var items = [];
+  var categories = [];
+
   try {
-    var raw = JSON.parse(localStorage.getItem(ITEMS_KEY));
-    if (Array.isArray(raw)) items = raw;
+    var rawItems = JSON.parse(localStorage.getItem(ITEMS_KEY));
+    if (Array.isArray(rawItems)) {
+      items = rawItems.map(function (it) {
+        return {
+          id: it.id || genId(),
+          name: it.name || 'Копировать',
+          text: typeof it.text === 'string' ? it.text : '',
+          pinned: !!it.pinned,
+          categoryId: it.categoryId || null
+        };
+      });
+    }
   } catch (e) { items = []; }
+
+  try {
+    var rawCats = JSON.parse(localStorage.getItem(CATS_KEY));
+    if (Array.isArray(rawCats)) {
+      categories = rawCats.map(function (c) {
+        return { id: c.id || genId(), name: c.name || 'Без названия' };
+      });
+    }
+  } catch (e) { categories = []; }
+
+  // Отвязываем "осиротевшие" ссылки на несуществующие категории
+  var catIds = {};
+  categories.forEach(function (c) { catIds[c.id] = true; });
+  items.forEach(function (i) {
+    if (i.categoryId && !catIds[i.categoryId]) i.categoryId = null;
+  });
 
   function save() {
     try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch (e) {}
+    try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
   }
 
   /* ======================= ТЕМА ======================= */
@@ -497,18 +693,27 @@ footer{
     applyTheme(next, true);
   });
 
+  /* ======================= ИНТРО ======================= */
+  var introTimer = setTimeout(closeIntro, 2200);
+  function closeIntro() {
+    clearTimeout(introTimer);
+    if (introEl.classList.contains('hidden')) return;
+    introEl.classList.add('hidden');
+    document.body.classList.remove('intro-open');
+    setTimeout(function () { introEl.style.display = 'none'; }, 600);
+  }
+  introEl.addEventListener('click', closeIntro);
+
   /* ======================= ТОСТ ======================= */
   var toastTimer = null;
   function showToast(message) {
     toastText.textContent = message;
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      toastEl.classList.remove('show');
-    }, 1500);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1500);
   }
 
-  /* ======================= АВТОРАСШИРЕНИЕ TEXTAREA ======================= */
+  /* ======================= TEXTAREA ======================= */
   var MAX_H = 260;
   function autoGrow() {
     textEl.style.height = 'auto';
@@ -516,8 +721,6 @@ footer{
     textEl.style.height = Math.min(h, MAX_H) + 'px';
     textEl.style.overflowY = h > MAX_H ? 'auto' : 'hidden';
   }
-
-  /* ======================= ВАЛИДАЦИЯ КНОПКИ ✓ ======================= */
   function updateAddState() {
     addBtn.disabled = textEl.value.trim().length === 0;
   }
@@ -525,6 +728,12 @@ footer{
     autoGrow();
     updateAddState();
   });
+
+  function shake(el) {
+    el.classList.remove('shake');
+    void el.offsetWidth;
+    el.classList.add('shake');
+  }
 
   /* ======================= КОПИРОВАНИЕ ======================= */
   function legacyCopy(text) {
@@ -564,78 +773,199 @@ footer{
     }
   }
 
-  /* ======================= РЕНДЕР СПИСКА ======================= */
-  var X_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-              'stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  /* ======================= ИКОНКИ ======================= */
+  var X_SVG =
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
 
+  var PIN_SVG =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M12 17v5"/>' +
+    '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
+    '</svg>';
+
+  /* ======================= SELECT КАТЕГОРИЙ ======================= */
+  function updateCategorySelect() {
+    var current = catSelect.value;
+    catSelect.innerHTML = '<option value="">Без категории</option>';
+    categories.forEach(function (c) {
+      var opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.name;
+      catSelect.appendChild(opt);
+    });
+    if (current && categories.some(function (c) { return c.id === current; })) {
+      catSelect.value = current;
+    }
+  }
+
+  /* ======================= РЕНДЕР ======================= */
   function preview(text) {
     return text.replace(/\s+/g, ' ').trim();
+  }
+
+  function createItemEl(item) {
+    var row = document.createElement('div');
+    row.className = 'item';
+    row.dataset.id = item.id;
+
+    var main = document.createElement('button');
+    main.type = 'button';
+    main.className = 'item-main';
+    main.title = 'Нажмите, чтобы скопировать';
+
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'item-name';
+    nameSpan.textContent = item.name;
+
+    var textSpan = document.createElement('span');
+    textSpan.className = 'item-text';
+    textSpan.textContent = preview(item.text);
+
+    main.appendChild(nameSpan);
+    main.appendChild(textSpan);
+    main.addEventListener('click', function () { copyText(item.text, row); });
+
+    var pin = document.createElement('button');
+    pin.type = 'button';
+    pin.className = 'item-pin' + (item.pinned ? ' active' : '');
+    pin.setAttribute('aria-label', item.pinned ? 'Открепить' : 'Закрепить');
+    pin.innerHTML = PIN_SVG;
+    pin.addEventListener('click', function (e) {
+      e.stopPropagation();
+      item.pinned = !item.pinned;
+      save();
+      render();
+      showToast(item.pinned ? 'Закреплено' : 'Откреплено');
+    });
+
+    var del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'item-del';
+    del.setAttribute('aria-label', 'Удалить «' + item.name + '»');
+    del.innerHTML = X_SVG;
+    del.addEventListener('click', function (e) {
+      e.stopPropagation();
+      row.classList.add('removing');
+      setTimeout(function () {
+        items = items.filter(function (i) { return i.id !== item.id; });
+        save();
+        render();
+        showToast('Удалено');
+      }, 200);
+    });
+
+    row.appendChild(main);
+    row.appendChild(pin);
+    row.appendChild(del);
+    return row;
+  }
+
+  function renderSection(title, sectionItems, cat) {
+    var sec = document.createElement('div');
+    sec.className = 'section';
+
+    var head = document.createElement('div');
+    head.className = 'section-head';
+
+    var nameElSec = document.createElement('span');
+    nameElSec.className = 'section-name';
+    nameElSec.textContent = title;
+
+    var countEl = document.createElement('span');
+    countEl.className = 'section-count';
+    countEl.textContent = sectionItems.length;
+
+    head.appendChild(nameElSec);
+    head.appendChild(countEl);
+
+    if (cat) {
+      var delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'section-del';
+      delBtn.setAttribute('aria-label', 'Удалить категорию');
+      delBtn.innerHTML = X_SVG;
+      delBtn.addEventListener('click', function () { deleteCategory(cat.id); });
+      head.appendChild(delBtn);
+    }
+
+    sec.appendChild(head);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'section-items';
+
+    if (sectionItems.length === 0) {
+      var hint = document.createElement('div');
+      hint.className = 'section-empty';
+      hint.textContent = 'Пока пусто — добавьте сюда кнопку';
+      wrap.appendChild(hint);
+    } else {
+      sectionItems.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
+    }
+
+    sec.appendChild(wrap);
+    return sec;
   }
 
   function render() {
     listEl.innerHTML = '';
 
-    if (items.length === 0) {
+    if (items.length === 0 && categories.length === 0) {
       emptyEl.style.display = 'block';
       return;
     }
     emptyEl.style.display = 'none';
 
-    items.forEach(function (it) {
-      var row = document.createElement('div');
-      row.className = 'item';
-      row.dataset.id = it.id;
+    var pinned = items.filter(function (i) { return i.pinned; });
+    var hasOthers = pinned.length > 0 || categories.length > 0;
 
-      var main = document.createElement('button');
-      main.type = 'button';
-      main.className = 'item-main';
-      main.title = 'Нажмите, чтобы скопировать';
+    // 1. Закреплённые
+    if (pinned.length > 0) {
+      listEl.appendChild(renderSection('Закреплённые', pinned, null));
+    }
 
-      var nameSpan = document.createElement('span');
-      nameSpan.className = 'item-name';
-      nameSpan.textContent = it.name;
-
-      var textSpan = document.createElement('span');
-      textSpan.className = 'item-text';
-      textSpan.textContent = preview(it.text);
-
-      main.appendChild(nameSpan);
-      main.appendChild(textSpan);
-      main.addEventListener('click', function () { copyText(it.text, row); });
-
-      var del = document.createElement('button');
-      del.type = 'button';
-      del.className = 'item-del';
-      del.setAttribute('aria-label', 'Удалить «' + it.name + '»');
-      del.innerHTML = X_SVG;
-      del.addEventListener('click', function (e) {
-        e.stopPropagation();
-        removeItem(it.id, row);
+    // 2. Категории
+    categories.forEach(function (cat) {
+      var catItems = items.filter(function (i) {
+        return !i.pinned && i.categoryId === cat.id;
       });
-
-      row.appendChild(main);
-      row.appendChild(del);
-      listEl.appendChild(row);
+      listEl.appendChild(renderSection(cat.name, catItems, cat));
     });
+
+    // 3. Без категории
+    var uncat = items.filter(function (i) { return !i.pinned && !i.categoryId; });
+    if (hasOthers) {
+      if (uncat.length > 0) {
+        listEl.appendChild(renderSection('Без категории', uncat, null));
+      }
+    } else {
+      // Только «плоский» список без заголовков
+      var wrap = document.createElement('div');
+      wrap.className = 'section-items';
+      uncat.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
+      listEl.appendChild(wrap);
+    }
   }
 
   /* ======================= ДОБАВЛЕНИЕ ======================= */
   function addItem() {
     var text = textEl.value.trim();
     if (!text) {
-      textEl.classList.remove('shake');
-      void textEl.offsetWidth;
-      textEl.classList.add('shake');
+      shake(textEl);
       textEl.focus();
       return;
     }
 
     var name = nameEl.value.trim() || 'Копировать';
+    var categoryId = catSelect.value || null;
 
     items.unshift({
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      id: genId(),
       name: name,
-      text: text
+      text: text,
+      pinned: false,
+      categoryId: categoryId
     });
 
     save();
@@ -658,18 +988,78 @@ footer{
     }
   });
 
-  /* ======================= УДАЛЕНИЕ ======================= */
-  function removeItem(id, rowEl) {
-    rowEl.classList.add('removing');
-    setTimeout(function () {
-      items = items.filter(function (i) { return i.id !== id; });
-      save();
-      render();
-      showToast('Удалено');
-    }, 200);
+  /* ======================= КАТЕГОРИИ: СОЗДАНИЕ ======================= */
+  newCatBtn.addEventListener('click', function () {
+    var willOpen = newCatRow.hidden;
+    newCatRow.hidden = !willOpen;
+    newCatBtn.classList.toggle('open', willOpen);
+    if (willOpen) {
+      newCatInput.value = '';
+      newCatInput.focus();
+    }
+  });
+
+  function submitNewCategory() {
+    var name = newCatInput.value.trim();
+    if (!name) {
+      shake(newCatInput);
+      newCatInput.focus();
+      return;
+    }
+    if (categories.some(function (c) {
+      return c.name.toLowerCase() === name.toLowerCase();
+    })) {
+      showToast('Такая категория уже есть');
+      shake(newCatInput);
+      return;
+    }
+
+    var cat = { id: genId(), name: name };
+    categories.push(cat);
+    save();
+    updateCategorySelect();
+    catSelect.value = cat.id;
+    newCatRow.hidden = true;
+    newCatBtn.classList.remove('open');
+    newCatInput.value = '';
+    render();
+    showToast('Категория создана');
+  }
+
+  newCatConfirm.addEventListener('click', submitNewCategory);
+  newCatInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      submitNewCategory();
+    }
+  });
+
+  /* ======================= КАТЕГОРИИ: УДАЛЕНИЕ ======================= */
+  function deleteCategory(id) {
+    var cat = categories.find(function (c) { return c.id === id; });
+    if (!cat) return;
+
+    var ok = true;
+    try {
+      ok = window.confirm(
+        'Удалить категорию «' + cat.name + '»?\nКнопки из неё переместятся в «Без категории».'
+      );
+    } catch (e) { ok = true; }
+
+    if (!ok) return;
+
+    items.forEach(function (i) {
+      if (i.categoryId === id) i.categoryId = null;
+    });
+    categories = categories.filter(function (c) { return c.id !== id; });
+    save();
+    updateCategorySelect();
+    render();
+    showToast('Категория удалена');
   }
 
   /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
+  updateCategorySelect();
   autoGrow();
   updateAddState();
   render();
