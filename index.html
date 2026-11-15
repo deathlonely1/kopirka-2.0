@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Копирка 2.0</title>
 <meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233fa9ff'/%3E%3Cstop offset='1' stop-color='%237a5cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='1' y='1' width='34' height='34' rx='10.5' fill='url(%23g)'/%3E%3Crect x='12.5' y='8.5' width='13' height='13' rx='4' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Crect x='9' y='13' width='13' height='13' rx='4' fill='%23fff' fill-opacity='.92'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
@@ -33,6 +34,7 @@
   --blob2:#c9a7ff;
   --blob3:#8ee7ff;
   --blob-op:.55;
+  --modal-bg:rgba(255,255,255,.94);
 }
 [data-theme="dark"]{
   color-scheme: dark;
@@ -54,6 +56,7 @@
   --blob2:#4a1f8f;
   --blob3:#0a5a6b;
   --blob-op:.60;
+  --modal-bg:rgba(24,24,28,.94);
 }
 
 /* ======================= БАЗА ======================= */
@@ -73,7 +76,8 @@ body{
   -moz-osx-font-smoothing:grayscale;
   transition:background .45s ease, color .3s ease;
 }
-body.intro-open{overflow:hidden}
+body.intro-open,
+body.modal-open{overflow:hidden}
 
 /* ======================= ФОНОВЫЕ ПЯТНА ======================= */
 .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
@@ -186,7 +190,7 @@ main{
   width:100%;
   max-width:640px;
   margin:0 auto;
-  padding:6px 20px 96px;
+  padding:6px 20px 140px;
   display:flex;
   flex-direction:column;
   gap:18px;
@@ -406,12 +410,256 @@ select.field option{background:var(--bg);color:var(--text)}
   border-radius:24px;
 }
 
+/* ======================= ЗАМЕТКИ ======================= */
+.notes-section{display:flex;flex-direction:column;gap:10px}
+.notes-header{
+  display:flex;align-items:center;gap:8px;
+  padding:2px 6px 0;
+}
+.notes-title{
+  font-size:13px;font-weight:700;
+  color:var(--text-2);
+  letter-spacing:.02em;
+}
+.notes-grid{display:flex;flex-direction:column;gap:10px}
+.notes-empty{
+  padding:22px 18px;text-align:center;
+  font-size:13px;font-weight:500;line-height:1.5;
+  color:var(--text-3);
+  border:1.5px dashed var(--dash);
+  border-radius:18px;
+}
+
+.note-card{
+  position:relative;
+  display:flex;flex-direction:column;gap:10px;
+  padding:14px 14px 10px 22px;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  box-shadow:var(--shadow);
+  animation:pop .34s cubic-bezier(.2,.9,.3,1.15);
+}
+.note-card::before{
+  content:'';
+  position:absolute;
+  left:8px;top:14px;bottom:14px;
+  width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--accent),var(--accent2));
+}
+.note-text{
+  font-size:14px;
+  line-height:1.5;
+  font-weight:500;
+  color:var(--text);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.note-actions{
+  display:flex;gap:4px;
+  justify-content:flex-end;
+  margin-top:-2px;
+}
+.note-btn{
+  width:30px;height:30px;
+  border:none;border-radius:8px;
+  background:transparent;
+  color:var(--text-3);
+  cursor:pointer;
+  display:grid;place-items:center;
+  transition:background .2s ease, color .2s ease, transform .15s ease;
+}
+.note-btn:hover{background:var(--field);color:var(--text)}
+.note-btn.del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.note-btn:active{transform:scale(.9)}
+
+.note-edit-input{
+  width:100%;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:500;
+  line-height:1.5;
+  color:var(--text);
+  background:var(--field);
+  border:none;
+  border-radius:12px;
+  padding:12px 14px;
+  outline:none;
+  resize:none;
+  overflow:hidden;
+  min-height:70px;
+  display:block;
+  transition:box-shadow .25s ease;
+}
+.note-edit-input:focus{box-shadow:0 0 0 3px var(--ring)}
+.note-edit-actions{
+  display:flex;gap:8px;justify-content:flex-end;
+}
+.note-edit-actions .note-btn{
+  width:36px;height:36px;border-radius:10px;
+}
+.note-edit-actions .note-btn.save{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+.note-edit-actions .note-btn.save:hover{
+  filter:brightness(1.08);
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+.note-edit-actions .note-btn.cancel:hover{
+  background:rgba(255,59,48,.12);
+  color:var(--danger);
+}
+
+/* ======================= FAB ======================= */
+.fab-stack{
+  position:fixed;
+  right:20px;
+  bottom:calc(20px + env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:10px;
+  z-index:15;
+}
+.fab{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 18px;
+  border-radius:999px;
+  border:1px solid var(--card-border);
+  background:var(--card);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow);
+  color:var(--text);
+  font-family:inherit;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:transform .15s ease, background .2s ease, filter .2s ease;
+  white-space:nowrap;
+}
+.fab:active{transform:scale(.95)}
+.fab-note{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 8px 24px rgba(10,132,255,.35);
+}
+.fab-note:hover{filter:brightness(1.06)}
+.fab-emoji{font-size:16px;line-height:1}
+
+/* ======================= МОДАЛКИ ======================= */
+.modal-backdrop{
+  position:fixed;inset:0;
+  z-index:200;
+  display:grid;place-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+.modal-backdrop.open{
+  opacity:1;
+  pointer-events:auto;
+}
+.modal{
+  width:100%;
+  max-width:480px;
+  max-height:85vh;
+  overflow-y:auto;
+  background:var(--modal-bg);
+  border-radius:24px;
+  padding:22px;
+  border:1px solid var(--card-border);
+  box-shadow:0 24px 70px rgba(0,0,0,.35);
+  transform:scale(.94);
+  transition:transform .25s cubic-bezier(.2,.9,.3,1.15);
+}
+.modal-backdrop.open .modal{transform:scale(1)}
+.modal h3{
+  margin:0 0 14px;
+  font-family:'Unbounded','Manrope',sans-serif;
+  font-weight:600;
+  font-size:18px;
+  letter-spacing:-.01em;
+}
+.modal-textarea{
+  width:100%;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:500;
+  line-height:1.55;
+  color:var(--text);
+  background:var(--field);
+  border:none;
+  border-radius:14px;
+  padding:12px 14px;
+  outline:none;
+  resize:vertical;
+  min-height:120px;
+  max-height:280px;
+  display:block;
+  transition:box-shadow .25s ease;
+}
+.modal-textarea::placeholder{color:var(--text-3);font-weight:400}
+.modal-textarea:focus{box-shadow:0 0 0 3px var(--ring)}
+.modal-actions{
+  display:flex;gap:10px;justify-content:flex-end;
+  margin-top:16px;
+}
+.btn-primary{
+  padding:11px 22px;
+  border:none;border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+  font-family:inherit;font-size:14px;font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(10,132,255,.35);
+  transition:transform .15s ease, filter .2s ease;
+}
+.btn-primary:active{transform:scale(.95)}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-secondary{
+  padding:11px 22px;
+  border:1px solid var(--card-border);
+  border-radius:14px;
+  background:var(--field);
+  color:var(--text);
+  font-family:inherit;font-size:14px;font-weight:600;
+  cursor:pointer;
+  transition:transform .15s ease, background .2s ease;
+}
+.btn-secondary:active{transform:scale(.95)}
+.btn-secondary:hover{background:var(--field-hover)}
+
+.info-content h4{
+  margin:16px 0 6px;
+  font-size:14px;font-weight:700;
+  color:var(--text);
+}
+.info-content h4:first-child{margin-top:0}
+.info-content p{
+  margin:0;
+  font-size:13.5px;line-height:1.55;
+  color:var(--text-2);
+  font-weight:500;
+}
+
 /* ======================= ТОСТ ======================= */
 .toast{
   position:fixed;
   left:50%;
-  bottom:calc(72px + env(safe-area-inset-bottom));
-  transform:translate(-50%,16px);
+  top:calc(80px + env(safe-area-inset-top));
+  transform:translate(-50%,-16px);
   display:flex;align-items:center;gap:8px;
   padding:12px 20px;
   border-radius:999px;
@@ -419,7 +667,7 @@ select.field option{background:var(--bg);color:var(--text)}
   color:#fff;
   font-size:14px;font-weight:600;letter-spacing:-.01em;
   opacity:0;pointer-events:none;
-  z-index:100;
+  z-index:300;
   box-shadow:0 12px 34px rgba(0,0,0,.28);
   backdrop-filter:blur(20px) saturate(180%);
   -webkit-backdrop-filter:blur(20px) saturate(180%);
@@ -428,7 +676,7 @@ select.field option{background:var(--bg);color:var(--text)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast svg{flex:0 0 auto;color:#30d158}
 
-/* ======================= ПОДВАЛ (прибит влево-вниз) ======================= */
+/* ======================= ПОДВАЛ ======================= */
 footer{
   position:fixed;
   left:0;bottom:0;
@@ -444,7 +692,7 @@ footer{
   line-height:1.5;
   user-select:none;
   pointer-events:none;
-  max-width:280px;
+  max-width:300px;
 }
 footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
@@ -457,11 +705,22 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   40%,60%{transform:translateX(4px)}
 }
 
+/* ======================= АДАПТИВ ======================= */
+@media (max-width:640px){
+  main{padding:6px 16px 210px}
+  .fab-stack{
+    right:14px;
+    bottom:calc(84px + env(safe-area-inset-bottom));
+    gap:8px;
+  }
+  .fab{padding:10px 14px;font-size:13px;gap:6px}
+  footer{font-size:10.5px;padding:6px 12px calc(8px + env(safe-area-inset-bottom));max-width:230px}
+}
 @media (max-width:420px){
   .brand-name{font-size:16px}
-  main{padding:6px 14px 96px}
-  footer{padding:8px 12px calc(10px + env(safe-area-inset-bottom));font-size:11px}
   .topbar{padding:12px 14px}
+  footer{font-size:10px;max-width:200px}
+  .fab{font-size:12.5px}
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
@@ -470,7 +729,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 </head>
 <body class="intro-open">
 
-<!-- ======================= SVG DEFS (логотипы) ======================= -->
+<!-- ======================= SVG DEFS ======================= -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <linearGradient id="lgBg" x1="0" y1="0" x2="1" y2="1">
@@ -581,6 +840,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   <section class="list" id="list"></section>
   <div class="empty" id="empty">Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.</div>
+
+  <section class="notes-section" id="notesSection">
+    <div class="notes-header">
+      <span class="notes-title">📝 Заметки</span>
+      <span class="section-count" id="notesCount">0</span>
+    </div>
+    <div class="notes-grid" id="notesGrid"></div>
+    <div class="notes-empty" id="notesEmpty">Пока нет заметок.<br>Нажмите «Добавить заметку» в правом нижнем углу.</div>
+  </section>
 </main>
 
 <!-- ======================= ПОДПИСЬ (низ-лево) ======================= -->
@@ -588,6 +856,66 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   <span>Идея взята из разработки Ивана Першина</span>
   <span>2026 Собственная доработка deathlonely</span>
 </footer>
+
+<!-- ======================= FAB (низ-право) ======================= -->
+<div class="fab-stack">
+  <button class="fab fab-note" id="addNoteFab" type="button">
+    <span class="fab-emoji">📝</span>
+    <span>Добавить заметку</span>
+  </button>
+  <button class="fab fab-info" id="infoFab" type="button">
+    <span class="fab-emoji">💡</span>
+    <span>Объясни как это работает</span>
+  </button>
+</div>
+
+<!-- ======================= МОДАЛКА: ЗАМЕТКА ======================= -->
+<div class="modal-backdrop" id="noteModal">
+  <div class="modal">
+    <h3>Новая заметка</h3>
+    <textarea id="noteTextInput" class="modal-textarea" rows="4"
+              placeholder="Введите текст заметки…"></textarea>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="noteCancel" type="button">Отмена</button>
+      <button class="btn-primary" id="noteSave" type="button">✓ Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= МОДАЛКА: ИНФО ======================= -->
+<div class="modal-backdrop" id="infoModal">
+  <div class="modal">
+    <h3>Как это работает</h3>
+    <div class="info-content">
+      <h4>Что такое Копирка 2.0</h4>
+      <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок и организации кнопок по категориям. Все данные хранятся только в вашем браузере — ничего никуда не отправляется.</p>
+
+      <h4>Добавить кнопку</h4>
+      <p>Введите текст, который нужно копировать, придумайте название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в списке ниже.</p>
+
+      <h4>Копирование</h4>
+      <p>Нажмите на кнопку — текст моментально попадёт в буфер обмена. Вверху экрана появится подтверждение «Скопировано».</p>
+
+      <h4>Категории</h4>
+      <p>Нажмите «+» рядом с выпадающим списком, чтобы создать новую категорию. Выбранная категория применяется к следующей добавляемой кнопке. Чтобы удалить категорию, нажмите крестик на её заголовке — кнопки из неё переедут в «Без категории».</p>
+
+      <h4>Закрепление</h4>
+      <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» наверху. Повторное нажатие открепляет. Удобно для самых частых действий.</p>
+
+      <h4>Заметки</h4>
+      <p>Кнопка «Добавить заметку» в правом нижнем углу открывает окно ввода. Заметки отображаются отдельными карточками ниже списка кнопок. Их можно редактировать (иконка карандаша) и удалять (крестик).</p>
+
+      <h4>Темы</h4>
+      <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается.</p>
+
+      <h4>Сохранение</h4>
+      <p>Все кнопки, категории и заметки сохраняются в localStorage браузера. Они остаются после закрытия вкладки, но привязаны к этому устройству и браузеру. Очистка данных сайта удалит всё.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" id="infoClose" type="button">Понятно</button>
+    </div>
+  </div>
+</div>
 
 <!-- ======================= ТОСТ ======================= -->
 <div class="toast" id="toast" role="status" aria-live="polite">
@@ -605,6 +933,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   /* ======================= КЛЮЧИ ======================= */
   var ITEMS_KEY = 'kopirka2.items';
   var CATS_KEY  = 'kopirka2.categories';
+  var NOTES_KEY = 'kopirka2.notes';
   var THEME_KEY = 'kopirka2.theme';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
@@ -623,6 +952,17 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var toastText     = document.getElementById('toastText');
   var metaTheme     = document.querySelector('meta[name="theme-color"]');
   var introEl       = document.getElementById('intro');
+  var notesGrid     = document.getElementById('notesGrid');
+  var notesEmpty    = document.getElementById('notesEmpty');
+  var notesCount    = document.getElementById('notesCount');
+  var addNoteFab    = document.getElementById('addNoteFab');
+  var infoFab       = document.getElementById('infoFab');
+  var noteModal     = document.getElementById('noteModal');
+  var noteTextInput = document.getElementById('noteTextInput');
+  var noteCancel    = document.getElementById('noteCancel');
+  var noteSave      = document.getElementById('noteSave');
+  var infoModal     = document.getElementById('infoModal');
+  var infoClose     = document.getElementById('infoClose');
 
   /* ======================= ХЕЛПЕРЫ ======================= */
   function genId() {
@@ -632,6 +972,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   /* ======================= СОСТОЯНИЕ ======================= */
   var items = [];
   var categories = [];
+  var notes = [];
+  var editingNoteId = null;
 
   try {
     var rawItems = JSON.parse(localStorage.getItem(ITEMS_KEY));
@@ -657,7 +999,19 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   } catch (e) { categories = []; }
 
-  // Отвязываем "осиротевшие" ссылки на несуществующие категории
+  try {
+    var rawNotes = JSON.parse(localStorage.getItem(NOTES_KEY));
+    if (Array.isArray(rawNotes)) {
+      notes = rawNotes.map(function (n) {
+        return {
+          id: n.id || genId(),
+          text: typeof n.text === 'string' ? n.text : '',
+          createdAt: n.createdAt || Date.now()
+        };
+      });
+    }
+  } catch (e) { notes = []; }
+
   var catIds = {};
   categories.forEach(function (c) { catIds[c.id] = true; });
   items.forEach(function (i) {
@@ -667,6 +1021,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function save() {
     try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch (e) {}
     try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
+  }
+  function saveNotes() {
+    try { localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); } catch (e) {}
   }
 
   /* ======================= ТЕМА ======================= */
@@ -785,6 +1142,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
     '</svg>';
 
+  var PENCIL_SVG =
+    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M12 20h9"/>' +
+    '<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>' +
+    '</svg>';
+
+  var CHECK_SVG =
+    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M4.5 12.6l5 5L19.5 6.6"/></svg>';
+
   /* ======================= SELECT КАТЕГОРИЙ ======================= */
   function updateCategorySelect() {
     var current = catSelect.value;
@@ -800,7 +1169,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }
 
-  /* ======================= РЕНДЕР ======================= */
+  /* ======================= РЕНДЕР КНОПОК ======================= */
   function preview(text) {
     return text.replace(/\s+/g, ' ').trim();
   }
@@ -920,12 +1289,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var pinned = items.filter(function (i) { return i.pinned; });
     var hasOthers = pinned.length > 0 || categories.length > 0;
 
-    // 1. Закреплённые
     if (pinned.length > 0) {
       listEl.appendChild(renderSection('Закреплённые', pinned, null));
     }
 
-    // 2. Категории
     categories.forEach(function (cat) {
       var catItems = items.filter(function (i) {
         return !i.pinned && i.categoryId === cat.id;
@@ -933,14 +1300,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       listEl.appendChild(renderSection(cat.name, catItems, cat));
     });
 
-    // 3. Без категории
     var uncat = items.filter(function (i) { return !i.pinned && !i.categoryId; });
     if (hasOthers) {
       if (uncat.length > 0) {
         listEl.appendChild(renderSection('Без категории', uncat, null));
       }
     } else {
-      // Только «плоский» список без заголовков
       var wrap = document.createElement('div');
       wrap.className = 'section-items';
       uncat.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
@@ -948,7 +1313,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }
 
-  /* ======================= ДОБАВЛЕНИЕ ======================= */
+  /* ======================= ДОБАВЛЕНИЕ КНОПКИ ======================= */
   function addItem() {
     var text = textEl.value.trim();
     if (!text) {
@@ -988,7 +1353,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   });
 
-  /* ======================= КАТЕГОРИИ: СОЗДАНИЕ ======================= */
+  /* ======================= КАТЕГОРИИ ======================= */
   newCatBtn.addEventListener('click', function () {
     var willOpen = newCatRow.hidden;
     newCatRow.hidden = !willOpen;
@@ -1034,7 +1399,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   });
 
-  /* ======================= КАТЕГОРИИ: УДАЛЕНИЕ ======================= */
   function deleteCategory(id) {
     var cat = categories.find(function (c) { return c.id === id; });
     if (!cat) return;
@@ -1058,11 +1422,210 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Категория удалена');
   }
 
+  /* ======================= ЗАМЕТКИ: РЕНДЕР ======================= */
+  function renderNotes() {
+    notesGrid.innerHTML = '';
+
+    if (notes.length === 0) {
+      notesEmpty.style.display = 'block';
+      notesCount.textContent = '0';
+      return;
+    }
+    notesEmpty.style.display = 'none';
+    notesCount.textContent = notes.length;
+
+    notes.forEach(function (note) {
+      var card = document.createElement('div');
+      card.className = 'note-card';
+      card.dataset.id = note.id;
+
+      if (editingNoteId === note.id) {
+        // Режим редактирования
+        var ta = document.createElement('textarea');
+        ta.className = 'note-edit-input';
+        ta.value = note.text;
+        ta.addEventListener('input', function () {
+          ta.style.height = 'auto';
+          ta.style.height = ta.scrollHeight + 'px';
+        });
+
+        var actions = document.createElement('div');
+        actions.className = 'note-edit-actions';
+
+        var saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'note-btn save';
+        saveBtn.setAttribute('aria-label', 'Сохранить');
+        saveBtn.innerHTML = CHECK_SVG;
+
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'note-btn cancel';
+        cancelBtn.setAttribute('aria-label', 'Отменить');
+        cancelBtn.innerHTML = X_SVG;
+
+        saveBtn.addEventListener('click', function () {
+          var newText = ta.value.trim();
+          if (!newText) {
+            shake(ta);
+            ta.focus();
+            return;
+          }
+          note.text = newText;
+          editingNoteId = null;
+          saveNotes();
+          renderNotes();
+          showToast('Заметка сохранена');
+        });
+
+        cancelBtn.addEventListener('click', function () {
+          editingNoteId = null;
+          renderNotes();
+        });
+
+        ta.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            e.preventDefault();
+            saveBtn.click();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            cancelBtn.click();
+          }
+        });
+
+        actions.appendChild(cancelBtn);
+        actions.appendChild(saveBtn);
+        card.appendChild(ta);
+        card.appendChild(actions);
+
+        // Автовысота + фокус после вставки в DOM
+        setTimeout(function () {
+          ta.style.height = 'auto';
+          ta.style.height = ta.scrollHeight + 'px';
+          ta.focus();
+          ta.setSelectionRange(ta.value.length, ta.value.length);
+        }, 0);
+
+      } else {
+        // Просмотр
+        var text = document.createElement('div');
+        text.className = 'note-text';
+        text.textContent = note.text;
+
+        var actions2 = document.createElement('div');
+        actions2.className = 'note-actions';
+
+        var editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.className = 'note-btn';
+        editBtn.setAttribute('aria-label', 'Редактировать заметку');
+        editBtn.title = 'Редактировать';
+        editBtn.innerHTML = PENCIL_SVG;
+        editBtn.addEventListener('click', function () {
+          editingNoteId = note.id;
+          renderNotes();
+        });
+
+        var delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'note-btn del';
+        delBtn.setAttribute('aria-label', 'Удалить заметку');
+        delBtn.title = 'Удалить';
+        delBtn.innerHTML = X_SVG;
+        delBtn.addEventListener('click', function () {
+          card.style.animation = 'disappear .22s ease forwards';
+          setTimeout(function () {
+            notes = notes.filter(function (n) { return n.id !== note.id; });
+            if (editingNoteId === note.id) editingNoteId = null;
+            saveNotes();
+            renderNotes();
+            showToast('Заметка удалена');
+          }, 200);
+        });
+
+        actions2.appendChild(editBtn);
+        actions2.appendChild(delBtn);
+
+        card.appendChild(text);
+        card.appendChild(actions2);
+      }
+
+      notesGrid.appendChild(card);
+    });
+  }
+
+  /* ======================= МОДАЛКИ ======================= */
+  function openModal(modal) {
+    modal.classList.add('open');
+    document.body.classList.add('modal-open');
+  }
+  function closeModal(modal) {
+    modal.classList.remove('open');
+    if (!document.querySelector('.modal-backdrop.open')) {
+      document.body.classList.remove('modal-open');
+    }
+  }
+
+  [noteModal, infoModal].forEach(function (modal) {
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal) closeModal(modal);
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (noteModal.classList.contains('open')) closeModal(noteModal);
+      else if (infoModal.classList.contains('open')) closeModal(infoModal);
+    }
+  });
+
+  /* ======================= ЗАМЕТКИ: ДОБАВЛЕНИЕ ======================= */
+  addNoteFab.addEventListener('click', function () {
+    noteTextInput.value = '';
+    openModal(noteModal);
+    setTimeout(function () { noteTextInput.focus(); }, 120);
+  });
+
+  function submitNote() {
+    var text = noteTextInput.value.trim();
+    if (!text) {
+      shake(noteTextInput);
+      noteTextInput.focus();
+      return;
+    }
+    notes.unshift({
+      id: genId(),
+      text: text,
+      createdAt: Date.now()
+    });
+    saveNotes();
+    renderNotes();
+    closeModal(noteModal);
+    showToast('Заметка добавлена');
+  }
+
+  noteSave.addEventListener('click', submitNote);
+  noteCancel.addEventListener('click', function () { closeModal(noteModal); });
+  noteTextInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      submitNote();
+    }
+  });
+
+  /* ======================= ИНФО ======================= */
+  infoFab.addEventListener('click', function () {
+    openModal(infoModal);
+    setTimeout(function () { infoClose.focus(); }, 120);
+  });
+  infoClose.addEventListener('click', function () { closeModal(infoModal); });
+
   /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
   updateCategorySelect();
   autoGrow();
   updateAddState();
   render();
+  renderNotes();
 })();
 </script>
 </body>
