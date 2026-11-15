@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
 <style>
-/* ======================= ТЕМЫ ======================= */
+/* ======================= ТЕМЫ (light/dark) ======================= */
 :root{
   color-scheme: light;
   --bg:#eef1f7;
@@ -33,8 +33,10 @@
   --blob1:#8ab4ff;
   --blob2:#c9a7ff;
   --blob3:#8ee7ff;
+  --blob4:#b3d4ff;
   --blob-op:.55;
   --modal-bg:rgba(255,255,255,.94);
+  --cursor-glow:rgba(120,150,255,.18);
 }
 [data-theme="dark"]{
   color-scheme: dark;
@@ -55,8 +57,42 @@
   --blob1:#0b3f8f;
   --blob2:#4a1f8f;
   --blob3:#0a5a6b;
+  --blob4:#0a2f5c;
   --blob-op:.60;
   --modal-bg:rgba(24,24,28,.94);
+  --cursor-glow:rgba(120,150,255,.28);
+}
+
+/* ======================= ФОНОВЫЕ ТЕМЫ (покупаемые) ======================= */
+html[data-bgtheme="ocean"]{
+  --blob1:#00b4d8;--blob2:#0077b6;--blob3:#90e0ef;--blob4:#48cae4;
+}
+html[data-bgtheme="ocean"][data-theme="dark"]{
+  --blob1:#003d5c;--blob2:#002855;--blob3:#005a7a;--blob4:#002a3a;
+}
+html[data-bgtheme="sunset"]{
+  --blob1:#ff8a5c;--blob2:#ff5e7e;--blob3:#ffd93d;--blob4:#ffad5c;
+}
+html[data-bgtheme="sunset"][data-theme="dark"]{
+  --blob1:#5c2a1a;--blob2:#4a1f2a;--blob3:#6b5015;--blob4:#4a2510;
+}
+html[data-bgtheme="forest"]{
+  --blob1:#4ade80;--blob2:#22c55e;--blob3:#a3e635;--blob4:#86efac;
+}
+html[data-bgtheme="forest"][data-theme="dark"]{
+  --blob1:#145a2c;--blob2:#0a3d1a;--blob3:#3a5015;--blob4:#0f4522;
+}
+html[data-bgtheme="aurora"]{
+  --blob1:#00e0b8;--blob2:#8b5cf6;--blob3:#22d3ee;--blob4:#a78bfa;
+}
+html[data-bgtheme="aurora"][data-theme="dark"]{
+  --blob1:#004a3a;--blob2:#2a1f5c;--blob3:#005a6b;--blob4:#3a2a72;
+}
+html[data-bgtheme="galaxy"]{
+  --blob1:#a855f7;--blob2:#ec4899;--blob3:#6366f1;--blob4:#c084fc;
+}
+html[data-bgtheme="galaxy"][data-theme="dark"]{
+  --blob1:#4a1f8f;--blob2:#5c1f3a;--blob3:#1f2a8f;--blob4:#5a2aa0;
 }
 
 /* ======================= БАЗА ======================= */
@@ -79,16 +115,33 @@ body{
 body.intro-open,
 body.modal-open{overflow:hidden}
 
-/* ======================= ФОНОВЫЕ ПЯТНА ======================= */
+/* ======================= ФОН: ЖИВЫЕ ПЯТНА ======================= */
 .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 .blob{
-  position:absolute;border-radius:50%;filter:blur(90px);
+  position:absolute;border-radius:50%;filter:blur(80px);
   opacity:var(--blob-op);
-  transition:background .5s ease, opacity .5s ease;
+  will-change:transform;
+  transition:background .6s ease, opacity .5s ease;
 }
 .blob-1{width:520px;height:520px;background:var(--blob1);top:-190px;left:-140px}
 .blob-2{width:470px;height:470px;background:var(--blob2);bottom:-180px;right:-150px}
-.blob-3{width:400px;height:400px;background:var(--blob3);top:42%;left:52%}
+.blob-3{width:440px;height:440px;background:var(--blob3);top:32%;left:48%}
+.blob-4{width:380px;height:380px;background:var(--blob4);top:60%;left:-8%}
+
+.cursor-glow{
+  position:fixed;
+  top:0;left:0;
+  width:440px;height:440px;
+  margin-left:-220px;margin-top:-220px;
+  background:radial-gradient(circle,var(--cursor-glow) 0%,transparent 62%);
+  pointer-events:none;
+  z-index:-1;
+  will-change:transform;
+  transition:background .5s ease;
+}
+@media (hover:none){
+  .cursor-glow{display:none}
+}
 
 /* ======================= ИНТРО ======================= */
 .intro{
@@ -265,8 +318,7 @@ textarea.field{
 .select-wrap::after{
   content:'';
   position:absolute;
-  right:16px;
-  top:50%;
+  right:16px;top:50%;
   width:9px;height:9px;
   margin-top:-6px;
   transform:rotate(45deg);
@@ -414,109 +466,148 @@ select.field option{background:var(--bg);color:var(--text)}
   border-radius:24px;
 }
 
-/* ======================= ЗАМЕТКИ ======================= */
-.notes-section{display:flex;flex-direction:column;gap:10px}
-.notes-header{
-  display:flex;align-items:center;gap:8px;
-  padding:2px 6px 0;
+/* ======================= ЗАМЕТКИ: ПЛАВАЮЩИЕ ОКНА ======================= */
+.notes-layer{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  pointer-events:none;
+  overflow:hidden;
+  transition:opacity .2s ease;
 }
-.notes-title{
-  font-size:13px;font-weight:700;
-  color:var(--text-2);
-  letter-spacing:.02em;
+body.modal-open .notes-layer{
+  opacity:0;
+  pointer-events:none;
 }
-.notes-grid{display:flex;flex-direction:column;gap:10px}
-.notes-empty{
-  padding:22px 18px;text-align:center;
-  font-size:13px;font-weight:500;line-height:1.5;
-  color:var(--text-3);
-  border:1.5px dashed var(--dash);
-  border-radius:18px;
-}
-
-.note-card{
-  position:relative;
-  display:flex;flex-direction:column;gap:10px;
-  padding:14px 14px 10px 22px;
-  border-radius:18px;
-  background:var(--card);
+.note-window{
+  position:absolute;
+  width:280px;
+  max-width:calc(100vw - 32px);
+  background:var(--modal-bg);
+  border-radius:16px;
   border:1px solid var(--card-border);
-  backdrop-filter:blur(30px) saturate(180%);
-  -webkit-backdrop-filter:blur(30px) saturate(180%);
-  box-shadow:var(--shadow);
-  animation:pop .34s cubic-bezier(.2,.9,.3,1.15);
+  box-shadow:0 18px 50px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.08);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  pointer-events:auto;
+  display:flex;
+  flex-direction:column;
+  user-select:none;
+  animation:noteIn .28s cubic-bezier(.2,.9,.3,1.15);
 }
-.note-card::before{
+@keyframes noteIn{
+  from{opacity:0;transform:scale(.9)}
+  to{opacity:1;transform:none}
+}
+.note-window.dragging{
+  transition:none;
+  box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 12px rgba(0,0,0,.12);
+}
+.note-window::before{
   content:'';
   position:absolute;
-  left:8px;top:14px;bottom:14px;
-  width:3px;border-radius:3px;
+  left:0;top:14px;bottom:14px;
+  width:3px;border-radius:0 3px 3px 0;
   background:linear-gradient(180deg,var(--accent),var(--accent2));
+  pointer-events:none;
 }
-.note-text{
+
+.note-header{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 8px 9px 12px;
+  border-bottom:1px solid var(--card-border);
+  cursor:grab;
+  touch-action:none;
+}
+.note-header:active{cursor:grabbing}
+
+.note-drag{
+  color:var(--text-3);
   font-size:14px;
-  line-height:1.5;
-  font-weight:500;
-  color:var(--text);
-  white-space:pre-wrap;
-  word-break:break-word;
+  line-height:1;
+  letter-spacing:-2px;
+  flex:0 0 auto;
+  user-select:none;
+}
+.note-title{
+  flex:1 1 auto;
+  font-size:11px;
+  font-weight:700;
+  color:var(--text-2);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .note-actions{
-  display:flex;gap:4px;
-  justify-content:flex-end;
-  margin-top:-2px;
+  display:flex;
+  gap:2px;
+  flex:0 0 auto;
 }
-.note-btn{
-  width:30px;height:30px;
-  border:none;border-radius:8px;
+.note-action-btn{
+  width:26px;height:26px;
+  border:none;border-radius:7px;
   background:transparent;
   color:var(--text-3);
   cursor:pointer;
-  display:grid;place-items:center;
-  transition:background .2s ease, color .2s ease, transform .15s ease;
+  display:grid;
+  place-items:center;
+  font-size:14px;
+  font-family:inherit;
+  transition:background .15s, color .15s, transform .1s;
 }
-.note-btn:hover{background:var(--field);color:var(--text)}
-.note-btn.del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
-.note-btn:active{transform:scale(.9)}
+.note-action-btn:hover{background:var(--field);color:var(--text)}
+.note-action-btn.del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.note-action-btn.save{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+.note-action-btn.save:hover{filter:brightness(1.08)}
+.note-action-btn:active{transform:scale(.9)}
 
-.note-edit-input{
+.note-body{
+  padding:12px 14px 14px 16px;
+  max-height:300px;
+  overflow-y:auto;
+}
+.note-view{
+  font-size:13.5px;
+  line-height:1.5;
+  color:var(--text);
+  white-space:pre-wrap;
+  word-break:break-word;
+  min-height:18px;
+  user-select:text;
+  cursor:text;
+}
+.note-view:empty::before{
+  content:'Пустая заметка…';
+  color:var(--text-3);
+  font-style:italic;
+}
+.note-edit{
   width:100%;
   font-family:inherit;
-  font-size:14px;
-  font-weight:500;
+  font-size:13.5px;
   line-height:1.5;
   color:var(--text);
   background:var(--field);
   border:none;
-  border-radius:12px;
-  padding:12px 14px;
+  border-radius:10px;
+  padding:10px 12px;
   outline:none;
   resize:none;
-  overflow:hidden;
-  min-height:70px;
-  display:block;
-  transition:box-shadow .25s ease;
+  min-height:80px;
+  max-height:240px;
+  display:none;
+  user-select:text;
 }
-.note-edit-input:focus{box-shadow:0 0 0 3px var(--ring)}
-.note-edit-actions{
-  display:flex;gap:8px;justify-content:flex-end;
-}
-.note-edit-actions .note-btn{
-  width:36px;height:36px;border-radius:10px;
-}
-.note-edit-actions .note-btn.save{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
-}
-.note-edit-actions .note-btn.save:hover{
-  filter:brightness(1.08);
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
-}
-.note-edit-actions .note-btn.cancel:hover{
-  background:rgba(255,59,48,.12);
-  color:var(--danger);
-}
+.note-edit:focus{box-shadow:0 0 0 3px var(--ring)}
+.note-window.editing .note-view{display:none}
+.note-window.editing .note-edit{display:block}
 
 /* ======================= FAB ======================= */
 .fab-stack{
@@ -596,26 +687,6 @@ select.field option{background:var(--bg);color:var(--text)}
   font-size:18px;
   letter-spacing:-.01em;
 }
-.modal-textarea{
-  width:100%;
-  font-family:inherit;
-  font-size:14px;
-  font-weight:500;
-  line-height:1.55;
-  color:var(--text);
-  background:var(--field);
-  border:none;
-  border-radius:14px;
-  padding:12px 14px;
-  outline:none;
-  resize:vertical;
-  min-height:120px;
-  max-height:280px;
-  display:block;
-  transition:box-shadow .25s ease;
-}
-.modal-textarea::placeholder{color:var(--text-3);font-weight:400}
-.modal-textarea:focus{box-shadow:0 0 0 3px var(--ring)}
 .modal-actions{
   display:flex;gap:10px;justify-content:flex-end;
   margin-top:16px;
@@ -659,10 +730,7 @@ select.field option{background:var(--bg);color:var(--text)}
 }
 
 /* ======================= ИГРА-КЛИКЕР ======================= */
-.game-modal{
-  max-width:420px;
-  max-height:88vh;
-}
+.game-modal{max-width:420px;max-height:88vh}
 .game-head{
   display:flex;align-items:center;justify-content:space-between;
   margin-bottom:10px;
@@ -682,14 +750,11 @@ select.field option{background:var(--bg);color:var(--text)}
 .game-close:hover{background:var(--field-hover)}
 .game-close:active{transform:scale(.9)}
 
-.game-score-display{
-  text-align:center;
-  padding:4px 0 14px;
-}
+.game-score-display{text-align:center;padding:4px 0 14px}
 .game-score{
   font-family:'Unbounded','Manrope',sans-serif;
   font-weight:600;
-  font-size:36px;
+  font-size:34px;
   background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
   -webkit-background-clip:text;
   background-clip:text;
@@ -709,9 +774,9 @@ select.field option{background:var(--bg);color:var(--text)}
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:4px;
+  gap:6px;
   width:100%;
-  padding:26px 0;
+  padding:22px 0;
   border:none;
   border-radius:20px;
   background:linear-gradient(135deg,var(--accent),var(--accent2));
@@ -726,8 +791,19 @@ select.field option{background:var(--bg);color:var(--text)}
   touch-action:manipulation;
 }
 .game-clicker:active{transform:scale(.97)}
-.game-clicker-emoji{font-size:44px;line-height:1}
-.game-clicker-label{font-size:13px;font-weight:700;opacity:.92}
+.game-clicker-logo{
+  filter:drop-shadow(0 4px 16px rgba(0,0,0,.4));
+  position:relative;
+  z-index:1;
+  pointer-events:none;
+}
+.game-clicker-label{
+  font-size:13px;
+  font-weight:700;
+  opacity:.94;
+  position:relative;
+  z-index:1;
+}
 
 .game-plus{
   position:absolute;
@@ -739,6 +815,7 @@ select.field option{background:var(--bg);color:var(--text)}
   pointer-events:none;
   text-shadow:0 2px 10px rgba(0,0,0,.35);
   animation:floatUp .8s ease-out forwards;
+  z-index:2;
 }
 @keyframes floatUp{
   from{opacity:1;transform:translate(-50%,-50%) scale(1)}
@@ -749,7 +826,7 @@ select.field option{background:var(--bg);color:var(--text)}
   display:flex;
   justify-content:space-around;
   gap:8px;
-  font-size:12px;
+  font-size:11.5px;
   color:var(--text-2);
   font-weight:500;
   margin:12px 0;
@@ -763,7 +840,7 @@ select.field option{background:var(--bg);color:var(--text)}
   display:block;
   color:var(--text);
   font-weight:700;
-  font-size:14px;
+  font-size:13.5px;
   margin-top:2px;
 }
 
@@ -773,14 +850,15 @@ select.field option{background:var(--bg);color:var(--text)}
   text-transform:uppercase;
   letter-spacing:.07em;
   color:var(--text-2);
-  margin:4px 4px 8px;
+  margin:8px 4px 8px;
+  display:flex;align-items:center;gap:6px;
 }
 
 .game-upgrades{
   display:flex;
   flex-direction:column;
   gap:6px;
-  margin-bottom:14px;
+  margin-bottom:8px;
 }
 .game-upgrade{
   display:flex;
@@ -831,10 +909,69 @@ select.field option{background:var(--bg);color:var(--text)}
 }
 .game-upgrade:disabled .game-upgrade-cost{color:var(--text-3)}
 
+/* ======================= МАГАЗИН ТЕМ ======================= */
+.game-themes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-bottom:10px;
+}
+.game-theme{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:var(--field);
+  border:2px solid transparent;
+  cursor:pointer;
+  color:var(--text);
+  font-family:inherit;
+  text-align:left;
+  transition:background .2s ease, border-color .2s ease, transform .1s ease;
+  min-width:0;
+}
+.game-theme:hover:not(.active){background:var(--field-hover)}
+.game-theme:active{transform:scale(.97)}
+.game-theme.active{
+  border-color:var(--accent);
+  background:rgba(10,132,255,.08);
+  cursor:default;
+}
+.game-theme-swatch{
+  flex:0 0 22px;
+  width:22px;
+  height:28px;
+  border-radius:6px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
+}
+.game-theme-swatch span{flex:1}
+.game-theme-body{flex:1 1 auto;min-width:0}
+.game-theme-name{
+  font-size:12.5px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.game-theme-status{
+  font-size:10.5px;
+  font-weight:600;
+  color:var(--text-2);
+  margin-top:1px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.game-theme.active .game-theme-status{color:var(--accent)}
+
 .game-footer{
   display:flex;
   justify-content:center;
-  margin-top:4px;
+  margin-top:8px;
 }
 .game-footer .btn-secondary{padding:8px 16px;font-size:12.5px}
 
@@ -880,7 +1017,7 @@ footer{
 }
 footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
-/* ======================= АНИМАЦИЯ ОШИБКИ ======================= */
+/* ======================= АНИМАЦИИ ОШИБКИ ======================= */
 .shake{animation:shake .45s ease}
 @keyframes shake{
   10%,90%{transform:translateX(-1px)}
@@ -899,8 +1036,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   .fab{padding:10px 14px;font-size:13px;gap:6px}
   footer{font-size:10.5px;padding:6px 12px calc(8px + env(safe-area-inset-bottom));max-width:230px}
-  .game-score{font-size:30px}
-  .game-clicker-emoji{font-size:38px}
+  .game-score{font-size:28px}
+  .game-clicker-logo{width:64px;height:64px}
+  .game-themes{grid-template-columns:1fr}
 }
 @media (max-width:420px){
   .brand-name{font-size:16px}
@@ -908,6 +1046,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   footer{font-size:10px;max-width:200px}
   .fab{font-size:12.5px}
   .theme-toggle{width:38px;height:38px;font-size:18px}
+  .note-window{width:calc(100vw - 32px)}
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
@@ -947,10 +1086,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
 <!-- ======================= ФОН ======================= -->
 <div class="bg-blobs" aria-hidden="true">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
+  <div class="blob blob-1" data-blob="0"></div>
+  <div class="blob blob-2" data-blob="1"></div>
+  <div class="blob blob-3" data-blob="2"></div>
+  <div class="blob blob-4" data-blob="3"></div>
 </div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 <!-- ======================= ШАПКА ======================= -->
 <header class="topbar">
@@ -1030,15 +1171,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   <section class="list" id="list"></section>
   <div class="empty" id="empty">Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.</div>
-
-  <section class="notes-section" id="notesSection">
-    <div class="notes-header">
-      <span class="notes-title">📝 Заметки</span>
-      <span class="section-count" id="notesCount">0</span>
-    </div>
-    <div class="notes-grid" id="notesGrid"></div>
-    <div class="notes-empty" id="notesEmpty">Пока нет заметок.<br>Нажмите «Добавить заметку» в правом нижнем углу.</div>
-  </section>
 </main>
 
 <!-- ======================= ПОДПИСЬ ======================= -->
@@ -1046,6 +1178,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   <span>Идея взята из разработки Ивана Першина</span>
   <span>2026 Собственная доработка deathlonely</span>
 </footer>
+
+<!-- ======================= СЛОЙ ЗАМЕТОК ======================= -->
+<div class="notes-layer" id="notesLayer"></div>
 
 <!-- ======================= FAB ======================= -->
 <div class="fab-stack">
@@ -1059,50 +1194,43 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </button>
 </div>
 
-<!-- ======================= МОДАЛКА: ЗАМЕТКА ======================= -->
-<div class="modal-backdrop" id="noteModal">
-  <div class="modal">
-    <h3>Новая заметка</h3>
-    <textarea id="noteTextInput" class="modal-textarea" rows="4"
-              placeholder="Введите текст заметки…"></textarea>
-    <div class="modal-actions">
-      <button class="btn-secondary" id="noteCancel" type="button">Отмена</button>
-      <button class="btn-primary" id="noteSave" type="button">✓ Сохранить</button>
-    </div>
-  </div>
-</div>
-
 <!-- ======================= МОДАЛКА: ИНФО ======================= -->
 <div class="modal-backdrop" id="infoModal">
   <div class="modal">
     <h3>Как это работает</h3>
     <div class="info-content">
       <h4>Что такое Копирка 2.0</h4>
-      <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок и организации кнопок по категориям. Все данные хранятся только в вашем браузере — ничего никуда не отправляется.</p>
+      <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок, организации кнопок по категориям и мини-игры. Все данные хранятся только в вашем браузере.</p>
 
       <h4>Добавить кнопку</h4>
-      <p>Введите текст, который нужно копировать, придумайте название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в списке ниже.</p>
+      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в списке ниже.</p>
 
       <h4>Копирование</h4>
       <p>Нажмите на кнопку — текст моментально попадёт в буфер обмена. Вверху экрана появится подтверждение «Скопировано».</p>
 
       <h4>Категории</h4>
-      <p>Нажмите «+» рядом с выпадающим списком, чтобы создать новую категорию. Выбранная категория применяется к следующей добавляемой кнопке. Чтобы удалить категорию, нажмите крестик на её заголовке — кнопки из неё переедут в «Без категории».</p>
+      <p>Нажмите «+» рядом с выпадающим списком, чтобы создать новую категорию. Выбранная категория применяется к следующей добавляемой кнопке. Крестик на заголовке категории удалит её — кнопки переедут в «Без категории».</p>
 
       <h4>Закрепление</h4>
-      <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» наверху. Повторное нажатие открепляет. Удобно для самых частых действий.</p>
+      <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» наверху. Повторное нажатие открепляет.</p>
 
       <h4>Заметки</h4>
-      <p>Кнопка «Добавить заметку» в правом нижнем углу открывает окно ввода. Заметки отображаются отдельными карточками ниже списка кнопок. Их можно редактировать (иконка карандаша) и удалять (крестик).</p>
+      <p>Кнопка «Добавить заметку» создаёт плавающее окно, которое можно перемещать по экрану, перетаскивая за заголовок. В окне можно сразу печатать текст. Иконка ✏️ переключает в режим редактирования, ✓ сохраняет, ✕ удаляет заметку. Позиция каждой заметки сохраняется в браузере.</p>
 
       <h4>Игра «Клик-Копирка»</h4>
-      <p>Кнопка 🎮 в правом верхнем углу открывает мини-игру-кликер. Кликайте по большой карточке, чтобы зарабатывать очки, и покупайте улучшения (сила клика и автокликер). Пассивный доход начисляется даже когда окно закрыто. Прогресс сохраняется.</p>
+      <p>Кнопка 🎮 в правом верхнем углу открывает мини-игру. Кликайте по логотипу, чтобы зарабатывать очки, покупайте улучшения и открывайте новые фоновые темы сайта. Пассивный доход начисляется даже когда окно закрыто.</p>
 
-      <h4>Темы</h4>
-      <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается.</p>
+      <h4>Магазин тем</h4>
+      <p>В игре есть 6 тем оформления фона — от бесплатной базовой до очень дорогих (Океан, Закат, Лес, Полярное сияние, Галактика). Купив тему, вы можете применить её в один клик — весь фон сайта изменится.</p>
+
+      <h4>Живой фон</h4>
+      <p>Цветные пятна на фоне плавно движутся сами и мягко реагируют на положение курсора мыши. На мобильных устройствах движение продолжается автоматически.</p>
+
+      <h4>Темы светлая/тёмная</h4>
+      <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается отдельно от фоновой темы.</p>
 
       <h4>Сохранение</h4>
-      <p>Все кнопки, категории, заметки и прогресс игры сохраняются в localStorage браузера. Они остаются после закрытия вкладки, но привязаны к этому устройству и браузеру. Очистка данных сайта удалит всё.</p>
+      <p>Все кнопки, категории, заметки, прогресс игры и купленные темы сохраняются в localStorage. Они остаются после закрытия вкладки, но привязаны к этому устройству и браузеру.</p>
     </div>
     <div class="modal-actions">
       <button class="btn-primary" id="infoClose" type="button">Понятно</button>
@@ -1123,8 +1251,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <div class="game-rate" id="gameRate">0 в секунду</div>
     </div>
 
-    <button class="game-clicker" id="gameClicker" type="button">
-      <span class="game-clicker-emoji">📋</span>
+    <button class="game-clicker" id="gameClicker" type="button" aria-label="Кликни">
+      <svg class="game-clicker-logo" viewBox="0 0 36 36" width="72" height="72" aria-hidden="true">
+        <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
+        <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
+        <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none"
+              stroke="url(#lgSheet)" stroke-width="2"/>
+        <rect x="9" y="13" width="13" height="13" rx="4" fill="url(#lgSheet)"/>
+      </svg>
       <span class="game-clicker-label" id="gameClickerLabel">Кликни +1</span>
     </button>
 
@@ -1134,7 +1268,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <div>В секунду<strong id="gamePerSecond">0</strong></div>
     </div>
 
-    <div class="game-section-label">Улучшения</div>
+    <div class="game-section-label">🎨 Магазин тем</div>
+    <div class="game-themes" id="gameThemes"></div>
+
+    <div class="game-section-label">⚡ Улучшения</div>
     <div class="game-upgrades" id="gameUpgrades"></div>
 
     <div class="game-footer">
@@ -1180,28 +1317,24 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var toastText     = document.getElementById('toastText');
   var metaTheme     = document.querySelector('meta[name="theme-color"]');
   var introEl       = document.getElementById('intro');
-  var notesGrid     = document.getElementById('notesGrid');
-  var notesEmpty    = document.getElementById('notesEmpty');
-  var notesCount    = document.getElementById('notesCount');
+  var notesLayer    = document.getElementById('notesLayer');
   var addNoteFab    = document.getElementById('addNoteFab');
   var infoFab       = document.getElementById('infoFab');
-  var noteModal     = document.getElementById('noteModal');
-  var noteTextInput = document.getElementById('noteTextInput');
-  var noteCancel    = document.getElementById('noteCancel');
-  var noteSave      = document.getElementById('noteSave');
   var infoModal     = document.getElementById('infoModal');
   var infoClose     = document.getElementById('infoClose');
   var gameModal     = document.getElementById('gameModal');
   var gameClose     = document.getElementById('gameClose');
-  var gameScore     = document.getElementById('gameScore');
-  var gameRate      = document.getElementById('gameRate');
+  var gameScoreEl   = document.getElementById('gameScore');
+  var gameRateEl    = document.getElementById('gameRate');
   var gameClicker   = document.getElementById('gameClicker');
   var gameClickLbl  = document.getElementById('gameClickerLabel');
   var gameClicksEl  = document.getElementById('gameTotalClicks');
   var gamePerClickEl= document.getElementById('gamePerClick');
   var gamePerSecEl  = document.getElementById('gamePerSecond');
   var gameUpgradesEl= document.getElementById('gameUpgrades');
+  var gameThemesEl  = document.getElementById('gameThemes');
   var gameResetBtn  = document.getElementById('gameReset');
+  var cursorGlow    = document.getElementById('cursorGlow');
 
   /* ======================= ХЕЛПЕРЫ ======================= */
   function genId() {
@@ -1209,24 +1342,24 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   function formatNum(n) {
     n = Math.floor(n);
+    if (!isFinite(n)) return '∞';
     if (n < 1000) return String(n);
-    if (n < 1000000) {
-      var k = n / 1000;
-      return (k < 10 ? k.toFixed(1) : Math.floor(k)) + 'K';
+    var units = [
+      { v: 1e3, s: 'K' }, { v: 1e6, s: 'M' }, { v: 1e9, s: 'B' },
+      { v: 1e12, s: 'T' }, { v: 1e15, s: 'Qa' }, { v: 1e18, s: 'Qi' }
+    ];
+    for (var i = units.length - 1; i >= 0; i--) {
+      if (n >= units[i].v) {
+        var x = n / units[i].v;
+        return (x < 10 ? x.toFixed(1) : Math.floor(x)) + units[i].s;
+      }
     }
-    if (n < 1000000000) {
-      var m = n / 1000000;
-      return (m < 10 ? m.toFixed(1) : Math.floor(m)) + 'M';
-    }
-    var b = n / 1000000000;
-    return (b < 10 ? b.toFixed(1) : Math.floor(b)) + 'B';
+    return String(n);
   }
 
-  /* ======================= СОСТОЯНИЕ ======================= */
+  /* ======================= СОСТОЯНИЕ: КНОПКИ / КАТЕГОРИИ ======================= */
   var items = [];
   var categories = [];
-  var notes = [];
-  var editingNoteId = null;
 
   try {
     var rawItems = JSON.parse(localStorage.getItem(ITEMS_KEY));
@@ -1252,19 +1385,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   } catch (e) { categories = []; }
 
-  try {
-    var rawNotes = JSON.parse(localStorage.getItem(NOTES_KEY));
-    if (Array.isArray(rawNotes)) {
-      notes = rawNotes.map(function (n) {
-        return {
-          id: n.id || genId(),
-          text: typeof n.text === 'string' ? n.text : '',
-          createdAt: n.createdAt || Date.now()
-        };
-      });
-    }
-  } catch (e) { notes = []; }
-
   var catIds = {};
   categories.forEach(function (c) { catIds[c.id] = true; });
   items.forEach(function (i) {
@@ -1275,11 +1395,32 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch (e) {}
     try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
   }
+
+  /* ======================= СОСТОЯНИЕ: ЗАМЕТКИ ======================= */
+  var notes = [];
+  var editingNoteId = null;
+
+  try {
+    var rawNotes = JSON.parse(localStorage.getItem(NOTES_KEY));
+    if (Array.isArray(rawNotes)) {
+      notes = rawNotes.map(function (n, i) {
+        return {
+          id: n.id || genId(),
+          text: typeof n.text === 'string' ? n.text : '',
+          createdAt: n.createdAt || Date.now(),
+          x: typeof n.x === 'number' ? n.x : undefined,
+          y: typeof n.y === 'number' ? n.y : undefined,
+          z: typeof n.z === 'number' ? n.z : (i + 1)
+        };
+      });
+    }
+  } catch (e) { notes = []; }
+
   function saveNotes() {
     try { localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); } catch (e) {}
   }
 
-  /* ======================= ТЕМА ======================= */
+  /* ======================= ТЕМА (light/dark) ======================= */
   function applyTheme(theme, persist) {
     document.documentElement.setAttribute('data-theme', theme);
     if (metaTheme) {
@@ -1289,7 +1430,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
     }
   }
-
   var savedTheme = null;
   try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
   if (savedTheme !== 'dark' && savedTheme !== 'light') {
@@ -1334,10 +1474,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function updateAddState() {
     addBtn.disabled = textEl.value.trim().length === 0;
   }
-  textEl.addEventListener('input', function () {
-    autoGrow();
-    updateAddState();
-  });
+  textEl.addEventListener('input', function () { autoGrow(); updateAddState(); });
 
   function shake(el) {
     el.classList.remove('shake');
@@ -1361,7 +1498,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     document.body.removeChild(ta);
     return ok;
   }
-
   function copyText(text, itemEl) {
     function success() {
       showToast('Скопировано');
@@ -1373,7 +1509,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       }
     }
     function failure() { showToast('Не удалось скопировать'); }
-
     if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
       navigator.clipboard.writeText(text).then(success).catch(function () {
         if (legacyCopy(text)) success(); else failure();
@@ -1384,28 +1519,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
 
   /* ======================= ИКОНКИ ======================= */
-  var X_SVG =
-    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+  var X_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
     'stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-
-  var PIN_SVG =
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+  var PIN_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
     'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
     '<path d="M12 17v5"/>' +
     '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
     '</svg>';
-
-  var PENCIL_SVG =
-    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-    '<path d="M12 20h9"/>' +
-    '<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>' +
-    '</svg>';
-
-  var CHECK_SVG =
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-    'stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">' +
-    '<path d="M4.5 12.6l5 5L19.5 6.6"/></svg>';
 
   /* ======================= SELECT КАТЕГОРИЙ ======================= */
   function updateCategorySelect() {
@@ -1423,9 +1543,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
 
   /* ======================= РЕНДЕР КНОПОК ======================= */
-  function preview(text) {
-    return text.replace(/\s+/g, ' ').trim();
-  }
+  function preview(text) { return text.replace(/\s+/g, ' ').trim(); }
 
   function createItemEl(item) {
     var row = document.createElement('div');
@@ -1436,15 +1554,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     main.type = 'button';
     main.className = 'item-main';
     main.title = 'Нажмите, чтобы скопировать';
-
     var nameSpan = document.createElement('span');
     nameSpan.className = 'item-name';
     nameSpan.textContent = item.name;
-
     var textSpan = document.createElement('span');
     textSpan.className = 'item-text';
     textSpan.textContent = preview(item.text);
-
     main.appendChild(nameSpan);
     main.appendChild(textSpan);
     main.addEventListener('click', function () { copyText(item.text, row); });
@@ -1487,18 +1602,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function renderSection(title, sectionItems, cat) {
     var sec = document.createElement('div');
     sec.className = 'section';
-
     var head = document.createElement('div');
     head.className = 'section-head';
-
     var nameElSec = document.createElement('span');
     nameElSec.className = 'section-name';
     nameElSec.textContent = title;
-
     var countEl = document.createElement('span');
     countEl.className = 'section-count';
     countEl.textContent = sectionItems.length;
-
     head.appendChild(nameElSec);
     head.appendChild(countEl);
 
@@ -1511,12 +1622,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       delBtn.addEventListener('click', function () { deleteCategory(cat.id); });
       head.appendChild(delBtn);
     }
-
     sec.appendChild(head);
 
     var wrap = document.createElement('div');
     wrap.className = 'section-items';
-
     if (sectionItems.length === 0) {
       var hint = document.createElement('div');
       hint.className = 'section-empty';
@@ -1525,34 +1634,28 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     } else {
       sectionItems.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
     }
-
     sec.appendChild(wrap);
     return sec;
   }
 
   function render() {
     listEl.innerHTML = '';
-
     if (items.length === 0 && categories.length === 0) {
       emptyEl.style.display = 'block';
       return;
     }
     emptyEl.style.display = 'none';
-
     var pinned = items.filter(function (i) { return i.pinned; });
     var hasOthers = pinned.length > 0 || categories.length > 0;
-
     if (pinned.length > 0) {
       listEl.appendChild(renderSection('Закреплённые', pinned, null));
     }
-
     categories.forEach(function (cat) {
       var catItems = items.filter(function (i) {
         return !i.pinned && i.categoryId === cat.id;
       });
       listEl.appendChild(renderSection(cat.name, catItems, cat));
     });
-
     var uncat = items.filter(function (i) { return !i.pinned && !i.categoryId; });
     if (hasOthers) {
       if (uncat.length > 0) {
@@ -1569,26 +1672,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   /* ======================= ДОБАВЛЕНИЕ КНОПКИ ======================= */
   function addItem() {
     var text = textEl.value.trim();
-    if (!text) {
-      shake(textEl);
-      textEl.focus();
-      return;
-    }
-
+    if (!text) { shake(textEl); textEl.focus(); return; }
     var name = nameEl.value.trim() || 'Копировать';
     var categoryId = catSelect.value || null;
-
-    items.unshift({
-      id: genId(),
-      name: name,
-      text: text,
-      pinned: false,
-      categoryId: categoryId
-    });
-
+    items.unshift({ id: genId(), name: name, text: text, pinned: false, categoryId: categoryId });
     save();
     render();
-
     textEl.value = '';
     nameEl.value = '';
     autoGrow();
@@ -1596,14 +1685,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     textEl.focus();
     showToast('Кнопка добавлена');
   }
-
   addBtn.addEventListener('click', addItem);
-
   nameEl.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addItem();
-    }
+    if (e.key === 'Enter') { e.preventDefault(); addItem(); }
   });
 
   /* ======================= КАТЕГОРИИ ======================= */
@@ -1611,27 +1695,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var willOpen = newCatRow.hidden;
     newCatRow.hidden = !willOpen;
     newCatBtn.classList.toggle('open', willOpen);
-    if (willOpen) {
-      newCatInput.value = '';
-      newCatInput.focus();
-    }
+    if (willOpen) { newCatInput.value = ''; newCatInput.focus(); }
   });
-
   function submitNewCategory() {
     var name = newCatInput.value.trim();
-    if (!name) {
-      shake(newCatInput);
-      newCatInput.focus();
-      return;
+    if (!name) { shake(newCatInput); newCatInput.focus(); return; }
+    if (categories.some(function (c) { return c.name.toLowerCase() === name.toLowerCase(); })) {
+      showToast('Такая категория уже есть'); shake(newCatInput); return;
     }
-    if (categories.some(function (c) {
-      return c.name.toLowerCase() === name.toLowerCase();
-    })) {
-      showToast('Такая категория уже есть');
-      shake(newCatInput);
-      return;
-    }
-
     var cat = { id: genId(), name: name };
     categories.push(cat);
     save();
@@ -1643,31 +1714,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     render();
     showToast('Категория создана');
   }
-
   newCatConfirm.addEventListener('click', submitNewCategory);
   newCatInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      submitNewCategory();
-    }
+    if (e.key === 'Enter') { e.preventDefault(); submitNewCategory(); }
   });
-
   function deleteCategory(id) {
     var cat = categories.find(function (c) { return c.id === id; });
     if (!cat) return;
-
     var ok = true;
-    try {
-      ok = window.confirm(
-        'Удалить категорию «' + cat.name + '»?\nКнопки из неё переместятся в «Без категории».'
-      );
-    } catch (e) { ok = true; }
-
+    try { ok = window.confirm('Удалить категорию «' + cat.name + '»?\nКнопки переместятся в «Без категории».'); }
+    catch (e) { ok = true; }
     if (!ok) return;
-
-    items.forEach(function (i) {
-      if (i.categoryId === id) i.categoryId = null;
-    });
+    items.forEach(function (i) { if (i.categoryId === id) i.categoryId = null; });
     categories = categories.filter(function (c) { return c.id !== id; });
     save();
     updateCategorySelect();
@@ -1675,134 +1733,347 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Категория удалена');
   }
 
-  /* ======================= ЗАМЕТКИ: РЕНДЕР ======================= */
-  function renderNotes() {
-    notesGrid.innerHTML = '';
+  /* ======================= ЗАМЕТКИ: ПЛАВАЮЩИЕ ОКНА ======================= */
+  var topZ = 100;
+  notes.forEach(function (n) { if (n.z > topZ) topZ = n.z; });
 
-    if (notes.length === 0) {
-      notesEmpty.style.display = 'block';
-      notesCount.textContent = '0';
-      return;
-    }
-    notesEmpty.style.display = 'none';
-    notesCount.textContent = notes.length;
+  function getViewportSize() {
+    return { w: window.innerWidth, h: window.innerHeight };
+  }
+  function clampNotePosition(x, y) {
+    var vp = getViewportSize();
+    var w = Math.min(280, vp.w - 32);
+    var h = 220;
+    var maxX = Math.max(8, vp.w - w - 8);
+    var maxY = Math.max(60, vp.h - h - 8);
+    return {
+      x: Math.max(8, Math.min(Math.round(x), maxX)),
+      y: Math.max(60, Math.min(Math.round(y), maxY))
+    };
+  }
+  function defaultNotePosition(index) {
+    var vp = getViewportSize();
+    var staggerX = (index * 30) % 120;
+    var staggerY = (index * 24) % 100;
+    var x = vp.w / 2 - 140 + staggerX - 60;
+    var y = vp.h / 2 - 110 + staggerY - 50;
+    return clampNotePosition(x, y);
+  }
 
-    notes.forEach(function (note) {
-      var card = document.createElement('div');
-      card.className = 'note-card';
-      card.dataset.id = note.id;
+  function createNoteElement(note) {
+    var el = document.createElement('div');
+    el.className = 'note-window';
+    el.dataset.id = note.id;
+    el.style.left = note.x + 'px';
+    el.style.top = note.y + 'px';
+    el.style.zIndex = String(note.z);
 
-      if (editingNoteId === note.id) {
-        var ta = document.createElement('textarea');
-        ta.className = 'note-edit-input';
-        ta.value = note.text;
-        ta.addEventListener('input', function () {
-          ta.style.height = 'auto';
-          ta.style.height = ta.scrollHeight + 'px';
-        });
+    var header = document.createElement('div');
+    header.className = 'note-header';
+    header.innerHTML =
+      '<span class="note-drag">⠿</span>' +
+      '<span class="note-title">Заметка</span>' +
+      '<div class="note-actions"></div>';
 
-        var actions = document.createElement('div');
-        actions.className = 'note-edit-actions';
+    var actionsEl = header.querySelector('.note-actions');
 
+    var body = document.createElement('div');
+    body.className = 'note-body';
+
+    var viewEl = document.createElement('div');
+    viewEl.className = 'note-view';
+    viewEl.textContent = note.text;
+
+    var editEl = document.createElement('textarea');
+    editEl.className = 'note-edit';
+    editEl.spellcheck = false;
+
+    body.appendChild(viewEl);
+    body.appendChild(editEl);
+
+    el.appendChild(header);
+    el.appendChild(body);
+
+    // Кнопки в зависимости от режима
+    function setButtons(mode) {
+      actionsEl.innerHTML = '';
+      if (mode === 'edit') {
         var saveBtn = document.createElement('button');
         saveBtn.type = 'button';
-        saveBtn.className = 'note-btn save';
+        saveBtn.className = 'note-action-btn save';
         saveBtn.setAttribute('aria-label', 'Сохранить');
-        saveBtn.innerHTML = CHECK_SVG;
+        saveBtn.textContent = '✓';
+        saveBtn.addEventListener('click', function () { commitEdit(note, el); });
 
         var cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
-        cancelBtn.className = 'note-btn cancel';
+        cancelBtn.className = 'note-action-btn del';
         cancelBtn.setAttribute('aria-label', 'Отменить');
-        cancelBtn.innerHTML = X_SVG;
+        cancelBtn.textContent = '✕';
+        cancelBtn.addEventListener('click', function () { cancelEdit(note, el); });
 
-        saveBtn.addEventListener('click', function () {
-          var newText = ta.value.trim();
-          if (!newText) {
-            shake(ta);
-            ta.focus();
-            return;
-          }
-          note.text = newText;
-          editingNoteId = null;
-          saveNotes();
-          renderNotes();
-          showToast('Заметка сохранена');
-        });
-
-        cancelBtn.addEventListener('click', function () {
-          editingNoteId = null;
-          renderNotes();
-        });
-
-        ta.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            saveBtn.click();
-          } else if (e.key === 'Escape') {
-            e.preventDefault();
-            cancelBtn.click();
-          }
-        });
-
-        actions.appendChild(cancelBtn);
-        actions.appendChild(saveBtn);
-        card.appendChild(ta);
-        card.appendChild(actions);
-
-        setTimeout(function () {
-          ta.style.height = 'auto';
-          ta.style.height = ta.scrollHeight + 'px';
-          ta.focus();
-          ta.setSelectionRange(ta.value.length, ta.value.length);
-        }, 0);
-
+        actionsEl.appendChild(cancelBtn);
+        actionsEl.appendChild(saveBtn);
       } else {
-        var text = document.createElement('div');
-        text.className = 'note-text';
-        text.textContent = note.text;
-
-        var actions2 = document.createElement('div');
-        actions2.className = 'note-actions';
-
         var editBtn = document.createElement('button');
         editBtn.type = 'button';
-        editBtn.className = 'note-btn';
-        editBtn.setAttribute('aria-label', 'Редактировать заметку');
-        editBtn.title = 'Редактировать';
-        editBtn.innerHTML = PENCIL_SVG;
-        editBtn.addEventListener('click', function () {
-          editingNoteId = note.id;
-          renderNotes();
-        });
+        editBtn.className = 'note-action-btn';
+        editBtn.setAttribute('aria-label', 'Редактировать');
+        editBtn.textContent = '✏️';
+        editBtn.addEventListener('click', function () { enterEdit(note, el); });
 
         var delBtn = document.createElement('button');
         delBtn.type = 'button';
-        delBtn.className = 'note-btn del';
-        delBtn.setAttribute('aria-label', 'Удалить заметку');
-        delBtn.title = 'Удалить';
-        delBtn.innerHTML = X_SVG;
-        delBtn.addEventListener('click', function () {
-          card.style.animation = 'disappear .22s ease forwards';
-          setTimeout(function () {
-            notes = notes.filter(function (n) { return n.id !== note.id; });
-            if (editingNoteId === note.id) editingNoteId = null;
-            saveNotes();
-            renderNotes();
-            showToast('Заметка удалена');
-          }, 200);
-        });
+        delBtn.className = 'note-action-btn del';
+        delBtn.setAttribute('aria-label', 'Удалить');
+        delBtn.textContent = '✕';
+        delBtn.addEventListener('click', function () { deleteNote(note, el); });
 
-        actions2.appendChild(editBtn);
-        actions2.appendChild(delBtn);
-
-        card.appendChild(text);
-        card.appendChild(actions2);
+        actionsEl.appendChild(editBtn);
+        actionsEl.appendChild(delBtn);
       }
+    }
 
-      notesGrid.appendChild(card);
+    setButtons(editingNoteId === note.id ? 'edit' : 'view');
+    if (editingNoteId === note.id) {
+      el.classList.add('editing');
+      editEl.value = note.text;
+      setTimeout(function () {
+        editEl.focus();
+        editEl.setSelectionRange(editEl.value.length, editEl.value.length);
+        editEl.style.height = 'auto';
+        editEl.style.height = Math.min(240, editEl.scrollHeight) + 'px';
+      }, 30);
+    }
+    editEl.addEventListener('input', function () {
+      editEl.style.height = 'auto';
+      editEl.style.height = Math.min(240, editEl.scrollHeight) + 'px';
     });
+    editEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        commitEdit(note, el);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cancelEdit(note, el);
+      }
+    });
+
+    // Click для поднятия наверх
+    el.addEventListener('pointerdown', function () {
+      if (parseInt(el.style.zIndex) !== topZ) {
+        topZ++;
+        el.style.zIndex = String(topZ);
+        note.z = topZ;
+        saveNotes();
+      }
+    });
+
+    // Drag — только по header, не по кнопкам
+    header.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('button')) return;
+      startDrag(e, note, el);
+    });
+
+    return el;
   }
+
+  function startDrag(e, note, el) {
+    e.preventDefault();
+    var rect = el.getBoundingClientRect();
+    var startX = e.clientX;
+    var startY = e.clientY;
+    var origX = rect.left;
+    var origY = rect.top;
+
+    el.classList.add('dragging');
+    el.setPointerCapture(e.pointerId);
+
+    function onMove(ev) {
+      var dx = ev.clientX - startX;
+      var dy = ev.clientY - startY;
+      var p = clampNotePosition(origX + dx, origY + dy);
+      el.style.left = p.x + 'px';
+      el.style.top = p.y + 'px';
+    }
+    function onEnd() {
+      el.classList.remove('dragging');
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onEnd);
+      el.removeEventListener('pointercancel', onEnd);
+      try { el.releasePointerCapture(e.pointerId); } catch (err) {}
+      note.x = parseInt(el.style.left, 10);
+      note.y = parseInt(el.style.top, 10);
+      saveNotes();
+    }
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onEnd);
+    el.addEventListener('pointercancel', onEnd);
+  }
+
+  function enterEdit(note, el) {
+    editingNoteId = note.id;
+    el.classList.add('editing');
+    var editEl = el.querySelector('.note-edit');
+    editEl.value = note.text;
+    // Пересобрать кнопки
+    var actionsEl = el.querySelector('.note-actions');
+    actionsEl.innerHTML = '';
+    var saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.className = 'note-action-btn save';
+    saveBtn.setAttribute('aria-label', 'Сохранить');
+    saveBtn.textContent = '✓';
+    saveBtn.addEventListener('click', function () { commitEdit(note, el); });
+    var cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'note-action-btn del';
+    cancelBtn.setAttribute('aria-label', 'Отменить');
+    cancelBtn.textContent = '✕';
+    cancelBtn.addEventListener('click', function () { cancelEdit(note, el); });
+    actionsEl.appendChild(cancelBtn);
+    actionsEl.appendChild(saveBtn);
+
+    setTimeout(function () {
+      editEl.focus();
+      editEl.setSelectionRange(editEl.value.length, editEl.value.length);
+      editEl.style.height = 'auto';
+      editEl.style.height = Math.min(240, editEl.scrollHeight) + 'px';
+    }, 20);
+  }
+
+  function commitEdit(note, el) {
+    var editEl = el.querySelector('.note-edit');
+    var text = editEl.value.trim();
+    if (!text) {
+      // Удаляем пустую заметку
+      removeNoteById(note.id, el);
+      return;
+    }
+    note.text = text;
+    editingNoteId = null;
+    el.classList.remove('editing');
+    var viewEl = el.querySelector('.note-view');
+    viewEl.textContent = note.text;
+
+    // Пересобрать кнопки
+    var actionsEl = el.querySelector('.note-actions');
+    actionsEl.innerHTML = '';
+    var editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'note-action-btn';
+    editBtn.setAttribute('aria-label', 'Редактировать');
+    editBtn.textContent = '✏️';
+    editBtn.addEventListener('click', function () { enterEdit(note, el); });
+    var delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'note-action-btn del';
+    delBtn.setAttribute('aria-label', 'Удалить');
+    delBtn.textContent = '✕';
+    delBtn.addEventListener('click', function () { deleteNote(note, el); });
+    actionsEl.appendChild(editBtn);
+    actionsEl.appendChild(delBtn);
+
+    saveNotes();
+    showToast('Заметка сохранена');
+  }
+
+  function cancelEdit(note, el) {
+    if (!note.text) {
+      // Пустая новая заметка — удаляем
+      removeNoteById(note.id, el);
+      return;
+    }
+    editingNoteId = null;
+    el.classList.remove('editing');
+    // Пересобрать кнопки
+    var actionsEl = el.querySelector('.note-actions');
+    actionsEl.innerHTML = '';
+    var editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'note-action-btn';
+    editBtn.setAttribute('aria-label', 'Редактировать');
+    editBtn.textContent = '✏️';
+    editBtn.addEventListener('click', function () { enterEdit(note, el); });
+    var delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'note-action-btn del';
+    delBtn.setAttribute('aria-label', 'Удалить');
+    delBtn.textContent = '✕';
+    delBtn.addEventListener('click', function () { deleteNote(note, el); });
+    actionsEl.appendChild(editBtn);
+    actionsEl.appendChild(delBtn);
+  }
+
+  function deleteNote(note, el) {
+    var ok = true;
+    try { ok = window.confirm('Удалить эту заметку?'); } catch (e) { ok = true; }
+    if (!ok) return;
+    removeNoteById(note.id, el);
+    showToast('Заметка удалена');
+  }
+
+  function removeNoteById(id, el) {
+    el.style.animation = 'noteIn .2s ease reverse forwards';
+    setTimeout(function () {
+      notes = notes.filter(function (n) { return n.id !== id; });
+      if (editingNoteId === id) editingNoteId = null;
+      saveNotes();
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }, 180);
+  }
+
+  function renderNotes() {
+    notesLayer.innerHTML = '';
+    notes.forEach(function (note) {
+      if (note.x === undefined || note.y === undefined) {
+        var p = defaultNotePosition(notes.indexOf(note));
+        note.x = p.x;
+        note.y = p.y;
+      }
+      notesLayer.appendChild(createNoteElement(note));
+    });
+    saveNotes();
+  }
+
+  function addNewNote() {
+    var vp = getViewportSize();
+    var offset = (notes.length * 26) % 140;
+    var p = clampNotePosition(vp.w / 2 - 140 + offset - 70, vp.h / 2 - 110 + offset - 50);
+    var note = {
+      id: genId(),
+      text: '',
+      createdAt: Date.now(),
+      x: p.x,
+      y: p.y,
+      z: ++topZ
+    };
+    notes.unshift(note);
+    editingNoteId = note.id;
+    saveNotes();
+    renderNotes();
+  }
+
+  addNoteFab.addEventListener('click', addNewNote);
+
+  // Клампим позиции при ресайзе
+  var resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      var els = notesLayer.querySelectorAll('.note-window');
+      els.forEach(function (el) {
+        var note = notes.find(function (n) { return n.id === el.dataset.id; });
+        if (!note) return;
+        var p = clampNotePosition(note.x, note.y);
+        note.x = p.x;
+        note.y = p.y;
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+      });
+      saveNotes();
+    }, 120);
+  });
 
   /* ======================= МОДАЛКИ ======================= */
   function openModal(modal) {
@@ -1815,56 +2086,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       document.body.classList.remove('modal-open');
     }
   }
-
-  [noteModal, infoModal, gameModal].forEach(function (modal) {
+  [infoModal, gameModal].forEach(function (modal) {
     modal.addEventListener('click', function (e) {
       if (e.target === modal) closeModal(modal);
     });
   });
-
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (gameModal.classList.contains('open')) closeModal(gameModal);
-      else if (noteModal.classList.contains('open')) closeModal(noteModal);
       else if (infoModal.classList.contains('open')) closeModal(infoModal);
     }
   });
 
-  /* ======================= ЗАМЕТКИ: ДОБАВЛЕНИЕ ======================= */
-  addNoteFab.addEventListener('click', function () {
-    noteTextInput.value = '';
-    openModal(noteModal);
-    setTimeout(function () { noteTextInput.focus(); }, 120);
-  });
-
-  function submitNote() {
-    var text = noteTextInput.value.trim();
-    if (!text) {
-      shake(noteTextInput);
-      noteTextInput.focus();
-      return;
-    }
-    notes.unshift({
-      id: genId(),
-      text: text,
-      createdAt: Date.now()
-    });
-    saveNotes();
-    renderNotes();
-    closeModal(noteModal);
-    showToast('Заметка добавлена');
-  }
-
-  noteSave.addEventListener('click', submitNote);
-  noteCancel.addEventListener('click', function () { closeModal(noteModal); });
-  noteTextInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      submitNote();
-    }
-  });
-
-  /* ======================= ИНФО ======================= */
   infoFab.addEventListener('click', function () {
     openModal(infoModal);
     setTimeout(function () { infoClose.focus(); }, 120);
@@ -1873,18 +2106,42 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   /* ======================= ИГРА-КЛИКЕР ======================= */
   var UPGRADES = [
-    { id: 'click1', icon: '👆', name: 'Улучшить клик',  desc: '+1 за клик',     costBase: 10,   effect: 'perClick',  amount: 1 },
-    { id: 'auto1',  icon: '⚙️', name: 'Автокликер',      desc: '+1 в секунду',   costBase: 50,   effect: 'perSecond', amount: 1 },
-    { id: 'click5', icon: '💪', name: 'Мощный клик',    desc: '+5 за клик',     costBase: 100,  effect: 'perClick',  amount: 5 },
-    { id: 'auto5',  icon: '🏭', name: 'Копи-ферма',     desc: '+5 в секунду',   costBase: 400,  effect: 'perSecond', amount: 5 },
-    { id: 'auto25', icon: '🚀', name: 'Копи-фабрика',   desc: '+25 в секунду',  costBase: 2500, effect: 'perSecond', amount: 25 }
+    { id: 'click1', icon: '👆', name: 'Улучшить клик',  desc: '+1 за клик',       costBase: 20,     effect: 'perClick', amount: 1 },
+    { id: 'auto1',  icon: '⚙️', name: 'Автокликер',      desc: '+1 в секунду',     costBase: 80,     effect: 'perSecond', amount: 1 },
+    { id: 'click2', icon: '💪', name: 'Мощный клик',    desc: '+3 за клик',       costBase: 200,    effect: 'perClick', amount: 3 },
+    { id: 'auto2',  icon: '🏭', name: 'Копи-ферма',     desc: '+3 в секунду',     costBase: 600,    effect: 'perSecond', amount: 3 },
+    { id: 'click3', icon: '🔥', name: 'Сильный клик',   desc: '+8 за клик',       costBase: 2000,   effect: 'perClick', amount: 8 },
+    { id: 'auto3',  icon: '🏗️', name: 'Копи-фабрика',   desc: '+10 в секунду',    costBase: 6000,   effect: 'perSecond', amount: 10 },
+    { id: 'click4', icon: '⚡', name: 'Сверхклик',      desc: '+20 за клик',      costBase: 25000,  effect: 'perClick', amount: 20 },
+    { id: 'auto4',  icon: '🌐', name: 'Копи-империя',   desc: '+30 в секунду',    costBase: 60000,  effect: 'perSecond', amount: 30 },
+    { id: 'clickM', icon: '💎', name: 'Клик ×2',        desc: 'Удваивает клик',   costBase: 250000, effect: 'clickMult', amount: 1 },
+    { id: 'autoM',  icon: '👑', name: 'Доход ×2',       desc: 'Удваивает пассив', costBase: 500000, effect: 'autoMult', amount: 1 }
+  ];
+
+  var THEMES = [
+    { id: 'default', icon: '🌊', name: 'По умолчанию', price: 0,
+      swatch: ['#8ab4ff', '#c9a7ff', '#8ee7ff'] },
+    { id: 'ocean',   icon: '🐬', name: 'Океан',        price: 15000,
+      swatch: ['#00b4d8', '#0077b6', '#90e0ef'] },
+    { id: 'sunset',  icon: '🌅', name: 'Закат',        price: 50000,
+      swatch: ['#ff8a5c', '#ff5e7e', '#ffd93d'] },
+    { id: 'forest',  icon: '🌲', name: 'Лес',          price: 150000,
+      swatch: ['#4ade80', '#22c55e', '#a3e635'] },
+    { id: 'aurora',  icon: '✨', name: 'Полярное сияние', price: 400000,
+      swatch: ['#00e0b8', '#8b5cf6', '#22d3ee'] },
+    { id: 'galaxy',  icon: '🌌', name: 'Галактика',    price: 1500000,
+      swatch: ['#a855f7', '#ec4899', '#6366f1'] }
   ];
 
   var gameState = {
     score: 0,
     totalClicks: 0,
     upgrades: {},
-    lastTick: Date.now()
+    purchasedThemes: ['default'],
+    activeTheme: 'default',
+    lastTick: Date.now(),
+    perClick: 1,
+    perSecond: 0
   };
 
   try {
@@ -1893,9 +2150,17 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       gameState.score = Number(rawGame.score) || 0;
       gameState.totalClicks = Number(rawGame.totalClicks) || 0;
       gameState.upgrades = (rawGame.upgrades && typeof rawGame.upgrades === 'object') ? rawGame.upgrades : {};
+      gameState.purchasedThemes = Array.isArray(rawGame.purchasedThemes) && rawGame.purchasedThemes.length > 0
+        ? rawGame.purchasedThemes.slice()
+        : ['default'];
+      gameState.activeTheme = typeof rawGame.activeTheme === 'string' ? rawGame.activeTheme : 'default';
       gameState.lastTick = Date.now();
     }
-  } catch (e) { /* оставляем дефолт */ }
+  } catch (e) { /* дефолт */ }
+
+  // Валидация: активная тема должна быть куплена
+  if (gameState.purchasedThemes.indexOf('default') === -1) gameState.purchasedThemes.unshift('default');
+  if (gameState.purchasedThemes.indexOf(gameState.activeTheme) === -1) gameState.activeTheme = 'default';
 
   function saveGame() {
     try {
@@ -1903,42 +2168,55 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         score: gameState.score,
         totalClicks: gameState.totalClicks,
         upgrades: gameState.upgrades,
+        purchasedThemes: gameState.purchasedThemes,
+        activeTheme: gameState.activeTheme,
         lastSaved: Date.now()
       }));
     } catch (e) {}
   }
 
+  function applyBgTheme(themeId) {
+    if (!THEMES.some(function (t) { return t.id === themeId; })) themeId = 'default';
+    if (themeId === 'default') {
+      document.documentElement.removeAttribute('data-bgtheme');
+    } else {
+      document.documentElement.setAttribute('data-bgtheme', themeId);
+    }
+  }
+
   function getUpgradeLevel(id) {
     return Math.max(0, Math.floor(Number(gameState.upgrades[id]) || 0));
   }
-
   function getUpgradeCost(up) {
     var lvl = getUpgradeLevel(up.id);
-    return Math.floor(up.costBase * Math.pow(1.6, lvl));
+    return Math.floor(up.costBase * Math.pow(1.85, lvl));
   }
-
   function recalcGameStats() {
-    var perClick = 1;
-    var perSecond = 0;
+    var baseClick = 1;
+    var baseAuto = 0;
+    var clickMult = 1;
+    var autoMult = 1;
     UPGRADES.forEach(function (up) {
       var lvl = getUpgradeLevel(up.id);
-      if (up.effect === 'perClick') perClick += up.amount * lvl;
-      if (up.effect === 'perSecond') perSecond += up.amount * lvl;
+      if (!lvl) return;
+      if (up.effect === 'perClick') baseClick += up.amount * lvl;
+      else if (up.effect === 'perSecond') baseAuto += up.amount * lvl;
+      else if (up.effect === 'clickMult') clickMult += up.amount * lvl;
+      else if (up.effect === 'autoMult') autoMult += up.amount * lvl;
     });
-    gameState.perClick = perClick;
-    gameState.perSecond = perSecond;
+    gameState.perClick = baseClick * clickMult;
+    gameState.perSecond = baseAuto * autoMult;
   }
 
   function updateGameUI() {
     recalcGameStats();
-    gameScore.textContent = formatNum(gameState.score);
-    gameRate.textContent = gameState.perSecond + ' в секунду';
+    gameScoreEl.textContent = formatNum(gameState.score);
+    gameRateEl.textContent = formatNum(gameState.perSecond) + ' в секунду';
     gameClicksEl.textContent = formatNum(gameState.totalClicks);
     gamePerClickEl.textContent = formatNum(gameState.perClick);
     gamePerSecEl.textContent = formatNum(gameState.perSecond);
     gameClickLbl.textContent = 'Кликни +' + formatNum(gameState.perClick);
 
-    // Обновляем доступность/стоимость апгрейдов
     var btns = gameUpgradesEl.querySelectorAll('.game-upgrade');
     btns.forEach(function (btn) {
       var id = btn.dataset.id;
@@ -1950,6 +2228,27 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       btn.querySelector('.game-upgrade-cost').textContent = formatNum(cost);
       btn.disabled = gameState.score < cost;
     });
+
+    var themeBtns = gameThemesEl.querySelectorAll('.game-theme');
+    themeBtns.forEach(function (btn) {
+      var id = btn.dataset.id;
+      var theme = THEMES.find(function (t) { return t.id === id; });
+      if (!theme) return;
+      var statusEl = btn.querySelector('.game-theme-status');
+      var owned = gameState.purchasedThemes.indexOf(id) !== -1;
+      var active = gameState.activeTheme === id;
+      btn.classList.toggle('active', active);
+      if (active) {
+        statusEl.textContent = '✓ Активна';
+        btn.disabled = true;
+      } else if (owned) {
+        statusEl.textContent = 'Применить';
+        btn.disabled = false;
+      } else {
+        statusEl.textContent = '🔒 ' + formatNum(theme.price);
+        btn.disabled = gameState.score < theme.price;
+      }
+    });
   }
 
   function renderUpgrades() {
@@ -1957,7 +2256,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     UPGRADES.forEach(function (up) {
       var lvl = getUpgradeLevel(up.id);
       var cost = getUpgradeCost(up);
-
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'game-upgrade';
@@ -1971,18 +2269,59 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           '<span class="game-upgrade-desc">' + up.desc + '</span>' +
         '</span>' +
         '<span class="game-upgrade-cost">' + formatNum(cost) + '</span>';
-
       btn.addEventListener('click', function () { buyUpgrade(up); });
       gameUpgradesEl.appendChild(btn);
     });
   }
 
+  function renderThemes() {
+    gameThemesEl.innerHTML = '';
+    THEMES.forEach(function (theme) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'game-theme';
+      btn.dataset.id = theme.id;
+      var swatch = theme.swatch.map(function (c) {
+        return '<span style="background:' + c + '"></span>';
+      }).join('');
+      btn.innerHTML =
+        '<div class="game-theme-swatch">' + swatch + '</div>' +
+        '<div class="game-theme-body">' +
+          '<div class="game-theme-name">' + theme.icon + ' ' + theme.name + '</div>' +
+          '<div class="game-theme-status"></div>' +
+        '</div>';
+      btn.addEventListener('click', function () { onThemeClick(theme); });
+      gameThemesEl.appendChild(btn);
+    });
+  }
+
+  function onThemeClick(theme) {
+    if (gameState.activeTheme === theme.id) return;
+    var owned = gameState.purchasedThemes.indexOf(theme.id) !== -1;
+
+    if (!owned) {
+      if (gameState.score < theme.price) {
+        showToast('Недостаточно очков');
+        return;
+      }
+      var ok = true;
+      try { ok = window.confirm('Купить тему «' + theme.name + '» за ' + formatNum(theme.price) + ' очков?'); }
+      catch (e) { ok = true; }
+      if (!ok) return;
+      gameState.score -= theme.price;
+      gameState.purchasedThemes.push(theme.id);
+    }
+
+    gameState.activeTheme = theme.id;
+    applyBgTheme(theme.id);
+    saveGame();
+    updateGameUI();
+    showToast('Тема «' + theme.name + '» активна');
+  }
+
   function buyUpgrade(up) {
     var cost = getUpgradeCost(up);
-    if (gameState.score < cost) {
-      showToast('Недостаточно очков');
-      return;
-    }
+    if (gameState.score < cost) { showToast('Недостаточно очков'); return; }
     gameState.score -= cost;
     gameState.upgrades[up.id] = getUpgradeLevel(up.id) + 1;
     saveGame();
@@ -2005,18 +2344,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     updateGameUI();
     saveGame();
   }
-
   gameClicker.addEventListener('click', doGameClick);
 
-  // Пассивный доход. Тик каждые 500мс, но с учётом реального времени.
+  // Пассивный доход
   setInterval(function () {
     recalcGameStats();
-    if (gameState.perSecond <= 0) {
-      gameState.lastTick = Date.now();
-      return;
-    }
+    if (gameState.perSecond <= 0) { gameState.lastTick = Date.now(); return; }
     var now = Date.now();
-    var elapsed = Math.min((now - gameState.lastTick) / 1000, 60); // до 60с догоняем
+    var elapsed = Math.min((now - gameState.lastTick) / 1000, 60);
     gameState.lastTick = now;
     if (elapsed > 0) {
       gameState.score += gameState.perSecond * elapsed;
@@ -2025,7 +2360,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }, 500);
 
-  // При возврате на вкладку — пересчитываем догон
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden) {
       var now = Date.now();
@@ -2046,14 +2380,16 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   gameResetBtn.addEventListener('click', function () {
     var ok = true;
-    try { ok = window.confirm('Сбросить весь прогресс в игре? Это нельзя отменить.'); }
+    try { ok = window.confirm('Сбросить ВЕСЬ прогресс игры, включая купленные темы?'); }
     catch (e) { ok = true; }
     if (!ok) return;
-
     gameState.score = 0;
     gameState.totalClicks = 0;
     gameState.upgrades = {};
+    gameState.purchasedThemes = ['default'];
+    gameState.activeTheme = 'default';
     gameState.lastTick = Date.now();
+    applyBgTheme('default');
     saveGame();
     renderUpgrades();
     updateGameUI();
@@ -2062,20 +2398,79 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   gameBtn.addEventListener('click', function () {
     renderUpgrades();
+    renderThemes();
     updateGameUI();
     gameState.lastTick = Date.now();
     openModal(gameModal);
   });
   gameClose.addEventListener('click', function () { closeModal(gameModal); });
 
+  /* ======================= ЖИВОЙ ФОН ======================= */
+  var prefersReducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var blobs = Array.prototype.slice.call(document.querySelectorAll('.blob'));
+  var blobConfigs = [
+    { speed: 0.16, phase: 0.0, ampX: 40, ampY: 30, parallax: 60 },
+    { speed: 0.21, phase: 2.0, ampX: 50, ampY: 40, parallax: -70 },
+    { speed: 0.13, phase: 4.0, ampX: 35, ampY: 45, parallax: 45 },
+    { speed: 0.18, phase: 6.0, ampX: 45, ampY: 35, parallax: -55 }
+  ];
+  var mouseTarget = { x: 0.5, y: 0.5 };
+  var mouseSmooth = { x: 0.5, y: 0.5 };
+  var glowTarget = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  var glowSmooth = { x: glowTarget.x, y: glowTarget.y };
+
+  document.addEventListener('mousemove', function (e) {
+    mouseTarget.x = e.clientX / Math.max(1, window.innerWidth);
+    mouseTarget.y = e.clientY / Math.max(1, window.innerHeight);
+    glowTarget.x = e.clientX;
+    glowTarget.y = e.clientY;
+  }, { passive: true });
+
+  function animateBackground() {
+    var now = performance.now() / 1000;
+    mouseSmooth.x += (mouseTarget.x - mouseSmooth.x) * 0.06;
+    mouseSmooth.y += (mouseTarget.y - mouseSmooth.y) * 0.06;
+
+    for (var i = 0; i < blobs.length; i++) {
+      var c = blobConfigs[i];
+      var ox = Math.sin(now * c.speed + c.phase) * c.ampX;
+      var oy = Math.cos(now * c.speed * 1.3 + c.phase) * c.ampY;
+      var px = (mouseSmooth.x - 0.5) * c.parallax;
+      var py = (mouseSmooth.y - 0.5) * c.parallax;
+      blobs[i].style.transform = 'translate(' + (ox + px).toFixed(1) + 'px, ' + (oy + py).toFixed(1) + 'px)';
+    }
+
+    if (cursorGlow) {
+      glowSmooth.x += (glowTarget.x - glowSmooth.x) * 0.15;
+      glowSmooth.y += (glowTarget.y - glowSmooth.y) * 0.15;
+      cursorGlow.style.transform = 'translate(' + glowSmooth.x.toFixed(1) + 'px, ' + glowSmooth.y.toFixed(1) + 'px)';
+    }
+
+    requestAnimationFrame(animateBackground);
+  }
+
+  if (!prefersReducedMotion) {
+    requestAnimationFrame(animateBackground);
+  }
+
   /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
+  applyBgTheme(gameState.activeTheme);
+
   updateCategorySelect();
   autoGrow();
   updateAddState();
   render();
   renderNotes();
   renderUpgrades();
+  renderThemes();
   updateGameUI();
+
+  // Начальная позиция курсор-свечения по центру
+  if (cursorGlow) {
+    cursorGlow.style.transform = 'translate(' + glowSmooth.x + 'px, ' + glowSmooth.y + 'px)';
+  }
 })();
 </script>
 </body>
