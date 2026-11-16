@@ -261,16 +261,90 @@ main{
   gap:18px;
 }
 
-/* ======================= КАРТОЧКА ВВОДА ======================= */
+/* ======================= КАРТОЧКА ВВОДА (сворачиваемая) ======================= */
 .composer{
-  display:flex;flex-direction:column;gap:10px;padding:14px;
+  display:flex;flex-direction:column;
+  padding:14px;
   border-radius:26px;
   background:var(--card);
   border:1px solid var(--card-border);
   backdrop-filter:blur(30px) saturate(180%);
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
+  transition:background .25s ease, border-color .25s ease, box-shadow .25s ease, padding .22s ease;
 }
+
+.composer-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;
+  padding:0 2px;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.composer-title{
+  font-size:12.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--text-2);
+  transition:color .25s ease, font-size .2s ease, letter-spacing .2s ease;
+}
+.composer-toggle{
+  flex:0 0 28px;width:28px;height:28px;
+  border:none;border-radius:50%;
+  background:var(--field);color:var(--text-2);
+  cursor:pointer;
+  display:grid;place-items:center;
+  padding:0;
+  transition:background .2s ease, color .2s ease;
+}
+.composer-head:hover .composer-toggle{
+  background:var(--field-hover);color:var(--text);
+}
+.composer-toggle svg{
+  transition:transform .32s cubic-bezier(.2,.9,.3,1.05);
+}
+
+.composer-body{
+  display:flex;flex-direction:column;gap:10px;
+  margin-top:10px;
+}
+.composer:not(.collapsed) .composer-body{
+  animation:composerIn .26s cubic-bezier(.2,.9,.3,1.15);
+}
+@keyframes composerIn{
+  from{opacity:0;transform:scale(.985) translateY(-3px)}
+  to{opacity:1;transform:none}
+}
+
+/* Свёрнутый вид */
+.composer.collapsed{
+  background:var(--field);
+  border-color:transparent;
+  box-shadow:none;
+  padding:11px 14px;
+}
+.composer.collapsed .composer-title{
+  text-transform:none;
+  font-size:13.5px;
+  letter-spacing:-.005em;
+  color:var(--text);
+}
+.composer.collapsed .composer-title::before{
+  content:'＋ ';
+  font-weight:800;
+  color:var(--accent);
+  margin-right:1px;
+}
+.composer.collapsed .composer-toggle{
+  background:transparent;
+}
+.composer.collapsed .composer-toggle svg{
+  transform:rotate(180deg);
+}
+.composer.collapsed .composer-body{
+  display:none;
+}
+
+/* ======================= ПОЛЯ ======================= */
 .field{
   width:100%;font-family:inherit;font-size:15px;font-weight:500;
   color:var(--text);background:var(--field);border:none;border-radius:16px;
@@ -774,45 +848,56 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 </header>
 
 <main>
-  <section class="composer">
-    <textarea id="textInput" class="field" rows="1"
-              placeholder="Текст, который будет копироваться…"
-              aria-label="Текст для копирования"></textarea>
-    <div class="row">
-      <input id="nameInput" class="field" type="text"
-             placeholder="Название кнопки"
-             aria-label="Название кнопки"
-             autocomplete="off" spellcheck="false">
-      <button id="addBtn" class="confirm" type="button" aria-label="Добавить кнопку" disabled>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4.5 12.6l5 5L19.5 6.6"/>
+  <section class="composer" id="composer">
+    <div class="composer-head" id="composerHead">
+      <span class="composer-title">Создать кнопку</span>
+      <button class="composer-toggle" id="composerToggle" type="button" aria-label="Свернуть форму" aria-expanded="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 15l6-6 6 6"/>
         </svg>
       </button>
     </div>
-    <div class="row">
-      <div class="select-wrap">
-        <select id="categorySelect" class="field" aria-label="Категория">
-          <option value="">Без категории</option>
-        </select>
+    <div class="composer-body">
+      <textarea id="textInput" class="field" rows="1"
+                placeholder="Текст, который будет копироваться…"
+                aria-label="Текст для копирования"></textarea>
+      <div class="row">
+        <input id="nameInput" class="field" type="text"
+               placeholder="Название кнопки"
+               aria-label="Название кнопки"
+               autocomplete="off" spellcheck="false">
+        <button id="addBtn" class="confirm" type="button" aria-label="Добавить кнопку" disabled>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 12.6l5 5L19.5 6.6"/>
+          </svg>
+        </button>
       </div>
-      <button id="newCatBtn" class="cat-add" type="button" aria-label="Создать категорию">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-          <path d="M12 5v14M5 12h14"/>
-        </svg>
-      </button>
-    </div>
-    <div class="row" id="newCatRow" hidden>
-      <input id="newCatInput" class="field" type="text"
-             placeholder="Название категории…"
-             autocomplete="off" spellcheck="false">
-      <button id="newCatConfirm" class="confirm" type="button" aria-label="Создать категорию">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4.5 12.6l5 5L19.5 6.6"/>
-        </svg>
-      </button>
+      <div class="row">
+        <div class="select-wrap">
+          <select id="categorySelect" class="field" aria-label="Категория">
+            <option value="">Без категории</option>
+          </select>
+        </div>
+        <button id="newCatBtn" class="cat-add" type="button" aria-label="Создать категорию">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+      </div>
+      <div class="row" id="newCatRow" hidden>
+        <input id="newCatInput" class="field" type="text"
+               placeholder="Название категории…"
+               autocomplete="off" spellcheck="false">
+        <button id="newCatConfirm" class="confirm" type="button" aria-label="Создать категорию">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 12.6l5 5L19.5 6.6"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -846,7 +931,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок, организации кнопок по категориям и мини-игры. Все данные хранятся только в вашем браузере.</p>
 
       <h4>Добавить кнопку</h4>
-      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в списке ниже.</p>
+      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в списке ниже. Форму можно свернуть, нажав на её заголовок «Создать кнопку» — освободится место для списка. Состояние запоминается.</p>
 
       <h4>Копирование</h4>
       <p>Нажмите на кнопку — текст моментально попадёт в буфер обмена. Вверху экрана появится подтверждение «Скопировано».</p>
@@ -939,6 +1024,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var NOTES_KEY = 'kopirka2.notes';
   var GAME_KEY  = 'kopirka2.game';
   var THEME_KEY = 'kopirka2.theme';
+  var COMPOSER_KEY = 'kopirka2.composerCollapsed';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
   var listEl        = document.getElementById('list');
@@ -976,6 +1062,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var gameResetBtn  = document.getElementById('gameReset');
   var cursorGlow    = document.getElementById('cursorGlow');
   var bgCanvas      = document.getElementById('bgCanvas');
+  var composerEl    = document.getElementById('composer');
+  var composerHead  = document.getElementById('composerHead');
+  var composerToggle= document.getElementById('composerToggle');
 
   /* ======================= ХЕЛПЕРЫ ======================= */
   var prefersReducedMotion = window.matchMedia &&
@@ -1121,6 +1210,36 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     void el.offsetWidth;
     el.classList.add('shake');
   }
+
+  /* ======================= СВОРАЧИВАНИЕ КОМПОЗЕРА ======================= */
+  var composerCollapsed = false;
+  try { composerCollapsed = localStorage.getItem(COMPOSER_KEY) === '1'; } catch (e) {}
+
+  function applyComposerState() {
+    composerEl.classList.toggle('collapsed', composerCollapsed);
+    composerToggle.setAttribute('aria-expanded', composerCollapsed ? 'false' : 'true');
+    composerToggle.setAttribute('aria-label', composerCollapsed ? 'Развернуть форму' : 'Свернуть форму');
+  }
+  applyComposerState();
+
+  function setComposerCollapsed(collapsed) {
+    if (composerCollapsed === collapsed) return;
+    composerCollapsed = !!collapsed;
+    try { localStorage.setItem(COMPOSER_KEY, composerCollapsed ? '1' : '0'); } catch (e) {}
+    applyComposerState();
+    if (!composerCollapsed) {
+      setTimeout(function () {
+        if (!composerCollapsed) {
+          autoGrow();
+          textEl.focus();
+        }
+      }, 260);
+    }
+  }
+
+  composerHead.addEventListener('click', function () {
+    setComposerCollapsed(!composerCollapsed);
+  });
 
   /* ======================= КОПИРОВАНИЕ ======================= */
   function legacyCopy(text) {
@@ -1914,18 +2033,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
       ctx.clearRect(0, 0, w, h);
 
-      // Точка схода следует за курсором
       var vpx = w * (0.2 + smoothMouse.x * 0.6);
       var vpy = h * (0.2 + smoothMouse.y * 0.6);
 
-      // Мягкое свечение в точке схода
       var glow = ctx.createRadialGradient(vpx, vpy, 0, vpx, vpy, Math.max(w, h) * 0.45);
       glow.addColorStop(0, glowColor + glowAlpha + ')');
       glow.addColorStop(1, glowColor + '0)');
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
 
-      // Позиция курсора в пикселях (для подсветки ближайших звёзд)
       var cursorSx = targetMouse.x * w;
       var cursorSy = targetMouse.y * h;
 
@@ -1952,13 +2068,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
         if (sx < -80 || sx > w + 80 || sy < -80 || sy > h + 80) continue;
 
-        // Размер и яркость зависят от глубины
         var size = (1 - s.z) * 2.8;
         if (size < 0.3) size = 0.3;
         var alpha = Math.min(1, (1 - s.z) * 1.15);
         if (alpha < 0.05) alpha = 0.05;
 
-        // Взаимодействие с курсором: подсветка ближайших звёзд
         var dxc = sx - cursorSx;
         var dyc = sy - cursorSy;
         var dc2 = dxc * dxc + dyc * dyc;
@@ -1971,7 +2085,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           }
         }
 
-        // Хвост
         ctx.strokeStyle = trailColor + (alpha * 0.55).toFixed(3) + ')';
         ctx.lineWidth = Math.max(0.4, size * 0.75);
         ctx.lineCap = 'round';
@@ -1980,7 +2093,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         ctx.lineTo(sx, sy);
         ctx.stroke();
 
-        // Голова звезды
         ctx.fillStyle = starColor + alpha.toFixed(3) + ')';
         ctx.beginPath();
         ctx.arc(sx, sy, Math.max(0.3, size * 0.5), 0, Math.PI * 2);
@@ -2068,7 +2180,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   } catch (e) { /* дефолт */ }
 
-  // Миграция старых ID (waves/aurora → starfield, forest → constellations)
   var idRemap = {
     'forest': 'constellations',
     'aurora': 'starfield',
