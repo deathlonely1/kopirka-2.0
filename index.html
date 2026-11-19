@@ -375,28 +375,79 @@ select.field option{background:var(--bg);color:var(--text)}
 .cat-add svg{transition:transform .3s ease}
 .cat-add.open svg{transform:rotate(45deg)}
 
-/* ======================= СПИСОК ======================= */
-.list{display:flex;flex-direction:column;gap:20px}
-.section{display:flex;flex-direction:column;gap:8px}
-.section-head{display:flex;align-items:center;gap:8px;padding:2px 6px 0}
+/* ======================= СПИСОК / СЕКЦИИ ======================= */
+.list{display:flex;flex-direction:column;gap:18px}
+
+.section{display:flex;flex-direction:column;gap:6px}
+.section-head{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.section-toggle-area{
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 8px;
+  margin:0;
+  border:none;
+  border-radius:10px;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+  transition:background .18s ease;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.section-toggle-area:hover{
+  background:var(--field);
+}
+.section-toggle-icon{
+  flex:0 0 14px;
+  width:14px;
+  height:14px;
+  color:var(--text-3);
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.05), color .18s ease;
+}
+.section-toggle-area:hover .section-toggle-icon{
+  color:var(--text-2);
+}
+.section.collapsed .section-toggle-icon{
+  transform:rotate(-90deg);
+}
 .section-name{
   font-size:12.5px;font-weight:700;text-transform:uppercase;
   letter-spacing:.07em;color:var(--text-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  min-width:0;
 }
 .section-count{
   font-size:11px;font-weight:600;color:var(--text-3);
   background:var(--field);padding:1px 7px;border-radius:999px;
+  flex:0 0 auto;
+  transition:background .18s ease;
+}
+.section-toggle-area:hover .section-count{
+  background:var(--card);
 }
 .section-del{
-  margin-left:auto;width:26px;height:26px;border:none;border-radius:50%;
-  background:transparent;color:var(--text-3);cursor:pointer;
+  flex:0 0 26px;
+  width:26px;height:26px;
+  border:none;border-radius:50%;
+  background:transparent;color:var(--text-3);
+  cursor:pointer;
   display:grid;place-items:center;
+  padding:0;
   transition:background .2s ease, color .2s ease, transform .15s ease;
 }
 .section-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
 .section-del:active{transform:scale(.9)}
 .section-items{display:flex;flex-direction:column;gap:8px}
+.section.collapsed .section-items{display:none}
 .section-empty{
   padding:16px;text-align:center;font-size:13px;font-weight:500;
   color:var(--text-3);border:1.5px dashed var(--dash);border-radius:16px;
@@ -921,6 +972,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <h4>Категории</h4>
       <p>Нажмите «+» рядом с выпадающим списком, чтобы создать новую категорию. Крестик на заголовке категории удалит её — кнопки переедут в «Без категории».</p>
 
+      <h4>Сворачивание категорий</h4>
+      <p>Клик по названию категории (или по стрелке рядом) сворачивает и разворачивает её содержимое. Так можно освободить место, если в категории много кнопок. Состояние каждой категории сохраняется между визитами. Сворачивать можно и разделы «Закреплённые», «Без категории».</p>
+
       <h4>Закрепление</h4>
       <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» наверху. Повторное нажатие открепляет.</p>
 
@@ -940,7 +994,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается отдельно от фоновой темы.</p>
 
       <h4>Сохранение</h4>
-      <p>Все кнопки, категории, заметки, прогресс игры и купленные темы сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
+      <p>Все кнопки, категории, заметки, прогресс игры, купленные темы и состояние свернутых категорий сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
     </div>
     <div class="modal-actions">
       <button class="btn-primary" id="infoClose" type="button">Понятно</button>
@@ -1007,6 +1061,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var GAME_KEY  = 'kopirka2.game';
   var THEME_KEY = 'kopirka2.theme';
   var COMPOSER_KEY = 'kopirka2.composerCollapsed';
+  var COLLAPSED_KEY = 'kopirka2.collapsedSections';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
   var listEl        = document.getElementById('list');
@@ -1109,6 +1164,25 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function save() {
     try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch (e) {}
     try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
+  }
+
+  /* --- Состояние свёрнутых секций --- */
+  var collapsedSections = {};
+  try {
+    var rawCollapsed = JSON.parse(localStorage.getItem(COLLAPSED_KEY));
+    if (rawCollapsed && typeof rawCollapsed === 'object' && !Array.isArray(rawCollapsed)) {
+      collapsedSections = rawCollapsed;
+    }
+  } catch (e) { collapsedSections = {}; }
+
+  function saveCollapsed() {
+    try { localStorage.setItem(COLLAPSED_KEY, JSON.stringify(collapsedSections)); } catch (e) {}
+  }
+
+  function setSectionCollapsed(key, collapsed) {
+    if (collapsed) collapsedSections[key] = true;
+    else delete collapsedSections[key];
+    saveCollapsed();
   }
 
   var notes = [];
@@ -1267,6 +1341,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     '<path d="M12 17v5"/>' +
     '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
     '</svg>';
+  var CHEVRON_SVG = '<svg class="section-toggle-icon" viewBox="0 0 24 24" fill="none" ' +
+    'stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M6 9l6 6 6-6"/></svg>';
 
   /* ======================= SELECT КАТЕГОРИЙ ======================= */
   function updateCategorySelect() {
@@ -1313,6 +1390,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     pin.addEventListener('click', function (e) {
       e.stopPropagation();
       item.pinned = !item.pinned;
+
+      // Автоматически разворачиваем целевую секцию
+      var targetKey = item.pinned ? '__pinned' : (item.categoryId || '__uncat');
+      if (collapsedSections[targetKey]) {
+        setSectionCollapsed(targetKey, false);
+      }
+
       save();
       render();
       showToast(item.pinned ? 'Закреплено' : 'Откреплено');
@@ -1340,29 +1424,69 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return row;
   }
 
-  function renderSection(title, sectionItems, cat) {
+  function toggleSection(key) {
+    var isNowCollapsed = !collapsedSections[key];
+    setSectionCollapsed(key, isNowCollapsed);
+
+    var sec = listEl.querySelector('.section[data-section-key="' + key + '"]');
+    if (!sec) return;
+    sec.classList.toggle('collapsed', isNowCollapsed);
+    var toggleArea = sec.querySelector('.section-toggle-area');
+    if (toggleArea) {
+      toggleArea.setAttribute('aria-expanded', isNowCollapsed ? 'false' : 'true');
+    }
+  }
+
+  function renderSection(title, sectionItems, cat, sectionKey) {
     var sec = document.createElement('div');
     sec.className = 'section';
+    sec.dataset.sectionKey = sectionKey;
+
+    var isCollapsed = !!collapsedSections[sectionKey];
+    if (isCollapsed) sec.classList.add('collapsed');
+
     var head = document.createElement('div');
     head.className = 'section-head';
+
+    var toggleArea = document.createElement('button');
+    toggleArea.type = 'button';
+    toggleArea.className = 'section-toggle-area';
+    toggleArea.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+    toggleArea.setAttribute('aria-label', (isCollapsed ? 'Развернуть' : 'Свернуть') + ' «' + title + '»');
+    toggleArea.innerHTML = CHEVRON_SVG;
+
     var nameElSec = document.createElement('span');
     nameElSec.className = 'section-name';
     nameElSec.textContent = title;
+
     var countEl = document.createElement('span');
     countEl.className = 'section-count';
     countEl.textContent = sectionItems.length;
-    head.appendChild(nameElSec);
-    head.appendChild(countEl);
+
+    toggleArea.appendChild(nameElSec);
+    toggleArea.appendChild(countEl);
+
+    toggleArea.addEventListener('click', function () {
+      toggleSection(sectionKey);
+    });
+
+    head.appendChild(toggleArea);
+
     if (cat) {
       var delBtn = document.createElement('button');
       delBtn.type = 'button';
       delBtn.className = 'section-del';
       delBtn.setAttribute('aria-label', 'Удалить категорию');
       delBtn.innerHTML = X_SVG;
-      delBtn.addEventListener('click', function () { deleteCategory(cat.id); });
+      delBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        deleteCategory(cat.id);
+      });
       head.appendChild(delBtn);
     }
+
     sec.appendChild(head);
+
     var wrap = document.createElement('div');
     wrap.className = 'section-items';
     if (sectionItems.length === 0) {
@@ -1386,14 +1510,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     emptyEl.style.display = 'none';
     var pinned = items.filter(function (i) { return i.pinned; });
     var hasOthers = pinned.length > 0 || categories.length > 0;
-    if (pinned.length > 0) listEl.appendChild(renderSection('Закреплённые', pinned, null));
+    if (pinned.length > 0) {
+      listEl.appendChild(renderSection('Закреплённые', pinned, null, '__pinned'));
+    }
     categories.forEach(function (cat) {
       var catItems = items.filter(function (i) { return !i.pinned && i.categoryId === cat.id; });
-      listEl.appendChild(renderSection(cat.name, catItems, cat));
+      listEl.appendChild(renderSection(cat.name, catItems, cat, cat.id));
     });
     var uncat = items.filter(function (i) { return !i.pinned && !i.categoryId; });
     if (hasOthers) {
-      if (uncat.length > 0) listEl.appendChild(renderSection('Без категории', uncat, null));
+      if (uncat.length > 0) {
+        listEl.appendChild(renderSection('Без категории', uncat, null, '__uncat'));
+      }
     } else {
       var wrap = document.createElement('div');
       wrap.className = 'section-items';
@@ -1407,6 +1535,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     if (!text) { shake(textEl); textEl.focus(); return; }
     var name = nameEl.value.trim() || 'Копировать';
     var categoryId = catSelect.value || null;
+
+    // Автоматически разворачиваем целевую секцию
+    var targetKey = categoryId || '__uncat';
+    if (collapsedSections[targetKey]) {
+      setSectionCollapsed(targetKey, false);
+    }
+
     items.unshift({ id: genId(), name: name, text: text, pinned: false, categoryId: categoryId });
     save();
     render();
@@ -1459,6 +1594,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     if (!ok) return;
     items.forEach(function (i) { if (i.categoryId === id) i.categoryId = null; });
     categories = categories.filter(function (c) { return c.id !== id; });
+    // Чистим состояние свёрнутости
+    if (collapsedSections[id]) {
+      delete collapsedSections[id];
+      saveCollapsed();
+    }
     save();
     updateCategorySelect();
     render();
@@ -2095,7 +2235,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     };
   }
 
-  // ---- Магма (тёплые притягивающиеся пятна) ----
+  // ---- Магма ----
   function startMagma() {
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
@@ -2107,7 +2247,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var blendMode = isDark ? 'lighter' : 'source-over';
-
     var colors = isDark
       ? ['rgba(255,80,30,A)', 'rgba(255,40,80,A)', 'rgba(255,150,40,A)', 'rgba(230,60,180,A)', 'rgba(255,200,80,A)']
       : ['rgba(255,140,90,A)', 'rgba(255,100,140,A)', 'rgba(255,180,90,A)', 'rgba(220,100,180,A)', 'rgba(255,160,120,A)'];
@@ -2157,21 +2296,17 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
     function drawFrame(t) {
       ctx.clearRect(0, 0, w, h);
-
       if (mouseActive) {
         if (mouseSmooth.x < -1000) { mouseSmooth.x = mouse.x; mouseSmooth.y = mouse.y; }
         mouseSmooth.x += (mouse.x - mouseSmooth.x) * 0.08;
         mouseSmooth.y += (mouse.y - mouseSmooth.y) * 0.08;
       }
-
       ctx.globalCompositeOperation = blendMode;
-
       var i;
       for (i = 0; i < blobs.length; i++) {
         var b = blobs[i];
         b.x += b.speedX + Math.sin(t * 0.0006 + b.phase) * 0.4;
         b.y += b.speedY + Math.cos(t * 0.0008 + b.phase * 1.4) * 0.4;
-
         if (mouseActive && mouseSmooth.x > -1000) {
           var mdx = mouseSmooth.x - b.x;
           var mdy = mouseSmooth.y - b.y;
@@ -2180,15 +2315,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           b.x += (mdx / md) * attract * 2.6;
           b.y += (mdy / md) * attract * 2.6;
         }
-
         var margin = b.baseR;
         if (b.x < -margin) b.x = w + margin;
         if (b.x > w + margin) b.x = -margin;
         if (b.y < -margin) b.y = h + margin;
         if (b.y > h + margin) b.y = -margin;
-
         b.r = b.baseR * (1 + Math.sin(t * b.pulseSpeed + b.phase) * b.pulseAmp);
-
         var grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
         grad.addColorStop(0, b.color.replace('A', isDark ? '0.6' : '0.55'));
         grad.addColorStop(0.45, b.color.replace('A', isDark ? '0.28' : '0.22'));
@@ -2198,7 +2330,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
         ctx.fill();
       }
-
       if (mouseActive && mouseSmooth.x > -1000) {
         var cr = 220;
         var cg = ctx.createRadialGradient(mouseSmooth.x, mouseSmooth.y, 0, mouseSmooth.x, mouseSmooth.y, cr);
@@ -2210,7 +2341,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         ctx.arc(mouseSmooth.x, mouseSmooth.y, cr, 0, Math.PI * 2);
         ctx.fill();
       }
-
       ctx.globalCompositeOperation = 'source-over';
     }
     function tick(now) {
@@ -2243,7 +2373,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     };
   }
 
-  // ---- Поток (flow field с вихрем) ----
+  // ---- Поток ----
   function startFlow() {
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
@@ -2254,7 +2384,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var running = true;
 
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-
     var palette = isDark
       ? [[100,180,255], [200,120,255], [80,220,220], [255,150,200], [180,150,255], [120,220,180]]
       : [[40,100,200], [140,60,180], [0,140,160], [200,60,120], [100,60,180], [30,140,100]];
@@ -2263,7 +2392,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var mouseSmooth = { x: -9999, y: -9999 };
     var mouseActive = false;
     var t0 = performance.now();
-
     var NUM = 0;
     var INTERACT_R = 250;
     var INTERACT_R2 = INTERACT_R * INTERACT_R;
@@ -2316,8 +2444,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
     function drawFrame(now) {
       var t = now - t0;
-
-      // Плавное затухание следов
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = 'rgba(0,0,0,0.055)';
       ctx.fillRect(0, 0, w, h);
@@ -2335,7 +2461,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       for (var i = 0; i < particles.length; i++) {
         var p = particles[i];
         var angle = flowAngle(p.x, p.y, t);
-
         if (mouseActive && mouseSmooth.x > -1000) {
           var dx = mouseSmooth.x - p.x;
           var dy = mouseSmooth.y - p.y;
@@ -2356,13 +2481,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
             angle = Math.atan2(vy, vx);
           }
         }
-
         p.px = p.x;
         p.py = p.y;
         p.x += Math.cos(angle) * p.speed;
         p.y += Math.sin(angle) * p.speed;
         p.age++;
-
         var out = p.x < -20 || p.x > w + 20 || p.y < -20 || p.y > h + 20;
         if (out || p.age > p.life) {
           if (out) {
@@ -2378,10 +2501,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           p.py = p.y;
           p.age = 0;
         }
-
         var alpha = Math.min(1, p.age / 25) * Math.min(1, (p.life - p.age) / 70);
         if (alpha < 0.05) continue;
-
         ctx.strokeStyle = p.color + alpha.toFixed(2) + ')';
         ctx.beginPath();
         ctx.moveTo(p.px, p.py);
