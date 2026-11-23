@@ -10,30 +10,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
 <style>
-/* ======================= ТЕМЫ ======================= */
 :root{
   color-scheme: light;
-  --bg:#eef1f7;
-  --text:#0a0a0f;
-  --text-2:rgba(60,60,67,.62);
-  --text-3:rgba(60,60,67,.36);
-  --card:rgba(255,255,255,.60);
-  --card-border:rgba(255,255,255,.80);
-  --field:rgba(120,120,128,.12);
-  --field-hover:rgba(120,120,128,.18);
+  --bg:#eef1f7; --text:#0a0a0f;
+  --text-2:rgba(60,60,67,.62); --text-3:rgba(60,60,67,.36);
+  --card:rgba(255,255,255,.60); --card-border:rgba(255,255,255,.80);
+  --field:rgba(120,120,128,.12); --field-hover:rgba(120,120,128,.18);
   --dash:rgba(60,60,67,.18);
-  --accent:#0a84ff;
-  --accent2:#5e5ce6;
-  --danger:#ff3b30;
+  --accent:#0a84ff; --accent2:#5e5ce6; --danger:#ff3b30;
   --ring:rgba(10,132,255,.22);
   --shadow:0 8px 28px rgba(20,25,60,.09), 0 1px 3px rgba(20,25,60,.05);
   --toast:#1c1c1e;
-  --brand-a:#0a84ff;
-  --brand-b:#5e5ce6;
-  --blob1:#8ab4ff;
-  --blob2:#c9a7ff;
-  --blob3:#8ee7ff;
-  --blob4:#b3d4ff;
+  --brand-a:#0a84ff; --brand-b:#5e5ce6;
+  --blob1:#8ab4ff; --blob2:#c9a7ff; --blob3:#8ee7ff; --blob4:#b3d4ff;
   --blob-op:.55;
   --modal-bg:rgba(255,255,255,.94);
   --cursor-glow:rgba(120,150,255,.18);
@@ -41,63 +30,38 @@
 }
 [data-theme="dark"]{
   color-scheme: dark;
-  --bg:#000000;
-  --text:#ffffff;
-  --text-2:rgba(235,235,245,.62);
-  --text-3:rgba(235,235,245,.32);
-  --card:rgba(28,28,32,.62);
-  --card-border:rgba(255,255,255,.09);
-  --field:rgba(120,120,128,.24);
-  --field-hover:rgba(120,120,128,.32);
+  --bg:#000000; --text:#ffffff;
+  --text-2:rgba(235,235,245,.62); --text-3:rgba(235,235,245,.32);
+  --card:rgba(28,28,32,.62); --card-border:rgba(255,255,255,.09);
+  --field:rgba(120,120,128,.24); --field-hover:rgba(120,120,128,.32);
   --dash:rgba(235,235,245,.16);
   --ring:rgba(10,132,255,.38);
   --shadow:0 10px 30px rgba(0,0,0,.55);
   --toast:#2c2c2e;
-  --brand-a:#4fa8ff;
-  --brand-b:#a58bff;
-  --blob1:#0b3f8f;
-  --blob2:#4a1f8f;
-  --blob3:#0a5a6b;
-  --blob4:#0a2f5c;
+  --brand-a:#4fa8ff; --brand-b:#a58bff;
+  --blob1:#0b3f8f; --blob2:#4a1f8f; --blob3:#0a5a6b; --blob4:#0a2f5c;
   --blob-op:.60;
   --modal-bg:rgba(24,24,28,.94);
   --cursor-glow:rgba(120,150,255,.28);
 }
-html[data-bgtheme="ocean"]{
-  --blob1:#00b4d8;--blob2:#0077b6;--blob3:#90e0ef;--blob4:#48cae4;
-}
-html[data-bgtheme="ocean"][data-theme="dark"]{
-  --blob1:#003d5c;--blob2:#002855;--blob3:#005a7a;--blob4:#002a3a;
-}
+html[data-bgtheme="ocean"]{--blob1:#00b4d8;--blob2:#0077b6;--blob3:#90e0ef;--blob4:#48cae4}
+html[data-bgtheme="ocean"][data-theme="dark"]{--blob1:#003d5c;--blob2:#002855;--blob3:#005a7a;--blob4:#002a3a}
 
-/* ======================= БАЗА ======================= */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
   margin:0;
   font-family:'Manrope',-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  min-height:100dvh;
-  display:flex;
-  flex-direction:column;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  background:var(--bg); color:var(--text);
+  min-height:100vh; min-height:100dvh;
+  display:flex; flex-direction:column; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   transition:background .45s ease, color .3s ease;
 }
-body.intro-open,
-body.modal-open{overflow:hidden}
+body.intro-open,body.modal-open{overflow:hidden}
 
-/* ======================= ФОН ======================= */
 .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-.blob{
-  position:absolute;border-radius:50%;filter:blur(80px);
-  opacity:var(--blob-op);
-  will-change:transform;
-  transition:background .6s ease, opacity .5s ease;
-}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:var(--blob-op);will-change:transform;transition:background .6s ease, opacity .5s ease}
 .blob-1{width:520px;height:520px;background:var(--blob1);top:-190px;left:-140px}
 .blob-2{width:470px;height:470px;background:var(--blob2);bottom:-180px;right:-150px}
 .blob-3{width:440px;height:440px;background:var(--blob3);top:32%;left:48%}
@@ -111,11 +75,7 @@ body.modal-open{overflow:hidden}
   transition:background .5s ease;
 }
 @media (hover:none){.cursor-glow{display:none}}
-
-.bg-canvas{
-  position:fixed;inset:0;width:100%;height:100%;
-  z-index:-1;display:none;pointer-events:none;
-}
+.bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;display:none;pointer-events:none}
 html[data-bgtheme="constellations"] .bg-canvas,
 html[data-bgtheme="starfield"] .bg-canvas,
 html[data-bgtheme="magma"] .bg-canvas,
@@ -129,7 +89,6 @@ html[data-bgtheme="starfield"] .cursor-glow,
 html[data-bgtheme="magma"] .cursor-glow,
 html[data-bgtheme="flow"] .cursor-glow{display:none}
 
-/* ======================= ИНТРО ======================= */
 .intro{
   position:fixed;inset:0;z-index:9999;
   display:grid;place-items:center;
@@ -140,14 +99,8 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
   opacity:1;transition:opacity .55s ease;cursor:pointer;
 }
 .intro.hidden{opacity:0;pointer-events:none}
-.intro-inner{
-  display:flex;flex-direction:column;align-items:center;gap:18px;
-  padding:0 24px;text-align:center;
-}
-.intro-logo{
-  filter:drop-shadow(0 14px 34px rgba(90,110,255,.45));
-  animation:introLogoIn .9s cubic-bezier(.2,.9,.3,1.15) both;
-}
+.intro-inner{display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 24px;text-align:center}
+.intro-logo{filter:drop-shadow(0 14px 34px rgba(90,110,255,.45));animation:introLogoIn .9s cubic-bezier(.2,.9,.3,1.15) both}
 .intro-title{
   font-family:'Unbounded','Manrope',sans-serif;font-weight:600;
   font-size:clamp(26px, 7vw, 38px);letter-spacing:-.02em;
@@ -155,15 +108,10 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
   -webkit-background-clip:text;background-clip:text;color:transparent;
   animation:introTextIn .8s .22s ease both;
 }
-.intro-tag{
-  font-size:14px;font-weight:500;color:var(--text-2);
-  max-width:320px;line-height:1.45;
-  animation:introTextIn .8s .48s ease both;
-}
+.intro-tag{font-size:14px;font-weight:500;color:var(--text-2);max-width:320px;line-height:1.45;animation:introTextIn .8s .48s ease both}
 @keyframes introLogoIn{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:1;transform:none}}
 @keyframes introTextIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-/* ======================= ШАПКА ======================= */
 .topbar{
   position:sticky;top:0;z-index:20;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -171,15 +119,10 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
   background:linear-gradient(to bottom, var(--bg) 20%, transparent);
 }
 .brand{display:flex;align-items:center;gap:11px;min-width:0}
-.logo{
-  flex:0 0 auto;
-  filter:drop-shadow(0 6px 14px rgba(90,110,255,.32));
-  border-radius:11px;
-}
+.logo{flex:0 0 auto;filter:drop-shadow(0 6px 14px rgba(90,110,255,.32));border-radius:11px}
 .brand-name{
   font-family:'Unbounded','Manrope',sans-serif;font-weight:600;
-  font-size:18px;letter-spacing:-.02em;line-height:1;
-  white-space:nowrap;
+  font-size:18px;letter-spacing:-.02em;line-height:1;white-space:nowrap;
   background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
@@ -187,12 +130,10 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 .topbar-actions{display:flex;align-items:center;gap:8px}
 
 .theme-toggle{
-  flex:0 0 auto;
-  width:42px;height:42px;border-radius:50%;
+  flex:0 0 auto;width:42px;height:42px;border-radius:50%;
   display:grid;place-items:center;
   border:1px solid var(--card-border);
-  background:var(--card);
-  color:var(--text);
+  background:var(--card);color:var(--text);
   cursor:pointer;
   backdrop-filter:blur(24px) saturate(180%);
   -webkit-backdrop-filter:blur(24px) saturate(180%);
@@ -205,19 +146,12 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 [data-theme="light"] .icon-moon{display:none}
 [data-theme="dark"]  .icon-sun{display:none}
 
-/* ======================= MAIN ======================= */
 main{
-  flex:1 0 auto;
-  width:100%;
-  max-width:640px;
-  margin:0 auto;
-  padding:6px 20px 100px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
+  flex:1 0 auto;width:100%;max-width:640px;
+  margin:0 auto;padding:6px 20px 100px;
+  display:flex;flex-direction:column;gap:18px;
 }
 
-/* ======================= КОМПОЗЕР ======================= */
 .composer{
   flex:0 0 auto;
   display:flex;flex-direction:column;
@@ -228,8 +162,7 @@ main{
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
   transition:background .25s ease, border-color .25s ease, box-shadow .25s ease, padding .22s ease;
-  position:relative;
-  z-index:100;
+  position:relative;z-index:100;
 }
 .composer-head{
   display:flex;align-items:center;justify-content:space-between;
@@ -253,21 +186,13 @@ main{
 .composer-body{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .composer:not(.collapsed) .composer-body{animation:composerIn .26s cubic-bezier(.2,.9,.3,1.15)}
 @keyframes composerIn{from{opacity:0;transform:scale(.985) translateY(-3px)}to{opacity:1;transform:none}}
-.composer.collapsed{
-  background:var(--field);border-color:transparent;
-  box-shadow:none;padding:11px 14px;
-}
-.composer.collapsed .composer-title{
-  text-transform:none;font-size:13.5px;letter-spacing:-.005em;color:var(--text);
-}
-.composer.collapsed .composer-title::before{
-  content:'＋ ';font-weight:800;color:var(--accent);margin-right:1px;
-}
+.composer.collapsed{background:var(--field);border-color:transparent;box-shadow:none;padding:11px 14px}
+.composer.collapsed .composer-title{text-transform:none;font-size:13.5px;letter-spacing:-.005em;color:var(--text)}
+.composer.collapsed .composer-title::before{content:'＋ ';font-weight:800;color:var(--accent);margin-right:1px}
 .composer.collapsed .composer-toggle{background:transparent}
 .composer.collapsed .composer-toggle svg{transform:rotate(180deg)}
 .composer.collapsed .composer-body{display:none}
 
-/* ======================= ПОЛЯ ======================= */
 .field{
   width:100%;font-family:inherit;font-size:15px;font-weight:500;
   color:var(--text);background:var(--field);border:none;border-radius:16px;
@@ -276,10 +201,7 @@ main{
 }
 .field::placeholder{color:var(--text-3);font-weight:400}
 .field:focus{box-shadow:0 0 0 3px var(--ring)}
-textarea.field{
-  resize:none;min-height:52px;max-height:260px;line-height:1.45;
-  overflow-y:hidden;display:block;
-}
+textarea.field{resize:none;min-height:52px;max-height:260px;line-height:1.45;overflow-y:hidden;display:block}
 .row{display:flex;gap:10px;align-items:stretch}
 .row[hidden]{display:none}
 .row .field{flex:1 1 auto;min-width:0}
@@ -314,7 +236,7 @@ select.field option{background:var(--bg);color:var(--text)}
 .cat-add svg{transition:transform .3s ease}
 .cat-add.open svg{transform:rotate(45deg)}
 
-/* ======================= WORKSPACE ======================= */
+/* WORKSPACE */
 .workspace{
   position:relative;
   flex:1 0 auto;
@@ -323,7 +245,6 @@ select.field option{background:var(--bg);color:var(--text)}
   overflow-x:hidden;
   padding:0;
 }
-
 .workspace-empty{
   position:absolute;left:50%;top:40px;
   transform:translateX(-50%);
@@ -335,7 +256,7 @@ select.field option{background:var(--bg);color:var(--text)}
   pointer-events:none;
 }
 
-/* ======================= СЕКЦИЯ-КАРТОЧКА ======================= */
+/* SECTION */
 .section{
   position:absolute;
   width:380px;
@@ -356,40 +277,21 @@ select.field option{background:var(--bg);color:var(--text)}
   background:var(--card);
   transform:scale(1.01);
 }
-
-.section-head{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  user-select:none;
-  -webkit-user-select:none;
-}
+.section-head{display:flex;align-items:center;gap:4px;user-select:none;-webkit-user-select:none}
 .section-toggle-area{
-  flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 8px;
-  margin:0;
-  border:none;
-  border-radius:10px;
-  background:transparent;
-  color:inherit;
-  font:inherit;
-  text-align:left;
+  flex:1 1 auto;min-width:0;
+  display:flex;align-items:center;gap:8px;
+  padding:6px 8px;margin:0;border:none;border-radius:10px;
+  background:transparent;color:inherit;font:inherit;text-align:left;
   cursor:grab;
   transition:background .18s ease;
-  -webkit-user-select:none;
-  user-select:none;
+  -webkit-user-select:none;user-select:none;
   touch-action:none;
 }
 .section.dragging .section-toggle-area{cursor:grabbing}
 .section-toggle-area:hover{background:var(--field-hover)}
 .section-toggle-icon{
-  flex:0 0 14px;
-  width:14px;
-  height:14px;
+  flex:0 0 14px;width:14px;height:14px;
   color:var(--text-3);
   transition:transform .28s cubic-bezier(.2,.9,.3,1.05), color .18s ease;
   pointer-events:none;
@@ -400,31 +302,23 @@ select.field option{background:var(--bg);color:var(--text)}
   font-size:12.5px;font-weight:700;text-transform:uppercase;
   letter-spacing:.07em;color:var(--text-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  min-width:0;
-  pointer-events:none;
+  min-width:0;pointer-events:none;
 }
 .section-count{
   font-size:11px;font-weight:600;color:var(--text-3);
   background:var(--card);padding:1px 7px;border-radius:999px;
-  flex:0 0 auto;
-  transition:background .18s ease;
-  pointer-events:none;
+  flex:0 0 auto;transition:background .18s ease;pointer-events:none;
 }
 .section-toggle-area:hover .section-count{background:var(--field-hover)}
-
 .section-del{
-  flex:0 0 26px;
-  width:26px;height:26px;
+  flex:0 0 26px;width:26px;height:26px;
   border:none;border-radius:50%;
   background:transparent;color:var(--text-3);
-  cursor:pointer;
-  display:grid;place-items:center;
-  padding:0;
+  cursor:pointer;display:grid;place-items:center;padding:0;
   transition:background .2s ease, color .2s ease, transform .15s ease;
 }
 .section-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
 .section-del:active{transform:scale(.9)}
-
 .section-items{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .section.collapsed .section-items{display:none}
 .section-empty{
@@ -432,7 +326,7 @@ select.field option{background:var(--bg);color:var(--text)}
   color:var(--text-3);border:1.5px dashed var(--dash);border-radius:14px;
 }
 
-/* ======================= ITEM ======================= */
+/* ITEM */
 .item{
   display:flex;align-items:center;gap:2px;
   padding:6px;border-radius:16px;
@@ -445,7 +339,6 @@ select.field option{background:var(--bg);color:var(--text)}
 @keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
 .item.removing{animation:disappear .22s ease forwards}
 @keyframes disappear{to{opacity:0;transform:scale(.94);margin-bottom:-8px}}
-
 .item-main{
   flex:1 1 auto;min-width:0;
   display:flex;flex-direction:column;gap:2px;
@@ -488,21 +381,11 @@ select.field option{background:var(--bg);color:var(--text)}
 .item-pin:active,.item-del:active{transform:scale(.88)}
 .item-pin.active{color:var(--accent)}
 .item-pin.active svg{fill:currentColor;fill-opacity:.16}
-.item-pin svg{
-  width:calc(14px * var(--item-scale));
-  height:calc(14px * var(--item-scale));
-}
-.item-del svg{
-  width:calc(13px * var(--item-scale));
-  height:calc(13px * var(--item-scale));
-}
+.item-pin svg{width:calc(14px * var(--item-scale));height:calc(14px * var(--item-scale))}
+.item-del svg{width:calc(13px * var(--item-scale));height:calc(13px * var(--item-scale))}
 
-/* ======================= ЗАМЕТКИ ======================= */
-.notes-layer{
-  position:fixed;inset:0;z-index:200;
-  pointer-events:none;overflow:hidden;
-  transition:opacity .2s ease;
-}
+/* NOTES */
+.notes-layer{position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden;transition:opacity .2s ease}
 body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .note-window{
   position:absolute;width:280px;max-width:calc(100vw - 32px);
@@ -564,7 +447,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .note-window.editing .note-view{display:none}
 .note-window.editing .note-edit{display:block}
 
-/* ======================= FAB ======================= */
+/* FAB */
 .fab-stack{
   position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));
   display:flex;flex-direction:column;align-items:flex-end;gap:10px;
@@ -590,7 +473,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .fab-note:hover{filter:brightness(1.06)}
 .fab-emoji{font-size:16px;line-height:1}
 
-/* ======================= МОДАЛКИ ======================= */
+/* MODALS */
 .modal-backdrop{
   position:fixed;inset:0;z-index:2000;
   display:grid;place-items:center;padding:20px;
@@ -635,33 +518,23 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .info-content h4:first-child{margin-top:0}
 .info-content p{margin:0;font-size:13.5px;line-height:1.55;color:var(--text-2);font-weight:500}
 
-/* ======================= НАСТРОЙКИ ======================= */
+/* SETTINGS */
 .settings-section{margin-bottom:18px}
 .settings-section:last-of-type{margin-bottom:0}
 .settings-label{
   font-size:11.5px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--text-2);
-  margin-bottom:10px;
+  letter-spacing:.07em;color:var(--text-2);margin-bottom:10px;
 }
-.scale-slider-wrap{
-  display:flex;align-items:center;gap:12px;
-  padding:6px 0;
-}
+.scale-slider-wrap{display:flex;align-items:center;gap:12px;padding:6px 0}
 .scale-a-sm{font-size:12px;color:var(--text-3);font-weight:700;flex:0 0 auto}
 .scale-a-lg{font-size:20px;color:var(--text);font-weight:700;flex:0 0 auto}
 .scale-value{
   font-size:13px;font-weight:700;color:var(--accent);
   min-width:52px;text-align:right;flex:0 0 auto;
 }
-#scaleSlider{
-  flex:1;
-  accent-color:var(--accent);
-  cursor:pointer;
-  height:6px;
-  min-width:0;
-}
+#scaleSlider{flex:1;accent-color:var(--accent);cursor:pointer;height:6px;min-width:0}
 
-/* ======================= ИГРА ======================= */
+/* GAME */
 .game-modal{max-width:420px;max-height:88vh}
 .game-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .game-head h3{margin:0}
@@ -691,10 +564,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
   user-select:none;-webkit-user-select:none;touch-action:manipulation;
 }
 .game-clicker:active{transform:scale(.97)}
-.game-clicker-logo{
-  filter:drop-shadow(0 4px 16px rgba(0,0,0,.4));
-  position:relative;z-index:1;pointer-events:none;
-}
+.game-clicker-logo{filter:drop-shadow(0 4px 16px rgba(0,0,0,.4));position:relative;z-index:1;pointer-events:none}
 .game-clicker-label{font-size:13px;font-weight:700;opacity:.94;position:relative;z-index:1}
 .game-plus{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
@@ -766,7 +636,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .game-footer{display:flex;justify-content:center;margin-top:8px}
 .game-footer .btn-secondary{padding:8px 16px;font-size:12.5px}
 
-/* ======================= ТОСТ ======================= */
+/* TOAST */
 .toast{
   position:fixed;left:50%;top:calc(80px + env(safe-area-inset-top));
   transform:translate(-50%,-16px);display:flex;align-items:center;gap:8px;
@@ -781,7 +651,6 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .toast svg{flex:0 0 auto;color:#30d158}
 
-/* ======================= ПОДВАЛ ======================= */
 footer{
   position:fixed;left:0;bottom:0;z-index:5;
   display:flex;flex-direction:column;align-items:flex-start;gap:1px;
@@ -800,7 +669,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   40%,60%{transform:translateX(4px)}
 }
 
-/* ======================= АДАПТИВ ======================= */
 @media (max-width:640px){
   main{padding:6px 16px 200px}
   .fab-stack{right:14px;bottom:calc(84px + env(safe-area-inset-bottom));gap:8px}
@@ -829,8 +697,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <linearGradient id="lgBg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3fa9ff"/>
-      <stop offset="1" stop-color="#7a5cff"/>
+      <stop offset="0" stop-color="#3fa9ff"/><stop offset="1" stop-color="#7a5cff"/>
     </linearGradient>
     <linearGradient id="lgSheet" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#ffffff" stop-opacity=".98"/>
@@ -839,9 +706,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </defs>
 </svg>
 
-<div class="intro" id="intro" role="dialog" aria-label="Заставка">
+<div class="intro" id="intro">
   <div class="intro-inner">
-    <svg class="intro-logo" width="104" height="104" viewBox="0 0 36 36" aria-hidden="true">
+    <svg class="intro-logo" width="104" height="104" viewBox="0 0 36 36">
       <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
       <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
       <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none" stroke="url(#lgSheet)" stroke-width="2"/>
@@ -853,17 +720,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 </div>
 
 <div class="bg-blobs" aria-hidden="true">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="blob blob-4"></div>
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-3"></div><div class="blob blob-4"></div>
 </div>
 <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 <canvas class="bg-canvas" id="bgCanvas" aria-hidden="true"></canvas>
 
 <header class="topbar">
   <div class="brand">
-    <svg class="logo" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+    <svg class="logo" width="36" height="36" viewBox="0 0 36 36">
       <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
       <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
       <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none" stroke="url(#lgSheet)" stroke-width="2"/>
@@ -871,7 +736,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     </svg>
     <span class="brand-name">Копирка&nbsp;<span class="ver">2.0</span></span>
   </div>
-
   <div class="topbar-actions">
     <button class="theme-toggle" id="settingsBtn" type="button" aria-label="Настройки" title="Настройки">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -907,14 +771,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       </button>
     </div>
     <div class="composer-body">
-      <textarea id="textInput" class="field" rows="1"
-                placeholder="Текст, который будет копироваться…"
-                aria-label="Текст для копирования"></textarea>
+      <textarea id="textInput" class="field" rows="1" placeholder="Текст, который будет копироваться…" aria-label="Текст для копирования"></textarea>
       <div class="row">
-        <input id="nameInput" class="field" type="text"
-               placeholder="Название кнопки"
-               aria-label="Название кнопки"
-               autocomplete="off" spellcheck="false">
+        <input id="nameInput" class="field" type="text" placeholder="Название кнопки" autocomplete="off" spellcheck="false">
         <button id="addBtn" class="confirm" type="button" aria-label="Добавить кнопку" disabled>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
@@ -924,9 +783,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       </div>
       <div class="row">
         <div class="select-wrap">
-          <select id="categorySelect" class="field" aria-label="Категория">
-            <option value="">Без категории</option>
-          </select>
+          <select id="categorySelect" class="field"><option value="">Без категории</option></select>
         </div>
         <button id="newCatBtn" class="cat-add" type="button" aria-label="Создать категорию">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -936,9 +793,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         </button>
       </div>
       <div class="row" id="newCatRow" hidden>
-        <input id="newCatInput" class="field" type="text"
-               placeholder="Название категории…"
-               autocomplete="off" spellcheck="false">
+        <input id="newCatInput" class="field" type="text" placeholder="Название категории…" autocomplete="off" spellcheck="false">
         <button id="newCatConfirm" class="confirm" type="button" aria-label="Создать категорию">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round">
@@ -948,7 +803,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       </div>
     </div>
   </section>
-
   <div class="workspace" id="workspace"></div>
 </main>
 
@@ -961,67 +815,45 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
 <div class="fab-stack">
   <button class="fab fab-note" id="addNoteFab" type="button">
-    <span class="fab-emoji">📝</span>
-    <span>Добавить заметку</span>
+    <span class="fab-emoji">📝</span><span>Добавить заметку</span>
   </button>
   <button class="fab fab-info" id="infoFab" type="button">
-    <span class="fab-emoji">💡</span>
-    <span>Объясни как это работает</span>
+    <span class="fab-emoji">💡</span><span>Объясни как это работает</span>
   </button>
 </div>
 
-<!-- ИНФО -->
+<!-- INFO -->
 <div class="modal-backdrop" id="infoModal">
   <div class="modal">
     <h3>Как это работает</h3>
     <div class="info-content">
       <h4>Что такое Копирка 2.0</h4>
-      <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок, организации кнопок по категориям и мини-игры. Все данные хранятся только в вашем браузере.</p>
-
-      <h4>Категории-карточки</h4>
-      <p>Каждая категория — плавающая карточка. Её можно перетащить в любое место рабочей области, потянув за заголовок. Позиция и свёрнутость каждой категории сохраняются между визитами.</p>
-
+      <p>Личный инструмент для быстрого копирования текстов, хранения заметок и мини-игры. Все данные хранятся только в вашем браузере.</p>
+      <h4>Категории</h4>
+      <p>Каждая категория — карточка, которую можно перетащить за заголовок. Клик по заголовку сворачивает/разворачивает её. Позиции сохраняются.</p>
       <h4>Сброс позиций</h4>
-      <p>В настройках (⚙️ в шапке) есть кнопка «Сбросить позиции категорий» — она возвращает все карточки в исходную вертикальную стопку по центру.</p>
-
+      <p>В настройках (⚙️) — кнопка «Сбросить позиции категорий». Возвращает все карточки в исходный вертикальный столбик по центру.</p>
       <h4>Размер кнопок</h4>
-      <p>Там же, в настройках, есть ползунок масштаба от 70% до 140%. Он меняет размер шрифта и отступов у всех кнопок-элементов одновременно.</p>
-
-      <h4>Добавить кнопку</h4>
-      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Целевая категория автоматически раскроется и выйдет на передний план.</p>
-
+      <p>Там же ползунок 70%–140%. Меняет размер шрифта и отступов у кнопок-элементов.</p>
       <h4>Копирование</h4>
-      <p>Нажмите на кнопку — текст моментально попадёт в буфер обмена. Вверху экрана появится подтверждение «Скопировано».</p>
-
+      <p>Нажмите на кнопку — текст попадёт в буфер. Вверху появится подтверждение.</p>
       <h4>Закрепление</h4>
-      <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» — это отдельная карточка, которую тоже можно двигать.</p>
-
+      <p>Булавка переносит кнопку в раздел «Закреплённые» — отдельную карточку, которую тоже можно двигать.</p>
       <h4>Заметки</h4>
-      <p>Кнопка «Добавить заметку» создаёт плавающее окно. Иконка ✏️ переключает в режим редактирования, ✓ сохраняет, ✕ удаляет. Позиция каждой заметки сохраняется.</p>
-
+      <p>Кнопка «Добавить заметку» создаёт плавающее окно. ✏️ — редактировать, ✓ — сохранить, ✕ — удалить. Позиция сохраняется.</p>
       <h4>Игра «Клик-Копирка»</h4>
-      <p>Кнопка 🎮 открывает мини-игру. Кликайте по логотипу, покупайте улучшения и открывайте новые фоновые темы сайта. Пассивный доход начисляется и в фоне.</p>
-
-      <h4>Магазин тем</h4>
-      <p>6 фоновых тем: По умолчанию, Океан, Созвездия, Звёздное поле, Магма и Поток. Четыре из них — анимированные canvas-движки, реагирующие на курсор.</p>
-
-      <h4>Светлая/тёмная тема</h4>
-      <p>Переключатель в правом верхнем углу. Работает отдельно от фоновой темы.</p>
-
+      <p>🎮 открывает мини-игру с улучшениями и магазином фоновых тем. Пассивный доход идёт и в фоне.</p>
       <h4>Сохранение</h4>
-      <p>Все кнопки, категории, их позиции и состояния, заметки, прогресс игры, темы и масштаб сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
+      <p>Кнопки, категории, позиции, заметки, прогресс игры и темы — в localStorage. Привязаны к устройству и браузеру.</p>
     </div>
-    <div class="modal-actions">
-      <button class="btn-primary" id="infoClose" type="button">Понятно</button>
-    </div>
+    <div class="modal-actions"><button class="btn-primary" id="infoClose" type="button">Понятно</button></div>
   </div>
 </div>
 
-<!-- НАСТРОЙКИ -->
+<!-- SETTINGS -->
 <div class="modal-backdrop" id="settingsModal">
   <div class="modal">
     <h3>Настройки</h3>
-
     <div class="settings-section">
       <div class="settings-label">Размер кнопок</div>
       <div class="scale-slider-wrap">
@@ -1031,21 +863,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         <span class="scale-value" id="scaleValue">100%</span>
       </div>
     </div>
-
     <div class="settings-section">
       <div class="settings-label">Позиции категорий</div>
-      <button class="btn-secondary" id="resetLayoutBtn" type="button" style="width:100%">
-        Сбросить позиции категорий
-      </button>
+      <button class="btn-secondary" id="resetLayoutBtn" type="button" style="width:100%">Сбросить позиции категорий</button>
     </div>
-
-    <div class="modal-actions">
-      <button class="btn-primary" id="settingsClose" type="button">Готово</button>
-    </div>
+    <div class="modal-actions"><button class="btn-primary" id="settingsClose" type="button">Готово</button></div>
   </div>
 </div>
 
-<!-- ИГРА -->
+<!-- GAME -->
 <div class="modal-backdrop" id="gameModal">
   <div class="modal game-modal">
     <div class="game-head">
@@ -1057,7 +883,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <div class="game-rate" id="gameRate">0 в секунду</div>
     </div>
     <button class="game-clicker" id="gameClicker" type="button" aria-label="Кликни">
-      <svg class="game-clicker-logo" viewBox="0 0 36 36" width="72" height="72" aria-hidden="true">
+      <svg class="game-clicker-logo" viewBox="0 0 36 36" width="72" height="72">
         <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
         <rect x="1" y="1" width="34" height="34" rx="10.5" fill="none" stroke="#fff" stroke-opacity=".28"/>
         <rect x="12.5" y="8.5" width="13" height="13" rx="4" fill="none" stroke="url(#lgSheet)" stroke-width="2"/>
@@ -1092,17 +918,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 (function () {
   'use strict';
 
-  /* ======================= КЛЮЧИ ======================= */
   var ITEMS_KEY = 'kopirka2.items';
   var CATS_KEY  = 'kopirka2.categories';
   var NOTES_KEY = 'kopirka2.notes';
   var GAME_KEY  = 'kopirka2.game';
   var THEME_KEY = 'kopirka2.theme';
   var COMPOSER_KEY = 'kopirka2.composerCollapsed';
-  var LAYOUT_KEY = 'kopirka2.layout';
+  var LAYOUT_KEY = 'kopirka2.layout.v3'; // НОВЫЙ КЛЮЧ — старые координаты не цепляются
   var SCALE_KEY = 'kopirka2.scale';
 
-  /* ======================= ЭЛЕМЕНТЫ ======================= */
   var workspace     = document.getElementById('workspace');
   var textEl        = document.getElementById('textInput');
   var nameEl        = document.getElementById('nameInput');
@@ -1147,95 +971,67 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var composerHead  = document.getElementById('composerHead');
   var composerToggle= document.getElementById('composerToggle');
 
-  /* ======================= ХЕЛПЕРЫ ======================= */
   var prefersReducedMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function genId() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-  }
+  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
   function formatNum(n) {
     n = Math.floor(n);
     if (!isFinite(n)) return '∞';
     if (n < 1000) return String(n);
     var units = [
-      { v: 1e3, s: 'K' }, { v: 1e6, s: 'M' }, { v: 1e9, s: 'B' },
-      { v: 1e12, s: 'T' }, { v: 1e15, s: 'Qa' }, { v: 1e18, s: 'Qi' }
+      {v:1e3,s:'K'},{v:1e6,s:'M'},{v:1e9,s:'B'},{v:1e12,s:'T'},{v:1e15,s:'Qa'},{v:1e18,s:'Qi'}
     ];
     for (var i = units.length - 1; i >= 0; i--) {
-      if (n >= units[i].v) {
-        var x = n / units[i].v;
-        return (x < 10 ? x.toFixed(1) : Math.floor(x)) + units[i].s;
-      }
+      if (n >= units[i].v) { var x = n/units[i].v; return (x < 10 ? x.toFixed(1) : Math.floor(x)) + units[i].s; }
     }
     return String(n);
   }
 
-  /* ======================= МАСШТАБ ======================= */
+  /* МАСШТАБ */
   var currentScale = 1;
-  try {
-    var s = parseFloat(localStorage.getItem(SCALE_KEY));
-    if (s && s >= 0.7 && s <= 1.4) currentScale = s;
-  } catch(e) {}
-
+  try { var s = parseFloat(localStorage.getItem(SCALE_KEY)); if (s && s >= 0.7 && s <= 1.4) currentScale = s; } catch(e) {}
   function applyScale(scale, persist) {
     document.documentElement.style.setProperty('--item-scale', scale);
     if (scaleValue) scaleValue.textContent = Math.round(scale * 100) + '%';
     if (scaleSlider) scaleSlider.value = Math.round(scale * 100);
-    if (persist) {
-      try { localStorage.setItem(SCALE_KEY, String(scale)); } catch(e) {}
-    }
+    if (persist) { try { localStorage.setItem(SCALE_KEY, String(scale)); } catch(e) {} }
   }
   applyScale(currentScale, false);
-
   if (scaleSlider) {
-    scaleSlider.addEventListener('input', function() {
-      var s = parseInt(this.value, 10) / 100;
-      applyScale(s, false);
-    });
-    scaleSlider.addEventListener('change', function() {
-      var s = parseInt(this.value, 10) / 100;
-      applyScale(s, true);
-    });
+    scaleSlider.addEventListener('input', function() { applyScale(parseInt(this.value, 10)/100, false); });
+    scaleSlider.addEventListener('change', function() { applyScale(parseInt(this.value, 10)/100, true); });
   }
 
-  /* ======================= СОСТОЯНИЕ ======================= */
-  var items = [];
-  var categories = [];
-
+  /* ДАННЫЕ */
+  var items = [], categories = [];
   try {
     var rawItems = JSON.parse(localStorage.getItem(ITEMS_KEY));
     if (Array.isArray(rawItems)) {
-      items = rawItems.map(function (it) {
-        return {
-          id: it.id || genId(),
-          name: it.name || 'Копировать',
+      items = rawItems.map(function(it) {
+        return { id: it.id || genId(), name: it.name || 'Копировать',
           text: typeof it.text === 'string' ? it.text : '',
-          pinned: !!it.pinned,
-          categoryId: it.categoryId || null
-        };
+          pinned: !!it.pinned, categoryId: it.categoryId || null };
       });
     }
-  } catch (e) { items = []; }
+  } catch(e) { items = []; }
 
   try {
     var rawCats = JSON.parse(localStorage.getItem(CATS_KEY));
     if (Array.isArray(rawCats)) {
-      categories = rawCats.map(function (c) {
+      categories = rawCats.map(function(c) {
         return { id: c.id || genId(), name: c.name || 'Без названия' };
       });
     }
-  } catch (e) { categories = []; }
+  } catch(e) { categories = []; }
 
   var catIds = {};
-  categories.forEach(function (c) { catIds[c.id] = true; });
-  items.forEach(function (i) {
-    if (i.categoryId && !catIds[i.categoryId]) i.categoryId = null;
-  });
+  categories.forEach(function(c){ catIds[c.id]=true; });
+  items.forEach(function(i){ if (i.categoryId && !catIds[i.categoryId]) i.categoryId = null; });
 
   function save() {
-    try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch (e) {}
-    try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
+    try { localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); } catch(e) {}
+    try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch(e) {}
   }
 
   var layout = {};
@@ -1248,18 +1044,17 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         if (layout[k] && layout[k].z > topZ) topZ = layout[k].z;
       });
     }
-  } catch (e) { layout = {}; }
+  } catch(e) { layout = {}; }
 
   function saveLayout() {
-    try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch (e) {}
+    try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch(e) {}
   }
 
-  var notes = [];
-  var editingNoteId = null;
+  var notes = [], editingNoteId = null;
   try {
     var rawNotes = JSON.parse(localStorage.getItem(NOTES_KEY));
     if (Array.isArray(rawNotes)) {
-      notes = rawNotes.map(function (n, i) {
+      notes = rawNotes.map(function(n, i) {
         return {
           id: n.id || genId(),
           text: typeof n.text === 'string' ? n.text : '',
@@ -1270,54 +1065,49 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         };
       });
     }
-  } catch (e) { notes = []; }
+  } catch(e) { notes = []; }
+  function saveNotes() { try { localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); } catch(e) {} }
 
-  function saveNotes() {
-    try { localStorage.setItem(NOTES_KEY, JSON.stringify(notes)); } catch (e) {}
-  }
-
-  /* ======================= ТЕМА ======================= */
+  /* ТЕМА */
   var onThemeChange = null;
   function applyTheme(theme, persist) {
     document.documentElement.setAttribute('data-theme', theme);
     if (metaTheme) metaTheme.setAttribute('content', theme === 'dark' ? '#000000' : '#eef1f7');
-    if (persist) { try { localStorage.setItem(THEME_KEY, theme); } catch (e) {} }
+    if (persist) { try { localStorage.setItem(THEME_KEY, theme); } catch(e) {} }
   }
   var savedTheme = null;
-  try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
+  try { savedTheme = localStorage.getItem(THEME_KEY); } catch(e) {}
   if (savedTheme !== 'dark' && savedTheme !== 'light') {
-    savedTheme = (window.matchMedia &&
-                  window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    savedTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
   }
   applyTheme(savedTheme, false);
-
-  themeToggle.addEventListener('click', function () {
+  themeToggle.addEventListener('click', function() {
     var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     applyTheme(next, true);
     if (onThemeChange) onThemeChange();
   });
 
-  /* ======================= ИНТРО ======================= */
+  /* ИНТРО */
   var introTimer = setTimeout(closeIntro, 2200);
   function closeIntro() {
     clearTimeout(introTimer);
     if (introEl.classList.contains('hidden')) return;
     introEl.classList.add('hidden');
     document.body.classList.remove('intro-open');
-    setTimeout(function () { introEl.style.display = 'none'; }, 600);
+    setTimeout(function() { introEl.style.display = 'none'; }, 600);
   }
   introEl.addEventListener('click', closeIntro);
 
-  /* ======================= ТОСТ ======================= */
+  /* ТОСТ */
   var toastTimer = null;
   function showToast(message) {
     toastText.textContent = message;
     toastEl.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 1500);
+    toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 1500);
   }
 
-  /* ======================= TEXTAREA ======================= */
+  /* TEXTAREA */
   var MAX_H = 260;
   function autoGrow() {
     textEl.style.height = 'auto';
@@ -1326,53 +1116,38 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     textEl.style.overflowY = h > MAX_H ? 'auto' : 'hidden';
   }
   function updateAddState() { addBtn.disabled = textEl.value.trim().length === 0; }
-  textEl.addEventListener('input', function () { autoGrow(); updateAddState(); });
+  textEl.addEventListener('input', function(){ autoGrow(); updateAddState(); });
 
-  function shake(el) {
-    el.classList.remove('shake');
-    void el.offsetWidth;
-    el.classList.add('shake');
-  }
+  function shake(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
 
-  /* ======================= СВОРАЧИВАНИЕ КОМПОЗЕРА ======================= */
+  /* КОМПОЗЕР */
   var composerCollapsed = false;
-  try { composerCollapsed = localStorage.getItem(COMPOSER_KEY) === '1'; } catch (e) {}
-
+  try { composerCollapsed = localStorage.getItem(COMPOSER_KEY) === '1'; } catch(e) {}
   function applyComposerState() {
     composerEl.classList.toggle('collapsed', composerCollapsed);
     composerToggle.setAttribute('aria-expanded', composerCollapsed ? 'false' : 'true');
-    composerToggle.setAttribute('aria-label', composerCollapsed ? 'Развернуть форму' : 'Свернуть форму');
   }
   applyComposerState();
-
   function setComposerCollapsed(collapsed) {
     if (composerCollapsed === collapsed) return;
     composerCollapsed = !!collapsed;
-    try { localStorage.setItem(COMPOSER_KEY, composerCollapsed ? '1' : '0'); } catch (e) {}
+    try { localStorage.setItem(COMPOSER_KEY, composerCollapsed ? '1' : '0'); } catch(e) {}
     applyComposerState();
     if (!composerCollapsed) {
-      setTimeout(function () {
-        if (!composerCollapsed) { autoGrow(); textEl.focus(); }
-      }, 260);
+      setTimeout(function() { if (!composerCollapsed) { autoGrow(); textEl.focus(); } }, 260);
     }
   }
-  composerHead.addEventListener('click', function () {
-    setComposerCollapsed(!composerCollapsed);
-  });
+  composerHead.addEventListener('click', function(){ setComposerCollapsed(!composerCollapsed); });
 
-  /* ======================= КОПИРОВАНИЕ ======================= */
+  /* КОПИРОВАНИЕ */
   function legacyCopy(text) {
     var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'fixed';
-    ta.style.top = '-9999px';
-    ta.style.left = '-9999px';
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.top = '-9999px'; ta.style.left = '-9999px';
     document.body.appendChild(ta);
-    ta.select();
-    ta.setSelectionRange(0, text.length);
+    ta.select(); ta.setSelectionRange(0, text.length);
     var ok = false;
-    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
     document.body.removeChild(ta);
     return ok;
   }
@@ -1383,12 +1158,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         itemEl.classList.remove('copied');
         void itemEl.offsetWidth;
         itemEl.classList.add('copied');
-        setTimeout(function () { itemEl.classList.remove('copied'); }, 460);
+        setTimeout(function() { itemEl.classList.remove('copied'); }, 460);
       }
     }
     function failure() { showToast('Не удалось скопировать'); }
     if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(success).catch(function () {
+      navigator.clipboard.writeText(text).then(success).catch(function() {
         if (legacyCopy(text)) success(); else failure();
       });
     } else {
@@ -1396,78 +1171,43 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }
 
-  /* ======================= ИКОНКИ ======================= */
-  var X_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-    'stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-  var PIN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
-    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
-    '<path d="M12 17v5"/>' +
-    '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
-    '</svg>';
-  var CHEVRON_SVG = '<svg class="section-toggle-icon" viewBox="0 0 24 24" fill="none" ' +
-    'stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
-    '<path d="M6 9l6 6 6-6"/></svg>';
+  var X_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var PIN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>';
+  var CHEVRON_SVG = '<svg class="section-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
-  /* ======================= SELECT КАТЕГОРИЙ ======================= */
+  /* SELECT */
   function updateCategorySelect() {
     var current = catSelect.value;
     catSelect.innerHTML = '<option value="">Без категории</option>';
-    categories.forEach(function (c) {
+    categories.forEach(function(c) {
       var opt = document.createElement('option');
       opt.value = c.id;
       opt.textContent = c.name;
       catSelect.appendChild(opt);
     });
-    if (current && categories.some(function (c) { return c.id === current; })) {
-      catSelect.value = current;
-    }
+    if (current && categories.some(function(c){ return c.id === current; })) catSelect.value = current;
   }
 
-  /* ======================= СЕКЦИИ ======================= */
+  /* СЕКЦИИ */
   function getSections() {
     var sections = [];
-    var pinned = items.filter(function(i) { return i.pinned; });
+    var pinned = items.filter(function(i){ return i.pinned; });
     if (pinned.length > 0) {
       sections.push({ key: '__pinned', name: 'Закреплённые', items: pinned, isSpecial: true });
     }
     categories.forEach(function(cat) {
-      var catItems = items.filter(function(i) {
-        return !i.pinned && i.categoryId === cat.id;
-      });
+      var catItems = items.filter(function(i){ return !i.pinned && i.categoryId === cat.id; });
       sections.push({ key: cat.id, name: cat.name, items: catItems, category: cat });
     });
-    var uncat = items.filter(function(i) { return !i.pinned && !i.categoryId; });
+    var uncat = items.filter(function(i){ return !i.pinned && !i.categoryId; });
     if (uncat.length > 0) {
       sections.push({ key: '__uncat', name: 'Без категории', items: uncat, isSpecial: true });
     }
     return sections;
   }
 
-  function pruneLayout() {
-    var valid = {};
-    getSections().forEach(function(s) { valid[s.key] = true; });
-    Object.keys(layout).forEach(function(k) {
-      if (!valid[k]) delete layout[k];
-    });
-  }
-
-  function raiseSection(key) {
-    if (!layout[key]) return;
-    topZ++;
-    layout[key].z = topZ;
-    saveLayout();
-  }
-
   function focusCategory(key) {
-    if (!layout[key]) {
-      var wsW = workspace.clientWidth || 400;
-      layout[key] = {
-        x: Math.max(8, Math.round((wsW - 320) / 2)),
-        y: 8,
-        z: ++topZ,
-        collapsed: false
-      };
-    }
+    if (!layout[key]) layout[key] = { z: ++topZ, collapsed: false };
     layout[key].collapsed = false;
     layout[key].z = ++topZ;
     saveLayout();
@@ -1480,7 +1220,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     saveLayout();
   }
 
-  /* ======================= РЕНДЕР ======================= */
+  /* РЕНДЕР */
   function createItemEl(item) {
     var row = document.createElement('div');
     row.className = 'item';
@@ -1498,17 +1238,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     textSpan.textContent = item.text.replace(/\s+/g, ' ').trim();
     main.appendChild(nameSpan);
     main.appendChild(textSpan);
-    main.addEventListener('click', function (e) {
-      e.stopPropagation();
-      copyText(item.text, row);
-    });
+    main.addEventListener('click', function(e) { e.stopPropagation(); copyText(item.text, row); });
 
     var pin = document.createElement('button');
     pin.type = 'button';
     pin.className = 'item-pin' + (item.pinned ? ' active' : '');
     pin.setAttribute('aria-label', item.pinned ? 'Открепить' : 'Закрепить');
     pin.innerHTML = PIN_SVG;
-    pin.addEventListener('click', function (e) {
+    pin.addEventListener('click', function(e) {
       e.stopPropagation();
       item.pinned = !item.pinned;
       var targetKey = item.pinned ? '__pinned' : (item.categoryId || '__uncat');
@@ -1523,11 +1260,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     del.className = 'item-del';
     del.setAttribute('aria-label', 'Удалить «' + item.name + '»');
     del.innerHTML = X_SVG;
-    del.addEventListener('click', function (e) {
+    del.addEventListener('click', function(e) {
       e.stopPropagation();
       row.classList.add('removing');
-      setTimeout(function () {
-        items = items.filter(function (i) { return i.id !== item.id; });
+      setTimeout(function() {
+        items = items.filter(function(i){ return i.id !== item.id; });
         save();
         render();
         showToast('Удалено');
@@ -1544,16 +1281,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var toggleArea = el.querySelector('.section-toggle-area');
     if (!toggleArea) return;
 
-    toggleArea.addEventListener('click', function (e) {
-      if (el.dataset.dragging === '1') {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
+    toggleArea.addEventListener('click', function(e) {
+      if (el.dataset.dragging === '1') { e.preventDefault(); e.stopPropagation(); return; }
       toggleCollapse(key, el);
     });
 
-    el.addEventListener('pointerdown', function (e) {
+    el.addEventListener('pointerdown', function(e) {
       if (e.target.closest('.section-del')) return;
       if (e.target.closest('button') && !e.target.closest('.section-toggle-area')) return;
       if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
@@ -1563,11 +1296,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       var startY = e.clientY;
       var state = layout[key];
       if (!state) return;
-      var startLeft = state.x;
-      var startTop = state.y;
+      var startLeft = state.x || 0;
+      var startTop = state.y || 0;
       var moved = false;
 
-      raiseSection(key);
+      state.z = ++topZ;
       el.style.zIndex = state.z;
       el.dataset.dragging = '0';
 
@@ -1581,31 +1314,26 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           el.dataset.dragging = '1';
         }
         if (!moved) return;
-
         var wsW = workspace.clientWidth;
         var elW = el.offsetWidth;
         var nx = Math.max(0, Math.min(startLeft + dx, wsW - elW));
         var ny = Math.max(0, startTop + dy);
-
         el.style.left = nx + 'px';
         el.style.top = ny + 'px';
         state.x = nx;
         state.y = ny;
       }
-
       function onUp(ev) {
         if (ev.pointerId !== pointerId) return;
         document.removeEventListener('pointermove', onMove);
         document.removeEventListener('pointerup', onUp);
         document.removeEventListener('pointercancel', onUp);
-
         el.classList.remove('dragging');
         if (moved) {
           saveLayout();
           setTimeout(function() { el.dataset.dragging = '0'; }, 60);
         }
       }
-
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
       document.addEventListener('pointercancel', onUp);
@@ -1616,7 +1344,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var el = document.createElement('div');
     el.className = 'section';
     el.dataset.key = sec.key;
-
     var state = layout[sec.key];
     if (state && state.collapsed) el.classList.add('collapsed');
 
@@ -1626,7 +1353,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var toggleArea = document.createElement('button');
     toggleArea.type = 'button';
     toggleArea.className = 'section-toggle-area';
-    toggleArea.setAttribute('aria-label', 'Свернуть/развернуть «' + sec.name + '»');
     toggleArea.innerHTML = CHEVRON_SVG;
 
     var nameElSec = document.createElement('span');
@@ -1647,10 +1373,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       delBtn.className = 'section-del';
       delBtn.setAttribute('aria-label', 'Удалить категорию');
       delBtn.innerHTML = X_SVG;
-      delBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        deleteCategory(sec.category.id);
-      });
+      delBtn.addEventListener('click', function(e) { e.stopPropagation(); deleteCategory(sec.category.id); });
       head.appendChild(delBtn);
     }
 
@@ -1664,7 +1387,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       hint.textContent = 'Пока пусто — добавьте сюда кнопку';
       wrap.appendChild(hint);
     } else {
-      sec.items.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
+      sec.items.forEach(function(it){ wrap.appendChild(createItemEl(it)); });
     }
     el.appendChild(wrap);
 
@@ -1672,28 +1395,27 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return el;
   }
 
+  /* Раскладка столбиком по центру — как в исходной версии */
   function computeDefaultLayout() {
     var wsW = workspace.clientWidth || Math.min(400, window.innerWidth - 40);
     var y = 8;
-    var els = workspace.querySelectorAll('.section');
-    els.forEach(function(el) {
-      var key = el.dataset.key;
+    var sections = getSections();
+    sections.forEach(function(sec) {
+      var el = workspace.querySelector('.section[data-key="' + sec.key + '"]');
+      if (!el) return;
       var elW = el.offsetWidth || 320;
       var x = Math.max(8, Math.round((wsW - elW) / 2));
-      if (!layout[key]) layout[key] = {};
-      layout[key].x = x;
-      layout[key].y = y;
-      if (!layout[key].z) layout[key].z = ++topZ;
+      if (!layout[sec.key]) layout[sec.key] = {};
+      layout[sec.key].x = x;
+      layout[sec.key].y = y;
+      if (!layout[sec.key].z) layout[sec.key].z = ++topZ;
       y += el.offsetHeight + 8;
     });
-    topZ += els.length;
     saveLayout();
   }
 
   function render() {
-    pruneLayout();
     workspace.innerHTML = '';
-
     var sections = getSections();
     if (sections.length === 0) {
       var emptyEl = document.createElement('div');
@@ -1703,36 +1425,37 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       return;
     }
 
-    // Ensure layout exists for all sections
+    // 1) Проверяем, что для всех секций есть валидные числовые координаты
     var needsDefaults = false;
     sections.forEach(function(sec) {
-      if (!layout[sec.key] || typeof layout[sec.key].x !== 'number' || typeof layout[sec.key].y !== 'number') {
-        needsDefaults = true;
-      }
+      var s = layout[sec.key];
+      if (!s || typeof s.x !== 'number' || typeof s.y !== 'number') needsDefaults = true;
     });
 
-    var els = [];
+    // 2) Создаём и вставляем DOM
+    var pairs = [];
     sections.forEach(function(sec) {
       var el = createSectionEl(sec);
       workspace.appendChild(el);
-      els.push({ sec: sec, el: el });
+      pairs.push({ sec: sec, el: el });
     });
 
+    // 3) Если хоть одна секция без координат — выстроить ВСЕ в столбик
     if (needsDefaults) {
       computeDefaultLayout();
     }
 
-    // Apply positions
-    els.forEach(function(pair) {
-      var state = layout[pair.sec.key];
-      if (!state) return;
-      pair.el.style.left = state.x + 'px';
-      pair.el.style.top = state.y + 'px';
-      pair.el.style.zIndex = state.z || 1;
+    // 4) Применить позиции
+    pairs.forEach(function(pair) {
+      var st = layout[pair.sec.key];
+      if (!st) return;
+      pair.el.style.left = (st.x || 0) + 'px';
+      pair.el.style.top = (st.y || 0) + 'px';
+      pair.el.style.zIndex = st.z || 1;
     });
   }
 
-  /* ======================= ДОБАВЛЕНИЕ КНОПКИ ======================= */
+  /* ДОБАВИТЬ КНОПКУ */
   function addItem() {
     var text = textEl.value.trim();
     if (!text) { shake(textEl); textEl.focus(); return; }
@@ -1752,12 +1475,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Кнопка добавлена');
   }
   addBtn.addEventListener('click', addItem);
-  nameEl.addEventListener('keydown', function (e) {
+  nameEl.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') { e.preventDefault(); addItem(); }
   });
 
-  /* ======================= КАТЕГОРИИ ======================= */
-  newCatBtn.addEventListener('click', function () {
+  /* КАТЕГОРИИ */
+  newCatBtn.addEventListener('click', function() {
     var willOpen = newCatRow.hidden;
     newCatRow.hidden = !willOpen;
     newCatBtn.classList.toggle('open', willOpen);
@@ -1766,7 +1489,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function submitNewCategory() {
     var name = newCatInput.value.trim();
     if (!name) { shake(newCatInput); newCatInput.focus(); return; }
-    if (categories.some(function (c) { return c.name.toLowerCase() === name.toLowerCase(); })) {
+    if (categories.some(function(c){ return c.name.toLowerCase() === name.toLowerCase(); })) {
       showToast('Такая категория уже есть'); shake(newCatInput); return;
     }
     var cat = { id: genId(), name: name };
@@ -1782,18 +1505,17 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Категория создана');
   }
   newCatConfirm.addEventListener('click', submitNewCategory);
-  newCatInput.addEventListener('keydown', function (e) {
+  newCatInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') { e.preventDefault(); submitNewCategory(); }
   });
   function deleteCategory(id) {
-    var cat = categories.find(function (c) { return c.id === id; });
+    var cat = categories.find(function(c){ return c.id === id; });
     if (!cat) return;
     var ok = true;
-    try { ok = window.confirm('Удалить категорию «' + cat.name + '»?\nКнопки переместятся в «Без категории».'); }
-    catch (e) { ok = true; }
+    try { ok = window.confirm('Удалить категорию «' + cat.name + '»?\nКнопки переместятся в «Без категории».'); } catch(e) { ok = true; }
     if (!ok) return;
-    items.forEach(function (i) { if (i.categoryId === id) i.categoryId = null; });
-    categories = categories.filter(function (c) { return c.id !== id; });
+    items.forEach(function(i){ if (i.categoryId === id) i.categoryId = null; });
+    categories = categories.filter(function(c){ return c.id !== id; });
     if (layout[id]) { delete layout[id]; saveLayout(); }
     save();
     updateCategorySelect();
@@ -1801,25 +1523,24 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Категория удалена');
   }
 
-  /* ======================= СБРОС ПОЗИЦИЙ ======================= */
-  resetLayoutBtn.addEventListener('click', function () {
+  /* СБРОС ПОЗИЦИЙ */
+  resetLayoutBtn.addEventListener('click', function() {
     var sections = getSections();
     if (sections.length === 0) { showToast('Нечего упорядочивать'); return; }
-    Object.keys(layout).forEach(function(k) { delete layout[k]; });
+    Object.keys(layout).forEach(function(k){ delete layout[k]; });
+    topZ = 0;
     render();
-    saveLayout();
     showToast('Позиции сброшены');
   });
 
-  /* ======================= ЗАМЕТКИ ======================= */
+  /* ЗАМЕТКИ */
   var topZNotes = 100;
-  notes.forEach(function (n) { if (n.z > topZNotes) topZNotes = n.z; });
+  notes.forEach(function(n){ if (n.z > topZNotes) topZNotes = n.z; });
 
   function getViewportSize() { return { w: window.innerWidth, h: window.innerHeight }; }
   function clampNotePosition(x, y) {
     var vp = getViewportSize();
-    var w = Math.min(280, vp.w - 32);
-    var h = 220;
+    var w = Math.min(280, vp.w - 32), h = 220;
     return {
       x: Math.max(8, Math.min(Math.round(x), Math.max(8, vp.w - w - 8))),
       y: Math.max(60, Math.min(Math.round(y), Math.max(60, vp.h - h - 8)))
@@ -1827,10 +1548,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   function defaultNotePosition(index) {
     var vp = getViewportSize();
-    return clampNotePosition(
-      vp.w / 2 - 140 + (index * 30) % 120 - 60,
-      vp.h / 2 - 110 + (index * 24) % 100 - 50
-    );
+    return clampNotePosition(vp.w/2 - 140 + (index*30)%120 - 60, vp.h/2 - 110 + (index*24)%100 - 50);
   }
 
   function createNoteElement(note) {
@@ -1843,10 +1561,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
     var header = document.createElement('div');
     header.className = 'note-header';
-    header.innerHTML =
-      '<span class="note-drag">⠿</span>' +
-      '<span class="note-title">Заметка</span>' +
-      '<div class="note-actions"></div>';
+    header.innerHTML = '<span class="note-drag">⠿</span><span class="note-title">Заметка</span><div class="note-actions"></div>';
 
     var actionsEl = header.querySelector('.note-actions');
     var body = document.createElement('div');
@@ -1856,7 +1571,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     viewEl.textContent = note.text;
     var editEl = document.createElement('textarea');
     editEl.className = 'note-edit';
-    editEl.spellcheck = false;
     body.appendChild(viewEl);
     body.appendChild(editEl);
     el.appendChild(header);
@@ -1866,66 +1580,48 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       actionsEl.innerHTML = '';
       if (mode === 'edit') {
         var saveBtn = document.createElement('button');
-        saveBtn.type = 'button';
-        saveBtn.className = 'note-action-btn save';
-        saveBtn.textContent = '✓';
-        saveBtn.addEventListener('click', function () { commitEdit(note, el); });
+        saveBtn.type='button'; saveBtn.className='note-action-btn save'; saveBtn.textContent='✓';
+        saveBtn.addEventListener('click', function(){ commitEdit(note, el); });
         var cancelBtn = document.createElement('button');
-        cancelBtn.type = 'button';
-        cancelBtn.className = 'note-action-btn del';
-        cancelBtn.textContent = '✕';
-        cancelBtn.addEventListener('click', function () { cancelEdit(note, el); });
-        actionsEl.appendChild(cancelBtn);
-        actionsEl.appendChild(saveBtn);
+        cancelBtn.type='button'; cancelBtn.className='note-action-btn del'; cancelBtn.textContent='✕';
+        cancelBtn.addEventListener('click', function(){ cancelEdit(note, el); });
+        actionsEl.appendChild(cancelBtn); actionsEl.appendChild(saveBtn);
       } else {
         var editBtn = document.createElement('button');
-        editBtn.type = 'button';
-        editBtn.className = 'note-action-btn';
-        editBtn.textContent = '✏️';
-        editBtn.addEventListener('click', function () { enterEdit(note, el); });
+        editBtn.type='button'; editBtn.className='note-action-btn'; editBtn.textContent='✏️';
+        editBtn.addEventListener('click', function(){ enterEdit(note, el); });
         var delBtn = document.createElement('button');
-        delBtn.type = 'button';
-        delBtn.className = 'note-action-btn del';
-        delBtn.textContent = '✕';
-        delBtn.addEventListener('click', function () { deleteNote(note, el); });
-        actionsEl.appendChild(editBtn);
-        actionsEl.appendChild(delBtn);
+        delBtn.type='button'; delBtn.className='note-action-btn del'; delBtn.textContent='✕';
+        delBtn.addEventListener('click', function(){ deleteNote(note, el); });
+        actionsEl.appendChild(editBtn); actionsEl.appendChild(delBtn);
       }
     }
     setButtons(editingNoteId === note.id ? 'edit' : 'view');
     if (editingNoteId === note.id) {
       el.classList.add('editing');
       editEl.value = note.text;
-      setTimeout(function () {
+      setTimeout(function(){
         editEl.focus();
         editEl.setSelectionRange(editEl.value.length, editEl.value.length);
         editEl.style.height = 'auto';
         editEl.style.height = Math.min(240, editEl.scrollHeight) + 'px';
       }, 30);
     }
-    editEl.addEventListener('input', function () {
+    editEl.addEventListener('input', function(){
       editEl.style.height = 'auto';
       editEl.style.height = Math.min(240, editEl.scrollHeight) + 'px';
     });
-    editEl.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        commitEdit(note, el);
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        cancelEdit(note, el);
-      }
+    editEl.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); commitEdit(note, el); }
+      else if (e.key === 'Escape') { e.preventDefault(); cancelEdit(note, el); }
     });
 
-    el.addEventListener('pointerdown', function () {
+    el.addEventListener('pointerdown', function(){
       if (parseInt(el.style.zIndex) !== topZNotes) {
-        topZNotes++;
-        el.style.zIndex = String(topZNotes);
-        note.z = topZNotes;
-        saveNotes();
+        topZNotes++; el.style.zIndex = String(topZNotes); note.z = topZNotes; saveNotes();
       }
     });
-    header.addEventListener('pointerdown', function (e) {
+    header.addEventListener('pointerdown', function(e){
       if (e.target.closest('button')) return;
       startNoteDrag(e, note, el);
     });
@@ -1936,18 +1632,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function startNoteDrag(e, note, el) {
     e.preventDefault();
     var rect = el.getBoundingClientRect();
-    var startX = e.clientX;
-    var startY = e.clientY;
-    var origX = rect.left;
-    var origY = rect.top;
+    var startX = e.clientX, startY = e.clientY;
+    var origX = rect.left, origY = rect.top;
     el.classList.add('dragging');
     try { el.setPointerCapture(e.pointerId); } catch(err) {}
-
     function onMove(ev) {
       if (ev.pointerId !== e.pointerId) return;
       var p = clampNotePosition(origX + ev.clientX - startX, origY + ev.clientY - startY);
-      el.style.left = p.x + 'px';
-      el.style.top = p.y + 'px';
+      el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
     }
     function onEnd(ev) {
       if (ev.pointerId !== e.pointerId) return;
@@ -1955,7 +1647,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       el.removeEventListener('pointermove', onMove);
       el.removeEventListener('pointerup', onEnd);
       el.removeEventListener('pointercancel', onEnd);
-      try { el.releasePointerCapture(e.pointerId); } catch (err) {}
+      try { el.releasePointerCapture(e.pointerId); } catch(err) {}
       note.x = parseInt(el.style.left, 10);
       note.y = parseInt(el.style.top, 10);
       saveNotes();
@@ -1973,18 +1665,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var actionsEl = el.querySelector('.note-actions');
     actionsEl.innerHTML = '';
     var saveBtn = document.createElement('button');
-    saveBtn.type = 'button';
-    saveBtn.className = 'note-action-btn save';
-    saveBtn.textContent = '✓';
-    saveBtn.addEventListener('click', function () { commitEdit(note, el); });
+    saveBtn.type='button'; saveBtn.className='note-action-btn save'; saveBtn.textContent='✓';
+    saveBtn.addEventListener('click', function(){ commitEdit(note, el); });
     var cancelBtn = document.createElement('button');
-    cancelBtn.type = 'button';
-    cancelBtn.className = 'note-action-btn del';
-    cancelBtn.textContent = '✕';
-    cancelBtn.addEventListener('click', function () { cancelEdit(note, el); });
-    actionsEl.appendChild(cancelBtn);
-    actionsEl.appendChild(saveBtn);
-    setTimeout(function () {
+    cancelBtn.type='button'; cancelBtn.className='note-action-btn del'; cancelBtn.textContent='✕';
+    cancelBtn.addEventListener('click', function(){ cancelEdit(note, el); });
+    actionsEl.appendChild(cancelBtn); actionsEl.appendChild(saveBtn);
+    setTimeout(function(){
       editEl.focus();
       editEl.setSelectionRange(editEl.value.length, editEl.value.length);
       editEl.style.height = 'auto';
@@ -2016,30 +1703,25 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var actionsEl = el.querySelector('.note-actions');
     actionsEl.innerHTML = '';
     var editBtn = document.createElement('button');
-    editBtn.type = 'button';
-    editBtn.className = 'note-action-btn';
-    editBtn.textContent = '✏️';
-    editBtn.addEventListener('click', function () { enterEdit(note, el); });
+    editBtn.type='button'; editBtn.className='note-action-btn'; editBtn.textContent='✏️';
+    editBtn.addEventListener('click', function(){ enterEdit(note, el); });
     var delBtn = document.createElement('button');
-    delBtn.type = 'button';
-    delBtn.className = 'note-action-btn del';
-    delBtn.textContent = '✕';
-    delBtn.addEventListener('click', function () { deleteNote(note, el); });
-    actionsEl.appendChild(editBtn);
-    actionsEl.appendChild(delBtn);
+    delBtn.type='button'; delBtn.className='note-action-btn del'; delBtn.textContent='✕';
+    delBtn.addEventListener('click', function(){ deleteNote(note, el); });
+    actionsEl.appendChild(editBtn); actionsEl.appendChild(delBtn);
   }
 
   function deleteNote(note, el) {
     var ok = true;
-    try { ok = window.confirm('Удалить эту заметку?'); } catch (e) { ok = true; }
+    try { ok = window.confirm('Удалить эту заметку?'); } catch(e) { ok = true; }
     if (!ok) return;
     removeNoteById(note.id, el);
     showToast('Заметка удалена');
   }
   function removeNoteById(id, el) {
     el.style.animation = 'noteIn .2s ease reverse forwards';
-    setTimeout(function () {
-      notes = notes.filter(function (n) { return n.id !== id; });
+    setTimeout(function(){
+      notes = notes.filter(function(n){ return n.id !== id; });
       if (editingNoteId === id) editingNoteId = null;
       saveNotes();
       if (el.parentNode) el.parentNode.removeChild(el);
@@ -2048,11 +1730,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   function renderNotes() {
     notesLayer.innerHTML = '';
-    notes.forEach(function (note) {
+    notes.forEach(function(note) {
       if (note.x === undefined || note.y === undefined) {
         var p = defaultNotePosition(notes.indexOf(note));
-        note.x = p.x;
-        note.y = p.y;
+        note.x = p.x; note.y = p.y;
       }
       notesLayer.appendChild(createNoteElement(note));
     });
@@ -2062,11 +1743,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function addNewNote() {
     var vp = getViewportSize();
     var offset = (notes.length * 26) % 140;
-    var p = clampNotePosition(vp.w / 2 - 140 + offset - 70, vp.h / 2 - 110 + offset - 50);
-    var note = {
-      id: genId(), text: '', createdAt: Date.now(),
-      x: p.x, y: p.y, z: ++topZNotes
-    };
+    var p = clampNotePosition(vp.w/2 - 140 + offset - 70, vp.h/2 - 110 + offset - 50);
+    var note = { id: genId(), text: '', createdAt: Date.now(), x: p.x, y: p.y, z: ++topZNotes };
     notes.unshift(note);
     editingNoteId = note.id;
     saveNotes();
@@ -2075,27 +1753,25 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   addNoteFab.addEventListener('click', addNewNote);
 
   var resizeTimer = null;
-  window.addEventListener('resize', function () {
+  window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () {
+    resizeTimer = setTimeout(function(){
       var vp = getViewportSize();
-      notesLayer.querySelectorAll('.note-window').forEach(function (el) {
-        var note = notes.find(function (n) { return n.id === el.dataset.id; });
+      notesLayer.querySelectorAll('.note-window').forEach(function(el) {
+        var note = notes.find(function(n){ return n.id === el.dataset.id; });
         if (!note) return;
         var p = clampNotePosition(note.x, note.y);
-        note.x = p.x;
-        note.y = p.y;
-        el.style.left = p.x + 'px';
-        el.style.top = p.y + 'px';
+        note.x = p.x; note.y = p.y;
+        el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
       });
       saveNotes();
 
       var wsW = workspace.clientWidth;
       var changed = false;
-      Object.keys(layout).forEach(function(key) {
+      Object.keys(layout).forEach(function(key){
         var state = layout[key];
         var el = workspace.querySelector('.section[data-key="' + key + '"]');
-        if (!el) return;
+        if (!el || typeof state.x !== 'number') return;
         var elW = el.offsetWidth;
         if (state.x > wsW - elW) {
           state.x = Math.max(0, wsW - elW);
@@ -2107,23 +1783,16 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }, 120);
   });
 
-  /* ======================= МОДАЛКИ ======================= */
-  function openModal(modal) {
-    modal.classList.add('open');
-    document.body.classList.add('modal-open');
-  }
+  /* МОДАЛКИ */
+  function openModal(modal) { modal.classList.add('open'); document.body.classList.add('modal-open'); }
   function closeModal(modal) {
     modal.classList.remove('open');
-    if (!document.querySelector('.modal-backdrop.open')) {
-      document.body.classList.remove('modal-open');
-    }
+    if (!document.querySelector('.modal-backdrop.open')) document.body.classList.remove('modal-open');
   }
-  [infoModal, settingsModal, gameModal].forEach(function (modal) {
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) closeModal(modal);
-    });
+  [infoModal, settingsModal, gameModal].forEach(function(modal){
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(modal); });
   });
-  document.addEventListener('keydown', function (e) {
+  document.addEventListener('keydown', function(e){
     if (e.key === 'Escape') {
       if (gameModal.classList.contains('open')) closeModal(gameModal);
       else if (settingsModal.classList.contains('open')) closeModal(settingsModal);
@@ -2131,37 +1800,31 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   });
 
-  infoFab.addEventListener('click', function () { openModal(infoModal); setTimeout(function () { infoClose.focus(); }, 120); });
-  infoClose.addEventListener('click', function () { closeModal(infoModal); });
-  settingsBtn.addEventListener('click', function () { openModal(settingsModal); });
-  settingsClose.addEventListener('click', function () { closeModal(settingsModal); });
+  infoFab.addEventListener('click', function(){ openModal(infoModal); setTimeout(function(){ infoClose.focus(); }, 120); });
+  infoClose.addEventListener('click', function(){ closeModal(infoModal); });
+  settingsBtn.addEventListener('click', function(){ openModal(settingsModal); });
+  settingsClose.addEventListener('click', function(){ closeModal(settingsModal); });
 
-  /* ======================= ФОНОВЫЕ ДВИЖКИ ======================= */
+  /* ФОНОВЫЕ ДВИЖКИ */
   var activeBgEngine = null;
 
   function startConstellations() {
-    var canvas = bgCanvas;
-    var ctx = canvas.getContext('2d');
+    var canvas = bgCanvas, ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0, particles = [], raf = null, running = true;
-    var mouse = { x: -9999, y: -9999, active: false };
+    var w=0, h=0, particles=[], raf=null, running=true;
+    var mouse = { x:-9999, y:-9999, active:false };
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var dotColor = isDark ? 'rgba(180,210,255,0.9)' : 'rgba(40,80,180,0.7)';
     var lineRGB = isDark ? '160,200,255' : '40,80,180';
-
     function resize() {
       w = window.innerWidth; h = window.innerHeight;
-      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+      canvas.style.width = w+'px'; canvas.style.height = h+'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var count = Math.min(110, Math.max(40, Math.floor((w * h) / 18000)));
+      var count = Math.min(110, Math.max(40, Math.floor((w*h)/18000)));
       particles = [];
       for (var i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * w, y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-          r: 1.2 + Math.random() * 1.6
-        });
+        particles.push({ x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.4, vy:(Math.random()-0.5)*0.4, r: 1.2 + Math.random()*1.6 });
       }
     }
     function onPointer(e) {
@@ -2172,182 +1835,166 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     function onLeave() { mouse.active = false; }
     function drawFrame() {
       ctx.clearRect(0, 0, w, h);
-      var i, j, p, a, b, dx, dy, d2;
-      var linkDist = 140, linkDist2 = linkDist * linkDist;
+      var i, j, p, a, b, dx, dy, d2, linkDist=140, linkDist2=linkDist*linkDist;
       for (i = 0; i < particles.length; i++) {
-        p = particles[i];
-        p.x += p.vx; p.y += p.vy;
+        p = particles[i]; p.x += p.vx; p.y += p.vy;
         if (mouse.active) {
-          dx = mouse.x - p.x; dy = mouse.y - p.y; d2 = dx * dx + dy * dy;
+          dx = mouse.x-p.x; dy = mouse.y-p.y; d2 = dx*dx+dy*dy;
           if (d2 < 32400 && d2 > 1) {
             var dist = Math.sqrt(d2);
-            var force = (180 - dist) / 180 * 0.05;
-            p.vx += (dx / dist) * force; p.vy += (dy / dist) * force;
+            var force = (180-dist)/180 * 0.05;
+            p.vx += (dx/dist)*force; p.vy += (dy/dist)*force;
           }
         }
         p.vx *= 0.992; p.vy *= 0.992;
-        var sp2 = p.vx * p.vx + p.vy * p.vy;
-        if (sp2 > 2.25) { var sp = Math.sqrt(sp2); p.vx = p.vx / sp * 1.5; p.vy = p.vy / sp * 1.5; }
-        if (sp2 < 0.04) { p.vx += (Math.random() - 0.5) * 0.15; p.vy += (Math.random() - 0.5) * 0.15; }
-        if (p.x < -30) p.x = w + 30; else if (p.x > w + 30) p.x = -30;
-        if (p.y < -30) p.y = h + 30; else if (p.y > h + 30) p.y = -30;
+        var sp2 = p.vx*p.vx + p.vy*p.vy;
+        if (sp2 > 2.25) { var sp = Math.sqrt(sp2); p.vx = p.vx/sp*1.5; p.vy = p.vy/sp*1.5; }
+        if (sp2 < 0.04) { p.vx += (Math.random()-0.5)*0.15; p.vy += (Math.random()-0.5)*0.15; }
+        if (p.x < -30) p.x = w+30; else if (p.x > w+30) p.x = -30;
+        if (p.y < -30) p.y = h+30; else if (p.y > h+30) p.y = -30;
       }
       ctx.lineWidth = 1;
       for (i = 0; i < particles.length; i++) {
         a = particles[i];
-        for (j = i + 1; j < particles.length; j++) {
+        for (j = i+1; j < particles.length; j++) {
           b = particles[j];
-          dx = a.x - b.x; dy = a.y - b.y; d2 = dx * dx + dy * dy;
+          dx = a.x-b.x; dy = a.y-b.y; d2 = dx*dx+dy*dy;
           if (d2 < linkDist2) {
-            var alpha = (1 - d2 / linkDist2) * 0.4;
+            var alpha = (1-d2/linkDist2) * 0.4;
             ctx.strokeStyle = 'rgba(' + lineRGB + ',' + alpha.toFixed(3) + ')';
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
       }
       ctx.fillStyle = dotColor;
-      for (i = 0; i < particles.length; i++) {
-        p = particles[i]; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
-      }
+      for (i = 0; i < particles.length; i++) { p = particles[i]; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); }
     }
     function tick() { if (!running) return; drawFrame(); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
-    window.addEventListener('pointermove', onPointer, { passive: true });
-    window.addEventListener('pointerdown', onPointer, { passive: true });
+    window.addEventListener('pointermove', onPointer, { passive:true });
+    window.addEventListener('pointerdown', onPointer, { passive:true });
     window.addEventListener('pointerleave', onLeave);
     window.addEventListener('pointercancel', onLeave);
     if (prefersReducedMotion) drawFrame(); else tick();
-    return {
-      stop: function () {
-        running = false;
-        if (raf) cancelAnimationFrame(raf);
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('pointermove', onPointer);
-        window.removeEventListener('pointerdown', onPointer);
-        window.removeEventListener('pointerleave', onLeave);
-        window.removeEventListener('pointercancel', onLeave);
-        ctx.clearRect(0, 0, w, h);
-      }
-    };
+    return { stop: function() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('pointercancel', onLeave);
+      ctx.clearRect(0, 0, w, h);
+    }};
   }
 
   function startStarfield() {
-    var canvas = bgCanvas;
-    var ctx = canvas.getContext('2d');
+    var canvas = bgCanvas, ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0, stars = [], raf = null, running = true;
+    var w=0, h=0, stars=[], raf=null, running=true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var starColor = isDark ? 'rgba(220,232,255,' : 'rgba(40,70,150,';
     var trailColor = isDark ? 'rgba(160,195,255,' : 'rgba(50,90,180,';
-    var glowColor  = isDark ? 'rgba(120,160,255,' : 'rgba(80,120,220,';
-    var glowAlpha  = isDark ? 0.14 : 0.10;
+    var glowColor = isDark ? 'rgba(120,160,255,' : 'rgba(80,120,220,';
+    var glowAlpha = isDark ? 0.14 : 0.10;
     var SPEED = 0.011;
-    var targetMouse = { x: 0.5, y: 0.5 };
-    var smoothMouse = { x: 0.5, y: 0.5 };
-
+    var targetMouse = { x:0.5, y:0.5 };
+    var smoothMouse = { x:0.5, y:0.5 };
     function resize() {
       w = window.innerWidth; h = window.innerHeight;
-      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+      canvas.style.width = w+'px'; canvas.style.height = h+'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var count = Math.min(320, Math.max(120, Math.floor(w * h / 12000)));
+      var count = Math.min(320, Math.max(120, Math.floor(w*h/12000)));
       stars = [];
       for (var i = 0; i < count; i++) {
-        var z0 = Math.random() * 0.95 + 0.05;
-        stars.push({ x: (Math.random() - 0.5), y: (Math.random() - 0.5), z: z0, pz: Math.min(1, z0 + 0.012) });
+        var z0 = Math.random()*0.95 + 0.05;
+        stars.push({ x: Math.random()-0.5, y: Math.random()-0.5, z: z0, pz: Math.min(1, z0+0.012) });
       }
     }
     function onPointer(e) {
-      if (e.touches && e.touches.length) { targetMouse.x = e.touches[0].clientX / w; targetMouse.y = e.touches[0].clientY / h; }
-      else if (typeof e.clientX === 'number') { targetMouse.x = e.clientX / w; targetMouse.y = e.clientY / h; }
+      if (e.touches && e.touches.length) { targetMouse.x = e.touches[0].clientX/w; targetMouse.y = e.touches[0].clientY/h; }
+      else if (typeof e.clientX === 'number') { targetMouse.x = e.clientX/w; targetMouse.y = e.clientY/h; }
     }
     function drawFrame() {
       smoothMouse.x += (targetMouse.x - smoothMouse.x) * 0.07;
       smoothMouse.y += (targetMouse.y - smoothMouse.y) * 0.07;
       ctx.clearRect(0, 0, w, h);
-      var vpx = w * (0.2 + smoothMouse.x * 0.6);
-      var vpy = h * (0.2 + smoothMouse.y * 0.6);
-      var glow = ctx.createRadialGradient(vpx, vpy, 0, vpx, vpy, Math.max(w, h) * 0.45);
+      var vpx = w*(0.2 + smoothMouse.x*0.6), vpy = h*(0.2 + smoothMouse.y*0.6);
+      var glow = ctx.createRadialGradient(vpx, vpy, 0, vpx, vpy, Math.max(w, h)*0.45);
       glow.addColorStop(0, glowColor + glowAlpha + ')');
       glow.addColorStop(1, glowColor + '0)');
       ctx.fillStyle = glow; ctx.fillRect(0, 0, w, h);
-      var cx = targetMouse.x * w, cy = targetMouse.y * h;
+      var cx = targetMouse.x*w, cy = targetMouse.y*h;
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i];
         s.pz = s.z; s.z -= SPEED;
-        if (s.z <= 0.03) { s.x = (Math.random() - 0.5); s.y = (Math.random() - 0.5); s.z = 1; s.pz = 1; }
-        if (!s.pz || s.pz <= 0.03) s.pz = Math.min(1, s.z + 0.011);
-        var sx = s.x / s.z * w * 0.5 + vpx;
-        var sy = s.y / s.z * h * 0.5 + vpy;
-        var px = s.x / s.pz * w * 0.5 + vpx;
-        var py = s.y / s.pz * h * 0.5 + vpy;
-        if (sx < -80 || sx > w + 80 || sy < -80 || sy > h + 80) continue;
-        var size = (1 - s.z) * 2.8; if (size < 0.3) size = 0.3;
-        var alpha = Math.min(1, (1 - s.z) * 1.15); if (alpha < 0.05) alpha = 0.05;
-        var dcc = (sx - cx) * (sx - cx) + (sy - cy) * (sy - cy);
+        if (s.z <= 0.03) { s.x = Math.random()-0.5; s.y = Math.random()-0.5; s.z = 1; s.pz = 1; }
+        if (!s.pz || s.pz <= 0.03) s.pz = Math.min(1, s.z+0.011);
+        var sx = s.x/s.z*w*0.5 + vpx, sy = s.y/s.z*h*0.5 + vpy;
+        var px = s.x/s.pz*w*0.5 + vpx, py = s.y/s.pz*h*0.5 + vpy;
+        if (sx < -80 || sx > w+80 || sy < -80 || sy > h+80) continue;
+        var size = (1-s.z)*2.8; if (size < 0.3) size = 0.3;
+        var alpha = Math.min(1, (1-s.z)*1.15); if (alpha < 0.05) alpha = 0.05;
+        var dcc = (sx-cx)*(sx-cx) + (sy-cy)*(sy-cy);
         if (dcc < 28000) {
           var dc = Math.sqrt(dcc) || 1;
-          var boost = (1 - dc / 167) * 0.55;
-          if (boost > 0) { size *= (1 + boost * 0.6); alpha = Math.min(1, alpha + boost * 0.35); }
+          var boost = (1 - dc/167) * 0.55;
+          if (boost > 0) { size *= (1 + boost*0.6); alpha = Math.min(1, alpha + boost*0.35); }
         }
-        ctx.strokeStyle = trailColor + (alpha * 0.55).toFixed(3) + ')';
-        ctx.lineWidth = Math.max(0.4, size * 0.75);
+        ctx.strokeStyle = trailColor + (alpha*0.55).toFixed(3) + ')';
+        ctx.lineWidth = Math.max(0.4, size*0.75);
         ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(sx, sy); ctx.stroke();
         ctx.fillStyle = starColor + alpha.toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.3, size * 0.5), 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.3, size*0.5), 0, Math.PI*2); ctx.fill();
       }
     }
     function tick() { if (!running) return; drawFrame(); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
-    window.addEventListener('pointermove', onPointer, { passive: true });
-    window.addEventListener('pointerdown', onPointer, { passive: true });
-    if (prefersReducedMotion) { smoothMouse.x = targetMouse.x; smoothMouse.y = targetMouse.y; drawFrame(); }
-    else tick();
-    return {
-      stop: function () {
-        running = false;
-        if (raf) cancelAnimationFrame(raf);
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('pointermove', onPointer);
-        window.removeEventListener('pointerdown', onPointer);
-        ctx.clearRect(0, 0, w, h);
-      }
-    };
+    window.addEventListener('pointermove', onPointer, { passive:true });
+    window.addEventListener('pointerdown', onPointer, { passive:true });
+    if (prefersReducedMotion) { smoothMouse.x = targetMouse.x; smoothMouse.y = targetMouse.y; drawFrame(); } else tick();
+    return { stop: function() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('pointerdown', onPointer);
+      ctx.clearRect(0, 0, w, h);
+    }};
   }
 
   function startMagma() {
-    var canvas = bgCanvas;
-    var ctx = canvas.getContext('2d');
+    var canvas = bgCanvas, ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0, blobs = [], raf = null, running = true;
+    var w=0, h=0, blobs=[], raf=null, running=true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var blendMode = isDark ? 'lighter' : 'source-over';
     var colors = isDark
-      ? ['rgba(255,80,30,A)', 'rgba(255,40,80,A)', 'rgba(255,150,40,A)', 'rgba(230,60,180,A)', 'rgba(255,200,80,A)']
-      : ['rgba(255,140,90,A)', 'rgba(255,100,140,A)', 'rgba(255,180,90,A)', 'rgba(220,100,180,A)', 'rgba(255,160,120,A)'];
-    var mouse = { x: -9999, y: -9999 };
-    var mouseSmooth = { x: -9999, y: -9999 };
+      ? ['rgba(255,80,30,A)','rgba(255,40,80,A)','rgba(255,150,40,A)','rgba(230,60,180,A)','rgba(255,200,80,A)']
+      : ['rgba(255,140,90,A)','rgba(255,100,140,A)','rgba(255,180,90,A)','rgba(220,100,180,A)','rgba(255,160,120,A)'];
+    var mouse = { x:-9999, y:-9999 };
+    var mouseSmooth = { x:-9999, y:-9999 };
     var mouseActive = false;
-
     function resize() {
       w = window.innerWidth; h = window.innerHeight;
-      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+      canvas.style.width = w+'px'; canvas.style.height = h+'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       if (blobs.length === 0) {
         for (var i = 0; i < 9; i++) {
           blobs.push({
-            x: Math.random() * w, y: Math.random() * h,
-            baseR: 120 + Math.random() * 110, r: 0,
+            x: Math.random()*w, y: Math.random()*h,
+            baseR: 120 + Math.random()*110, r: 0,
             color: colors[i % colors.length],
-            phase: Math.random() * Math.PI * 2,
-            speedX: (Math.random() - 0.5) * 0.5,
-            speedY: (Math.random() - 0.5) * 0.5,
-            pulseSpeed: 0.001 + Math.random() * 0.0015,
-            pulseAmp: 0.08 + Math.random() * 0.10
+            phase: Math.random()*Math.PI*2,
+            speedX: (Math.random()-0.5)*0.5,
+            speedY: (Math.random()-0.5)*0.5,
+            pulseSpeed: 0.001 + Math.random()*0.0015,
+            pulseAmp: 0.08 + Math.random()*0.10
           });
         }
       }
@@ -2362,31 +2009,31 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       ctx.clearRect(0, 0, w, h);
       if (mouseActive) {
         if (mouseSmooth.x < -1000) { mouseSmooth.x = mouse.x; mouseSmooth.y = mouse.y; }
-        mouseSmooth.x += (mouse.x - mouseSmooth.x) * 0.08;
-        mouseSmooth.y += (mouse.y - mouseSmooth.y) * 0.08;
+        mouseSmooth.x += (mouse.x - mouseSmooth.x)*0.08;
+        mouseSmooth.y += (mouse.y - mouseSmooth.y)*0.08;
       }
       ctx.globalCompositeOperation = blendMode;
       for (var i = 0; i < blobs.length; i++) {
         var b = blobs[i];
-        b.x += b.speedX + Math.sin(t * 0.0006 + b.phase) * 0.4;
-        b.y += b.speedY + Math.cos(t * 0.0008 + b.phase * 1.4) * 0.4;
+        b.x += b.speedX + Math.sin(t*0.0006 + b.phase)*0.4;
+        b.y += b.speedY + Math.cos(t*0.0008 + b.phase*1.4)*0.4;
         if (mouseActive && mouseSmooth.x > -1000) {
           var mdx = mouseSmooth.x - b.x, mdy = mouseSmooth.y - b.y;
-          var md = Math.sqrt(mdx * mdx + mdy * mdy) || 1;
-          var attract = Math.max(0, 1 - md / 550);
-          b.x += (mdx / md) * attract * 2.6;
-          b.y += (mdy / md) * attract * 2.6;
+          var md = Math.sqrt(mdx*mdx + mdy*mdy) || 1;
+          var attract = Math.max(0, 1 - md/550);
+          b.x += (mdx/md)*attract*2.6;
+          b.y += (mdy/md)*attract*2.6;
         }
         var margin = b.baseR;
-        if (b.x < -margin) b.x = w + margin; if (b.x > w + margin) b.x = -margin;
-        if (b.y < -margin) b.y = h + margin; if (b.y > h + margin) b.y = -margin;
-        b.r = b.baseR * (1 + Math.sin(t * b.pulseSpeed + b.phase) * b.pulseAmp);
+        if (b.x < -margin) b.x = w+margin; if (b.x > w+margin) b.x = -margin;
+        if (b.y < -margin) b.y = h+margin; if (b.y > h+margin) b.y = -margin;
+        b.r = b.baseR * (1 + Math.sin(t*b.pulseSpeed + b.phase)*b.pulseAmp);
         var grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
         grad.addColorStop(0, b.color.replace('A', isDark ? '0.6' : '0.55'));
         grad.addColorStop(0.45, b.color.replace('A', isDark ? '0.28' : '0.22'));
         grad.addColorStop(1, b.color.replace('A', '0'));
         ctx.fillStyle = grad;
-        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill();
       }
       if (mouseActive && mouseSmooth.x > -1000) {
         var cr = 220;
@@ -2394,62 +2041,57 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         cg.addColorStop(0, isDark ? 'rgba(255,210,150,0.45)' : 'rgba(255,150,120,0.28)');
         cg.addColorStop(0.5, isDark ? 'rgba(255,150,90,0.18)' : 'rgba(255,170,140,0.12)');
         cg.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(mouseSmooth.x, mouseSmooth.y, cr, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(mouseSmooth.x, mouseSmooth.y, cr, 0, Math.PI*2); ctx.fill();
       }
       ctx.globalCompositeOperation = 'source-over';
     }
     function tick(now) { if (!running) return; drawFrame(now); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
-    window.addEventListener('pointermove', onPointer, { passive: true });
-    window.addEventListener('pointerdown', onPointer, { passive: true });
+    window.addEventListener('pointermove', onPointer, { passive:true });
+    window.addEventListener('pointerdown', onPointer, { passive:true });
     window.addEventListener('pointerleave', onLeave);
     window.addEventListener('pointercancel', onLeave);
     if (prefersReducedMotion) drawFrame(performance.now()); else raf = requestAnimationFrame(tick);
-    return {
-      stop: function () {
-        running = false;
-        if (raf) cancelAnimationFrame(raf);
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('pointermove', onPointer);
-        window.removeEventListener('pointerdown', onPointer);
-        window.removeEventListener('pointerleave', onLeave);
-        window.removeEventListener('pointercancel', onLeave);
-        ctx.clearRect(0, 0, w, h);
-      }
-    };
+    return { stop: function() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('pointercancel', onLeave);
+      ctx.clearRect(0, 0, w, h);
+    }};
   }
 
   function startFlow() {
-    var canvas = bgCanvas;
-    var ctx = canvas.getContext('2d');
+    var canvas = bgCanvas, ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0, particles = [], raf = null, running = true;
+    var w=0, h=0, particles=[], raf=null, running=true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var palette = isDark
-      ? [[100,180,255], [200,120,255], [80,220,220], [255,150,200], [180,150,255], [120,220,180]]
-      : [[40,100,200], [140,60,180], [0,140,160], [200,60,120], [100,60,180], [30,140,100]];
-    var mouse = { x: -9999, y: -9999 };
-    var mouseSmooth = { x: -9999, y: -9999 };
+      ? [[100,180,255],[200,120,255],[80,220,220],[255,150,200],[180,150,255],[120,220,180]]
+      : [[40,100,200],[140,60,180],[0,140,160],[200,60,120],[100,60,180],[30,140,100]];
+    var mouse = { x:-9999, y:-9999 };
+    var mouseSmooth = { x:-9999, y:-9999 };
     var mouseActive = false;
     var t0 = performance.now();
-    var NUM = 0, IR = 250, IR2 = IR * IR;
-
+    var NUM = 0, IR = 250, IR2 = IR*IR;
     function resize() {
       w = window.innerWidth; h = window.innerHeight;
-      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+      canvas.style.width = w+'px'; canvas.style.height = h+'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      NUM = Math.min(800, Math.max(400, Math.floor((w * h) / 2200)));
+      NUM = Math.min(800, Math.max(400, Math.floor((w*h)/2200)));
       particles = [];
       for (var i = 0; i < NUM; i++) {
-        var c = palette[Math.floor(Math.random() * palette.length)];
+        var c = palette[Math.floor(Math.random()*palette.length)];
         particles.push({
-          x: Math.random() * w, y: Math.random() * h, px: 0, py: 0,
-          speed: 0.7 + Math.random() * 1.3,
+          x: Math.random()*w, y: Math.random()*h, px: 0, py: 0,
+          speed: 0.7 + Math.random()*1.3,
           color: 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',',
-          age: Math.floor(Math.random() * 200),
-          life: 200 + Math.random() * 300
+          age: Math.floor(Math.random()*200), life: 200 + Math.random()*300
         });
       }
     }
@@ -2460,9 +2102,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
     function onLeave() { mouseActive = false; }
     function flowAngle(x, y, t) {
-      return Math.sin(x * 0.0025 + t * 0.0004) * 1.2 +
-             Math.cos(y * 0.0035 - t * 0.0003) * 1.2 +
-             Math.sin((x + y) * 0.0018 + t * 0.0002) * 0.8;
+      return Math.sin(x*0.0025 + t*0.0004)*1.2 + Math.cos(y*0.0035 - t*0.0003)*1.2 + Math.sin((x+y)*0.0018 + t*0.0002)*0.8;
     }
     function drawFrame(now) {
       var t = now - t0;
@@ -2472,43 +2112,42 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       ctx.globalCompositeOperation = 'source-over';
       if (mouseActive) {
         if (mouseSmooth.x < -1000) { mouseSmooth.x = mouse.x; mouseSmooth.y = mouse.y; }
-        mouseSmooth.x += (mouse.x - mouseSmooth.x) * 0.15;
-        mouseSmooth.y += (mouse.y - mouseSmooth.y) * 0.15;
+        mouseSmooth.x += (mouse.x - mouseSmooth.x)*0.15;
+        mouseSmooth.y += (mouse.y - mouseSmooth.y)*0.15;
       }
       ctx.lineCap = 'round'; ctx.lineWidth = 1.3;
       for (var i = 0; i < particles.length; i++) {
         var p = particles[i];
         var angle = flowAngle(p.x, p.y, t);
         if (mouseActive && mouseSmooth.x > -1000) {
-          var dx = mouseSmooth.x - p.x, dy = mouseSmooth.y - p.y;
-          var d2 = dx * dx + dy * dy;
+          var dx = mouseSmooth.x-p.x, dy = mouseSmooth.y-p.y;
+          var d2 = dx*dx + dy*dy;
           if (d2 < IR2 && d2 > 60) {
             var d = Math.sqrt(d2);
-            var prox = 1 - d / IR;
-            var tx = -dy / d, ty = dx / d;
-            var rx = dx / d, ry = dy / d;
-            var ax = tx * 0.92 + rx * 0.32, ay = ty * 0.92 + ry * 0.32;
+            var prox = 1 - d/IR;
+            var tx = -dy/d, ty = dx/d;
+            var rx = dx/d, ry = dy/d;
+            var ax = tx*0.92 + rx*0.32, ay = ty*0.92 + ry*0.32;
             var bx = Math.cos(angle), by = Math.sin(angle);
-            var vx = bx * (1 - prox) + ax * prox;
-            var vy = by * (1 - prox) + ay * prox;
+            var vx = bx*(1-prox) + ax*prox;
+            var vy = by*(1-prox) + ay*prox;
             angle = Math.atan2(vy, vx);
           }
         }
         p.px = p.x; p.py = p.y;
-        p.x += Math.cos(angle) * p.speed;
-        p.y += Math.sin(angle) * p.speed;
+        p.x += Math.cos(angle)*p.speed; p.y += Math.sin(angle)*p.speed;
         p.age++;
-        var out = p.x < -20 || p.x > w + 20 || p.y < -20 || p.y > h + 20;
+        var out = p.x < -20 || p.x > w+20 || p.y < -20 || p.y > h+20;
         if (out || p.age > p.life) {
           if (out) {
-            if (p.x < 0) { p.x = w + 5; p.y = Math.random() * h; }
-            else if (p.x > w) { p.x = -5; p.y = Math.random() * h; }
-            else if (p.y < 0) { p.y = h + 5; p.x = Math.random() * w; }
-            else { p.y = -5; p.x = Math.random() * w; }
-          } else { p.x = Math.random() * w; p.y = Math.random() * h; }
+            if (p.x < 0) { p.x = w+5; p.y = Math.random()*h; }
+            else if (p.x > w) { p.x = -5; p.y = Math.random()*h; }
+            else if (p.y < 0) { p.y = h+5; p.x = Math.random()*w; }
+            else { p.y = -5; p.x = Math.random()*w; }
+          } else { p.x = Math.random()*w; p.y = Math.random()*h; }
           p.px = p.x; p.py = p.y; p.age = 0;
         }
-        var alpha = Math.min(1, p.age / 25) * Math.min(1, (p.life - p.age) / 70);
+        var alpha = Math.min(1, p.age/25) * Math.min(1, (p.life - p.age)/70);
         if (alpha < 0.05) continue;
         ctx.strokeStyle = p.color + alpha.toFixed(2) + ')';
         ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(p.x, p.y); ctx.stroke();
@@ -2517,59 +2156,47 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     function tick(now) { if (!running) return; drawFrame(now); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
-    window.addEventListener('pointermove', onPointer, { passive: true });
-    window.addEventListener('pointerdown', onPointer, { passive: true });
+    window.addEventListener('pointermove', onPointer, { passive:true });
+    window.addEventListener('pointerdown', onPointer, { passive:true });
     window.addEventListener('pointerleave', onLeave);
     window.addEventListener('pointercancel', onLeave);
     if (prefersReducedMotion) drawFrame(performance.now()); else raf = requestAnimationFrame(tick);
-    return {
-      stop: function () {
-        running = false;
-        if (raf) cancelAnimationFrame(raf);
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('pointermove', onPointer);
-        window.removeEventListener('pointerdown', onPointer);
-        window.removeEventListener('pointerleave', onLeave);
-        window.removeEventListener('pointercancel', onLeave);
-        ctx.clearRect(0, 0, w, h);
-      }
-    };
+    return { stop: function() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onPointer);
+      window.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('pointercancel', onLeave);
+      ctx.clearRect(0, 0, w, h);
+    }};
   }
 
-  /* ======================= ИГРА ======================= */
+  /* ИГРА */
   var UPGRADES = [
-    { id: 'click1', icon: '👆', name: 'Улучшить клик',  desc: '+1 за клик',       costBase: 20,     effect: 'perClick', amount: 1 },
-    { id: 'auto1',  icon: '⚙️', name: 'Автокликер',      desc: '+1 в секунду',     costBase: 80,     effect: 'perSecond', amount: 1 },
-    { id: 'click2', icon: '💪', name: 'Мощный клик',    desc: '+3 за клик',       costBase: 200,    effect: 'perClick', amount: 3 },
-    { id: 'auto2',  icon: '🏭', name: 'Копи-ферма',     desc: '+3 в секунду',     costBase: 600,    effect: 'perSecond', amount: 3 },
-    { id: 'click3', icon: '🔥', name: 'Сильный клик',   desc: '+8 за клик',       costBase: 2000,   effect: 'perClick', amount: 8 },
-    { id: 'auto3',  icon: '🏗️', name: 'Копи-фабрика',   desc: '+10 в секунду',    costBase: 6000,   effect: 'perSecond', amount: 10 },
-    { id: 'click4', icon: '⚡', name: 'Сверхклик',      desc: '+20 за клик',      costBase: 25000,  effect: 'perClick', amount: 20 },
-    { id: 'auto4',  icon: '🌐', name: 'Копи-империя',   desc: '+30 в секунду',    costBase: 60000,  effect: 'perSecond', amount: 30 },
-    { id: 'clickM', icon: '💎', name: 'Клик ×2',        desc: 'Удваивает клик',   costBase: 250000, effect: 'clickMult', amount: 1 },
-    { id: 'autoM',  icon: '👑', name: 'Доход ×2',       desc: 'Удваивает пассив', costBase: 500000, effect: 'autoMult', amount: 1 }
+    { id:'click1', icon:'👆', name:'Улучшить клик', desc:'+1 за клик', costBase:20, effect:'perClick', amount:1 },
+    { id:'auto1', icon:'⚙️', name:'Автокликер', desc:'+1 в секунду', costBase:80, effect:'perSecond', amount:1 },
+    { id:'click2', icon:'💪', name:'Мощный клик', desc:'+3 за клик', costBase:200, effect:'perClick', amount:3 },
+    { id:'auto2', icon:'🏭', name:'Копи-ферма', desc:'+3 в секунду', costBase:600, effect:'perSecond', amount:3 },
+    { id:'click3', icon:'🔥', name:'Сильный клик', desc:'+8 за клик', costBase:2000, effect:'perClick', amount:8 },
+    { id:'auto3', icon:'🏗️', name:'Копи-фабрика', desc:'+10 в секунду', costBase:6000, effect:'perSecond', amount:10 },
+    { id:'click4', icon:'⚡', name:'Сверхклик', desc:'+20 за клик', costBase:25000, effect:'perClick', amount:20 },
+    { id:'auto4', icon:'🌐', name:'Копи-империя', desc:'+30 в секунду', costBase:60000, effect:'perSecond', amount:30 },
+    { id:'clickM', icon:'💎', name:'Клик ×2', desc:'Удваивает клик', costBase:250000, effect:'clickMult', amount:1 },
+    { id:'autoM', icon:'👑', name:'Доход ×2', desc:'Удваивает пассив', costBase:500000, effect:'autoMult', amount:1 }
   ];
 
   var THEMES = [
-    { id: 'default', icon: '🌊', name: 'По умолчанию', price: 0,
-      swatch: ['#8ab4ff', '#c9a7ff', '#8ee7ff'], engine: 'blobs' },
-    { id: 'ocean',   icon: '🐬', name: 'Океан',        price: 15000,
-      swatch: ['#00b4d8', '#0077b6', '#90e0ef'], engine: 'blobs' },
-    { id: 'constellations', icon: '✨', name: 'Созвездия', price: 150000,
-      swatch: ['#a0c8ff', '#d0e4ff', '#f0f5ff'], engine: 'constellations' },
-    { id: 'starfield', icon: '🌠', name: 'Звёздное поле', price: 400000,
-      swatch: ['#0a1a4a', '#6080c0', '#e0e8ff'], engine: 'starfield' },
-    { id: 'magma', icon: '🔥', name: 'Магма',        price: 50000,
-      swatch: ['#ff6432', '#ff3c64', '#ffb43c'], engine: 'magma' },
-    { id: 'flow',  icon: '🌀', name: 'Поток',        price: 1500000,
-      swatch: ['#78b4ff', '#c88cff', '#64dcdc'], engine: 'flow' }
+    { id:'default', icon:'🌊', name:'По умолчанию', price:0, swatch:['#8ab4ff','#c9a7ff','#8ee7ff'], engine:'blobs' },
+    { id:'ocean', icon:'🐬', name:'Океан', price:15000, swatch:['#00b4d8','#0077b6','#90e0ef'], engine:'blobs' },
+    { id:'constellations', icon:'✨', name:'Созвездия', price:150000, swatch:['#a0c8ff','#d0e4ff','#f0f5ff'], engine:'constellations' },
+    { id:'starfield', icon:'🌠', name:'Звёздное поле', price:400000, swatch:['#0a1a4a','#6080c0','#e0e8ff'], engine:'starfield' },
+    { id:'magma', icon:'🔥', name:'Магма', price:50000, swatch:['#ff6432','#ff3c64','#ffb43c'], engine:'magma' },
+    { id:'flow', icon:'🌀', name:'Поток', price:1500000, swatch:['#78b4ff','#c88cff','#64dcdc'], engine:'flow' }
   ];
 
-  var gameState = {
-    score: 0, totalClicks: 0, upgrades: {},
-    purchasedThemes: ['default'], activeTheme: 'default',
-    lastTick: Date.now(), perClick: 1, perSecond: 0
-  };
+  var gameState = { score:0, totalClicks:0, upgrades:{}, purchasedThemes:['default'], activeTheme:'default', lastTick:Date.now(), perClick:1, perSecond:0 };
   try {
     var rawGame = JSON.parse(localStorage.getItem(GAME_KEY));
     if (rawGame && typeof rawGame === 'object') {
@@ -2581,12 +2208,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       gameState.activeTheme = typeof rawGame.activeTheme === 'string' ? rawGame.activeTheme : 'default';
       gameState.lastTick = Date.now();
     }
-  } catch (e) {}
-
-  var idRemap = {
-    'forest': 'constellations', 'aurora': 'starfield', 'waves': 'starfield',
-    'sunset': 'magma', 'galaxy': 'flow'
-  };
+  } catch(e) {}
+  var idRemap = { 'forest':'constellations','aurora':'starfield','waves':'starfield','sunset':'magma','galaxy':'flow' };
   if (Array.isArray(gameState.purchasedThemes)) {
     var seen = {}, migrated = [];
     for (var mi = 0; mi < gameState.purchasedThemes.length; mi++) {
@@ -2602,20 +2225,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function saveGame() {
     try {
       localStorage.setItem(GAME_KEY, JSON.stringify({
-        score: gameState.score, totalClicks: gameState.totalClicks,
-        upgrades: gameState.upgrades, purchasedThemes: gameState.purchasedThemes,
-        activeTheme: gameState.activeTheme, lastSaved: Date.now()
+        score:gameState.score, totalClicks:gameState.totalClicks,
+        upgrades:gameState.upgrades, purchasedThemes:gameState.purchasedThemes,
+        activeTheme:gameState.activeTheme, lastSaved:Date.now()
       }));
-    } catch (e) {}
+    } catch(e) {}
   }
 
   function applyBgTheme(themeId) {
     var theme = null;
-    for (var i = 0; i < THEMES.length; i++) {
-      if (THEMES[i].id === themeId) { theme = THEMES[i]; break; }
-    }
+    for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === themeId) { theme = THEMES[i]; break; }
     if (!theme) theme = THEMES[0];
-    if (activeBgEngine) { try { activeBgEngine.stop(); } catch (e) {} activeBgEngine = null; }
+    if (activeBgEngine) { try { activeBgEngine.stop(); } catch(e) {} activeBgEngine = null; }
     if (theme.id === 'default') document.documentElement.removeAttribute('data-bgtheme');
     else document.documentElement.setAttribute('data-bgtheme', theme.id);
     if (theme.engine === 'constellations') activeBgEngine = startConstellations();
@@ -2624,28 +2245,22 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     else if (theme.engine === 'flow') activeBgEngine = startFlow();
   }
 
-  onThemeChange = function () {
+  onThemeChange = function() {
     var cur = null;
-    for (var i = 0; i < THEMES.length; i++) {
-      if (THEMES[i].id === gameState.activeTheme) { cur = THEMES[i]; break; }
-    }
+    for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === gameState.activeTheme) { cur = THEMES[i]; break; }
     if (cur && cur.engine !== 'blobs') applyBgTheme(gameState.activeTheme);
   };
 
   function getUpgradeLevel(id) { return Math.max(0, Math.floor(Number(gameState.upgrades[id]) || 0)); }
-  function getUpgradeCost(up) {
-    var lvl = getUpgradeLevel(up.id);
-    return Math.floor(up.costBase * Math.pow(1.85, lvl));
-  }
+  function getUpgradeCost(up) { return Math.floor(up.costBase * Math.pow(1.85, getUpgradeLevel(up.id))); }
   function recalcGameStats() {
     var baseClick = 1, baseAuto = 0, clickMult = 1, autoMult = 1;
-    UPGRADES.forEach(function (up) {
-      var lvl = getUpgradeLevel(up.id);
-      if (!lvl) return;
-      if (up.effect === 'perClick') baseClick += up.amount * lvl;
-      else if (up.effect === 'perSecond') baseAuto += up.amount * lvl;
-      else if (up.effect === 'clickMult') clickMult += up.amount * lvl;
-      else if (up.effect === 'autoMult') autoMult += up.amount * lvl;
+    UPGRADES.forEach(function(up) {
+      var lvl = getUpgradeLevel(up.id); if (!lvl) return;
+      if (up.effect === 'perClick') baseClick += up.amount*lvl;
+      else if (up.effect === 'perSecond') baseAuto += up.amount*lvl;
+      else if (up.effect === 'clickMult') clickMult += up.amount*lvl;
+      else if (up.effect === 'autoMult') autoMult += up.amount*lvl;
     });
     gameState.perClick = baseClick * clickMult;
     gameState.perSecond = baseAuto * autoMult;
@@ -2660,20 +2275,19 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     gamePerSecEl.textContent = formatNum(gameState.perSecond);
     gameClickLbl.textContent = 'Кликни +' + formatNum(gameState.perClick);
 
-    gameUpgradesEl.querySelectorAll('.game-upgrade').forEach(function (btn) {
+    gameUpgradesEl.querySelectorAll('.game-upgrade').forEach(function(btn) {
       var id = btn.dataset.id;
-      var up = UPGRADES.find(function (u) { return u.id === id; });
+      var up = UPGRADES.find(function(u){ return u.id === id; });
       if (!up) return;
-      var cost = getUpgradeCost(up);
-      var lvl = getUpgradeLevel(up.id);
+      var cost = getUpgradeCost(up), lvl = getUpgradeLevel(up.id);
       btn.querySelector('.game-upgrade-level').textContent = 'ур. ' + lvl;
       btn.querySelector('.game-upgrade-cost').textContent = formatNum(cost);
       btn.disabled = gameState.score < cost;
     });
 
-    gameThemesEl.querySelectorAll('.game-theme').forEach(function (btn) {
+    gameThemesEl.querySelectorAll('.game-theme').forEach(function(btn) {
       var id = btn.dataset.id;
-      var theme = THEMES.find(function (t) { return t.id === id; });
+      var theme = THEMES.find(function(t){ return t.id === id; });
       if (!theme) return;
       var statusEl = btn.querySelector('.game-theme-status');
       var owned = gameState.purchasedThemes.indexOf(id) !== -1;
@@ -2687,13 +2301,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   function renderUpgrades() {
     gameUpgradesEl.innerHTML = '';
-    UPGRADES.forEach(function (up) {
-      var lvl = getUpgradeLevel(up.id);
-      var cost = getUpgradeCost(up);
+    UPGRADES.forEach(function(up) {
+      var lvl = getUpgradeLevel(up.id), cost = getUpgradeCost(up);
       var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'game-upgrade';
-      btn.dataset.id = up.id;
+      btn.type = 'button'; btn.className = 'game-upgrade'; btn.dataset.id = up.id;
       btn.innerHTML =
         '<span class="game-upgrade-icon">' + up.icon + '</span>' +
         '<span class="game-upgrade-body">' +
@@ -2703,28 +2314,24 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           '<span class="game-upgrade-desc">' + up.desc + '</span>' +
         '</span>' +
         '<span class="game-upgrade-cost">' + formatNum(cost) + '</span>';
-      btn.addEventListener('click', function () { buyUpgrade(up); });
+      btn.addEventListener('click', function(){ buyUpgrade(up); });
       gameUpgradesEl.appendChild(btn);
     });
   }
 
   function renderThemes() {
     gameThemesEl.innerHTML = '';
-    THEMES.forEach(function (theme) {
+    THEMES.forEach(function(theme) {
       var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'game-theme';
-      btn.dataset.id = theme.id;
-      var swatch = theme.swatch.map(function (c) {
-        return '<span style="background:' + c + '"></span>';
-      }).join('');
+      btn.type = 'button'; btn.className = 'game-theme'; btn.dataset.id = theme.id;
+      var swatch = theme.swatch.map(function(c){ return '<span style="background:'+c+'"></span>'; }).join('');
       btn.innerHTML =
         '<div class="game-theme-swatch">' + swatch + '</div>' +
         '<div class="game-theme-body">' +
           '<div class="game-theme-name">' + theme.icon + ' ' + theme.name + '</div>' +
           '<div class="game-theme-status"></div>' +
         '</div>';
-      btn.addEventListener('click', function () { onThemeClick(theme); });
+      btn.addEventListener('click', function(){ onThemeClick(theme); });
       gameThemesEl.appendChild(btn);
     });
   }
@@ -2735,8 +2342,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     if (!owned) {
       if (gameState.score < theme.price) { showToast('Недостаточно очков'); return; }
       var ok = true;
-      try { ok = window.confirm('Купить тему «' + theme.name + '» за ' + formatNum(theme.price) + ' очков?'); }
-      catch (e) { ok = true; }
+      try { ok = window.confirm('Купить тему «' + theme.name + '» за ' + formatNum(theme.price) + ' очков?'); } catch(e) { ok = true; }
       if (!ok) return;
       gameState.score -= theme.price;
       gameState.purchasedThemes.push(theme.id);
@@ -2753,9 +2359,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     if (gameState.score < cost) { showToast('Недостаточно очков'); return; }
     gameState.score -= cost;
     gameState.upgrades[up.id] = getUpgradeLevel(up.id) + 1;
-    saveGame();
-    renderUpgrades();
-    updateGameUI();
+    saveGame(); renderUpgrades(); updateGameUI();
     showToast(up.name + ' улучшен');
   }
 
@@ -2767,13 +2371,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     plus.className = 'game-plus';
     plus.textContent = '+' + formatNum(gameState.perClick);
     gameClicker.appendChild(plus);
-    setTimeout(function () { plus.remove(); }, 800);
-    updateGameUI();
-    saveGame();
+    setTimeout(function(){ plus.remove(); }, 800);
+    updateGameUI(); saveGame();
   }
   gameClicker.addEventListener('click', doGameClick);
 
-  setInterval(function () {
+  setInterval(function() {
     recalcGameStats();
     if (gameState.perSecond <= 0) { gameState.lastTick = Date.now(); return; }
     var now = Date.now();
@@ -2781,12 +2384,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     gameState.lastTick = now;
     if (elapsed > 0) {
       gameState.score += gameState.perSecond * elapsed;
-      updateGameUI();
-      saveGame();
+      updateGameUI(); saveGame();
     }
   }, 500);
 
-  document.addEventListener('visibilitychange', function () {
+  document.addEventListener('visibilitychange', function() {
     if (!document.hidden) {
       var now = Date.now();
       recalcGameStats();
@@ -2795,61 +2397,49 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         gameState.lastTick = now;
         if (elapsed > 0) {
           gameState.score += gameState.perSecond * elapsed;
-          updateGameUI();
-          saveGame();
+          updateGameUI(); saveGame();
         }
-      } else {
-        gameState.lastTick = now;
-      }
+      } else { gameState.lastTick = now; }
     }
   });
 
-  gameResetBtn.addEventListener('click', function () {
+  gameResetBtn.addEventListener('click', function() {
     var ok = true;
-    try { ok = window.confirm('Сбросить ВЕСЬ прогресс игры, включая купленные темы?'); }
-    catch (e) { ok = true; }
+    try { ok = window.confirm('Сбросить ВЕСЬ прогресс игры, включая купленные темы?'); } catch(e) { ok = true; }
     if (!ok) return;
-    gameState.score = 0;
-    gameState.totalClicks = 0;
-    gameState.upgrades = {};
-    gameState.purchasedThemes = ['default'];
-    gameState.activeTheme = 'default';
+    gameState.score = 0; gameState.totalClicks = 0; gameState.upgrades = {};
+    gameState.purchasedThemes = ['default']; gameState.activeTheme = 'default';
     gameState.lastTick = Date.now();
     applyBgTheme('default');
-    saveGame();
-    renderUpgrades();
-    updateGameUI();
+    saveGame(); renderUpgrades(); updateGameUI();
     showToast('Прогресс сброшен');
   });
 
-  gameBtn.addEventListener('click', function () {
-    renderUpgrades();
-    renderThemes();
-    updateGameUI();
+  gameBtn.addEventListener('click', function() {
+    renderUpgrades(); renderThemes(); updateGameUI();
     gameState.lastTick = Date.now();
     openModal(gameModal);
   });
-  gameClose.addEventListener('click', function () { closeModal(gameModal); });
+  gameClose.addEventListener('click', function(){ closeModal(gameModal); });
 
-  /* ======================= BLOBS ======================= */
+  /* BLOBS */
   var blobs = Array.prototype.slice.call(document.querySelectorAll('.blob'));
   var blobConfigs = [
-    { speed: 0.16, phase: 0.0, ampX: 40, ampY: 30, parallax: 60 },
-    { speed: 0.21, phase: 2.0, ampX: 50, ampY: 40, parallax: -70 },
-    { speed: 0.13, phase: 4.0, ampX: 35, ampY: 45, parallax: 45 },
-    { speed: 0.18, phase: 6.0, ampX: 45, ampY: 35, parallax: -55 }
+    { speed:0.16, phase:0.0, ampX:40, ampY:30, parallax:60 },
+    { speed:0.21, phase:2.0, ampX:50, ampY:40, parallax:-70 },
+    { speed:0.13, phase:4.0, ampX:35, ampY:45, parallax:45 },
+    { speed:0.18, phase:6.0, ampX:45, ampY:35, parallax:-55 }
   ];
-  var mouseTarget = { x: 0.5, y: 0.5 };
-  var mouseSmooth = { x: 0.5, y: 0.5 };
-  var glowTarget = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  var mouseTarget = { x:0.5, y:0.5 };
+  var mouseSmooth = { x:0.5, y:0.5 };
+  var glowTarget = { x: window.innerWidth/2, y: window.innerHeight/2 };
   var glowSmooth = { x: glowTarget.x, y: glowTarget.y };
 
-  document.addEventListener('mousemove', function (e) {
+  document.addEventListener('mousemove', function(e) {
     mouseTarget.x = e.clientX / Math.max(1, window.innerWidth);
     mouseTarget.y = e.clientY / Math.max(1, window.innerHeight);
-    glowTarget.x = e.clientX;
-    glowTarget.y = e.clientY;
-  }, { passive: true });
+    glowTarget.x = e.clientX; glowTarget.y = e.clientY;
+  }, { passive:true });
 
   function animateBackground() {
     var now = performance.now() / 1000;
@@ -2857,11 +2447,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     mouseSmooth.y += (mouseTarget.y - mouseSmooth.y) * 0.06;
     for (var i = 0; i < blobs.length; i++) {
       var c = blobConfigs[i];
-      var ox = Math.sin(now * c.speed + c.phase) * c.ampX;
-      var oy = Math.cos(now * c.speed * 1.3 + c.phase) * c.ampY;
+      var ox = Math.sin(now*c.speed + c.phase) * c.ampX;
+      var oy = Math.cos(now*c.speed*1.3 + c.phase) * c.ampY;
       var px = (mouseSmooth.x - 0.5) * c.parallax;
       var py = (mouseSmooth.y - 0.5) * c.parallax;
-      blobs[i].style.transform = 'translate(' + (ox + px).toFixed(1) + 'px, ' + (oy + py).toFixed(1) + 'px)';
+      blobs[i].style.transform = 'translate(' + (ox+px).toFixed(1) + 'px, ' + (oy+py).toFixed(1) + 'px)';
     }
     if (cursorGlow) {
       glowSmooth.x += (glowTarget.x - glowSmooth.x) * 0.15;
@@ -2872,14 +2462,14 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   if (!prefersReducedMotion) requestAnimationFrame(animateBackground);
 
-  /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
+  /* ИНИЦИАЛИЗАЦИЯ */
   applyBgTheme(gameState.activeTheme);
   updateCategorySelect();
   autoGrow();
   updateAddState();
   renderNotes();
 
-  requestAnimationFrame(function () {
+  requestAnimationFrame(function() {
     render();
     if (cursorGlow) {
       cursorGlow.style.transform = 'translate(' + glowSmooth.x + 'px, ' + glowSmooth.y + 'px)';
