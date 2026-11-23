@@ -37,6 +37,7 @@
   --blob-op:.55;
   --modal-bg:rgba(255,255,255,.94);
   --cursor-glow:rgba(120,150,255,.18);
+  --item-scale:1;
 }
 [data-theme="dark"]{
   color-scheme: dark;
@@ -71,15 +72,17 @@ html[data-bgtheme="ocean"][data-theme="dark"]{
 
 /* ======================= БАЗА ======================= */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0;overflow:hidden}
+html,body{height:100%}
 body{
+  margin:0;
   font-family:'Manrope',-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
   background:var(--bg);
   color:var(--text);
+  min-height:100vh;
+  min-height:100dvh;
   display:flex;
   flex-direction:column;
-  height:100vh;
-  height:100dvh;
+  overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   transition:background .45s ease, color .3s ease;
@@ -162,8 +165,7 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 
 /* ======================= ШАПКА ======================= */
 .topbar{
-  flex:0 0 auto;
-  position:relative;z-index:20;
+  position:sticky;top:0;z-index:20;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px 20px;
   background:linear-gradient(to bottom, var(--bg) 20%, transparent);
@@ -203,24 +205,21 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 [data-theme="light"] .icon-moon{display:none}
 [data-theme="dark"]  .icon-sun{display:none}
 
-/* ======================= MAIN / WORKSPACE ======================= */
+/* ======================= MAIN ======================= */
 main{
-  flex:1 1 auto;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  padding:6px 20px 20px;
-  gap:12px;
-  position:relative;
-  min-height:0;
-}
-
-/* ======================= КАРТОЧКА ВВОДА ======================= */
-.composer{
-  flex:0 0 auto;
+  flex:1 0 auto;
+  width:100%;
   max-width:640px;
   margin:0 auto;
-  width:100%;
+  padding:6px 20px 100px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* ======================= КОМПОЗЕР ======================= */
+.composer{
+  flex:0 0 auto;
   display:flex;flex-direction:column;
   padding:14px;border-radius:26px;
   background:var(--card);
@@ -229,7 +228,8 @@ main{
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
   transition:background .25s ease, border-color .25s ease, box-shadow .25s ease, padding .22s ease;
-  position:relative;z-index:5;
+  position:relative;
+  z-index:100;
 }
 .composer-head{
   display:flex;align-items:center;justify-content:space-between;
@@ -316,15 +316,17 @@ select.field option{background:var(--bg);color:var(--text)}
 
 /* ======================= WORKSPACE ======================= */
 .workspace{
-  flex:1 1 auto;
   position:relative;
-  overflow:hidden;
-  min-height:0;
+  flex:1 0 auto;
+  min-height:400px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:0;
 }
 
 .workspace-empty{
-  position:absolute;left:50%;top:50%;
-  transform:translate(-50%,-50%);
+  position:absolute;left:50%;top:40px;
+  transform:translateX(-50%);
   width:calc(100% - 40px);max-width:400px;
   padding:40px 22px;text-align:center;
   font-size:14px;font-weight:500;line-height:1.5;
@@ -332,135 +334,138 @@ select.field option{background:var(--bg);color:var(--text)}
   border:1.5px dashed var(--dash);border-radius:24px;
   pointer-events:none;
 }
-.workspace-empty.hidden{display:none}
 
-/* ======================= КАРТОЧКА КАТЕГОРИИ ======================= */
-.category-card{
+/* ======================= СЕКЦИЯ-КАРТОЧКА ======================= */
+.section{
   position:absolute;
-  left:0;top:0;
-  display:flex;
-  flex-direction:column;
-  min-width:130px;
-  max-width:280px;
-  background:var(--card);
+  width:380px;
+  max-width:calc(100vw - 40px);
+  padding:6px 8px 10px;
+  border-radius:18px;
+  background:var(--field);
   border:1px solid var(--card-border);
-  border-radius:20px;
-  backdrop-filter:blur(30px) saturate(180%);
-  -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
-  animation:cardIn .32s cubic-bezier(.2,.9,.3,1.15);
-  transition:box-shadow .2s ease;
+  transition:box-shadow .2s ease, transform .2s ease, background .2s ease;
+  animation:sectionIn .3s cubic-bezier(.2,.9,.3,1.15);
   will-change:left, top;
 }
-@keyframes cardIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-
-.category-card.dragging{
+@keyframes sectionIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.section.dragging{
   transition:none;
-  box-shadow:0 24px 60px rgba(0,0,0,.32), 0 4px 12px rgba(0,0,0,.12);
-  z-index:9999 !important;
+  box-shadow:0 20px 50px rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.12);
+  background:var(--card);
+  transform:scale(1.01);
 }
 
-.category-header{
+.section-head{
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:10px 10px 10px 14px;
-  cursor:grab;
-  touch-action:none;
+  gap:4px;
   user-select:none;
   -webkit-user-select:none;
 }
-.category-card.dragging .category-header{cursor:grabbing}
-.category-header:active{cursor:grabbing}
-
-.category-name{
+.section-toggle-area{
   flex:1 1 auto;
-  font-size:13.5px;
-  font-weight:700;
-  letter-spacing:-.01em;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
   min-width:0;
-  color:var(--text);
-}
-.category-count{
-  flex:0 0 auto;
-  font-size:11px;
-  font-weight:600;
-  color:var(--text-3);
-  background:var(--field);
-  padding:1px 7px;
-  border-radius:999px;
-}
-.category-del{
-  flex:0 0 24px;
-  width:24px;height:24px;
-  border:none;border-radius:50%;
-  background:transparent;
-  color:var(--text-3);
-  cursor:pointer;
-  display:grid;
-  place-items:center;
-  padding:0;
-  margin-left:-2px;
-  transition:background .18s ease, color .18s ease, transform .15s ease;
-}
-.category-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
-.category-del:active{transform:scale(.9)}
-
-.category-body{
   display:flex;
-  flex-direction:column;
-  gap:6px;
-  padding:0 8px 8px 8px;
+  align-items:center;
+  gap:8px;
+  padding:6px 8px;
+  margin:0;
+  border:none;
+  border-radius:10px;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  text-align:left;
+  cursor:grab;
+  transition:background .18s ease;
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:none;
 }
-.category-card.collapsed .category-body{display:none}
-
-.category-empty{
-  padding:14px 8px;
-  text-align:center;
-  font-size:12px;
-  font-weight:500;
+.section.dragging .section-toggle-area{cursor:grabbing}
+.section-toggle-area:hover{background:var(--field-hover)}
+.section-toggle-icon{
+  flex:0 0 14px;
+  width:14px;
+  height:14px;
   color:var(--text-3);
-  border:1.5px dashed var(--dash);
-  border-radius:14px;
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.05), color .18s ease;
+  pointer-events:none;
+}
+.section-toggle-area:hover .section-toggle-icon{color:var(--text-2)}
+.section.collapsed .section-toggle-icon{transform:rotate(-90deg)}
+.section-name{
+  font-size:12.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--text-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  min-width:0;
+  pointer-events:none;
+}
+.section-count{
+  font-size:11px;font-weight:600;color:var(--text-3);
+  background:var(--card);padding:1px 7px;border-radius:999px;
+  flex:0 0 auto;
+  transition:background .18s ease;
+  pointer-events:none;
+}
+.section-toggle-area:hover .section-count{background:var(--field-hover)}
+
+.section-del{
+  flex:0 0 26px;
+  width:26px;height:26px;
+  border:none;border-radius:50%;
+  background:transparent;color:var(--text-3);
+  cursor:pointer;
+  display:grid;place-items:center;
+  padding:0;
+  transition:background .2s ease, color .2s ease, transform .15s ease;
+}
+.section-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.section-del:active{transform:scale(.9)}
+
+.section-items{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.section.collapsed .section-items{display:none}
+.section-empty{
+  padding:16px;text-align:center;font-size:13px;font-weight:500;
+  color:var(--text-3);border:1.5px dashed var(--dash);border-radius:14px;
 }
 
-/* ======================= ITEM (кнопка внутри категории) ======================= */
+/* ======================= ITEM ======================= */
 .item{
   display:flex;align-items:center;gap:2px;
-  padding:4px;border-radius:12px;
-  background:var(--field);
-  border:none;
-  box-shadow:none;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
+  padding:6px;border-radius:16px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  box-shadow:0 2px 8px rgba(20,25,60,.04);
   animation:pop .3s cubic-bezier(.2,.9,.3,1.15);
   min-width:0;
 }
-@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
 .item.removing{animation:disappear .22s ease forwards}
-@keyframes disappear{to{opacity:0;transform:scale(.94);margin-bottom:-6px}}
+@keyframes disappear{to{opacity:0;transform:scale(.94);margin-bottom:-8px}}
 
 .item-main{
   flex:1 1 auto;min-width:0;
-  display:flex;flex-direction:column;gap:1px;
+  display:flex;flex-direction:column;gap:2px;
   text-align:left;
-  padding:8px 10px;
-  border:none;border-radius:8px;
+  padding:calc(12px * var(--item-scale)) calc(14px * var(--item-scale));
+  border:none;border-radius:12px;
   background:transparent;color:var(--text);
   font-family:inherit;cursor:pointer;
   transition:background .18s ease;
 }
-.item-main:hover{background:var(--field-hover)}
-.item-main:active{background:var(--card-border)}
+.item-main:hover{background:var(--field)}
+.item-main:active{background:var(--field-hover)}
 .item-name{
-  font-size:13px;font-weight:700;letter-spacing:-.005em;
+  font-size:calc(15px * var(--item-scale));
+  font-weight:700;letter-spacing:-.01em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item-text{
-  font-size:11px;font-weight:500;color:var(--text-2);
+  font-size:calc(12.5px * var(--item-scale));
+  font-weight:500;color:var(--text-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item.copied{animation:pulse .42s ease}
@@ -468,28 +473,33 @@ select.field option{background:var(--bg);color:var(--text)}
   0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}
   100%{box-shadow:0 0 0 14px rgba(48,209,88,0)}
 }
-
 .item-pin,.item-del{
-  flex:0 0 26px;
-  width:26px;height:26px;
+  flex:0 0 calc(32px * var(--item-scale));
+  width:calc(32px * var(--item-scale));
+  height:calc(32px * var(--item-scale));
   border:none;border-radius:50%;
   display:grid;place-items:center;
-  background:transparent;
-  color:var(--text-3);
+  background:transparent;color:var(--text-3);
   cursor:pointer;
   transition:background .2s ease, color .2s ease, transform .15s ease;
 }
-.item-pin:hover{background:var(--card-border);color:var(--text)}
+.item-pin:hover{background:var(--field);color:var(--text)}
 .item-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
 .item-pin:active,.item-del:active{transform:scale(.88)}
 .item-pin.active{color:var(--accent)}
 .item-pin.active svg{fill:currentColor;fill-opacity:.16}
-.item-pin svg{width:13px;height:13px}
-.item-del svg{width:12px;height:12px}
+.item-pin svg{
+  width:calc(14px * var(--item-scale));
+  height:calc(14px * var(--item-scale));
+}
+.item-del svg{
+  width:calc(13px * var(--item-scale));
+  height:calc(13px * var(--item-scale));
+}
 
 /* ======================= ЗАМЕТКИ ======================= */
 .notes-layer{
-  position:fixed;inset:0;z-index:100;
+  position:fixed;inset:0;z-index:200;
   pointer-events:none;overflow:hidden;
   transition:opacity .2s ease;
 }
@@ -557,7 +567,8 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 /* ======================= FAB ======================= */
 .fab-stack{
   position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));
-  display:flex;flex-direction:column;align-items:flex-end;gap:10px;z-index:15;
+  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+  z-index:1000;
 }
 .fab{
   display:inline-flex;align-items:center;gap:8px;padding:12px 18px;
@@ -581,7 +592,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 
 /* ======================= МОДАЛКИ ======================= */
 .modal-backdrop{
-  position:fixed;inset:0;z-index:200;
+  position:fixed;inset:0;z-index:2000;
   display:grid;place-items:center;padding:20px;
   background:rgba(0,0,0,.35);
   backdrop-filter:blur(6px);
@@ -623,6 +634,32 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .info-content h4{margin:16px 0 6px;font-size:14px;font-weight:700;color:var(--text)}
 .info-content h4:first-child{margin-top:0}
 .info-content p{margin:0;font-size:13.5px;line-height:1.55;color:var(--text-2);font-weight:500}
+
+/* ======================= НАСТРОЙКИ ======================= */
+.settings-section{margin-bottom:18px}
+.settings-section:last-of-type{margin-bottom:0}
+.settings-label{
+  font-size:11.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--text-2);
+  margin-bottom:10px;
+}
+.scale-slider-wrap{
+  display:flex;align-items:center;gap:12px;
+  padding:6px 0;
+}
+.scale-a-sm{font-size:12px;color:var(--text-3);font-weight:700;flex:0 0 auto}
+.scale-a-lg{font-size:20px;color:var(--text);font-weight:700;flex:0 0 auto}
+.scale-value{
+  font-size:13px;font-weight:700;color:var(--accent);
+  min-width:52px;text-align:right;flex:0 0 auto;
+}
+#scaleSlider{
+  flex:1;
+  accent-color:var(--accent);
+  cursor:pointer;
+  height:6px;
+  min-width:0;
+}
 
 /* ======================= ИГРА ======================= */
 .game-modal{max-width:420px;max-height:88vh}
@@ -701,7 +738,6 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .game-upgrade-desc{font-size:11px;color:var(--text-2);font-weight:500;margin-top:1px}
 .game-upgrade-cost{flex:0 0 auto;font-size:13px;font-weight:700;color:var(--accent)}
 .game-upgrade:disabled .game-upgrade-cost{color:var(--text-3)}
-
 .game-themes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .game-theme{
   display:flex;align-items:center;gap:8px;padding:8px 10px;
@@ -736,7 +772,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
   transform:translate(-50%,-16px);display:flex;align-items:center;gap:8px;
   padding:12px 20px;border-radius:999px;background:var(--toast);color:#fff;
   font-size:14px;font-weight:600;letter-spacing:-.01em;opacity:0;
-  pointer-events:none;z-index:300;
+  pointer-events:none;z-index:5000;
   box-shadow:0 12px 34px rgba(0,0,0,.28);
   backdrop-filter:blur(20px) saturate(180%);
   -webkit-backdrop-filter:blur(20px) saturate(180%);
@@ -747,7 +783,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 
 /* ======================= ПОДВАЛ ======================= */
 footer{
-  position:fixed;left:0;bottom:0;z-index:4;
+  position:fixed;left:0;bottom:0;z-index:5;
   display:flex;flex-direction:column;align-items:flex-start;gap:1px;
   padding:8px 14px calc(10px + env(safe-area-inset-bottom));
   color:var(--text-3);font-size:11.5px;font-weight:400;
@@ -766,27 +802,22 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
 /* ======================= АДАПТИВ ======================= */
 @media (max-width:640px){
-  main{padding:6px 14px 16px}
+  main{padding:6px 16px 200px}
   .fab-stack{right:14px;bottom:calc(84px + env(safe-area-inset-bottom));gap:8px}
   .fab{padding:10px 14px;font-size:13px;gap:6px}
   footer{font-size:10.5px;padding:6px 12px calc(8px + env(safe-area-inset-bottom));max-width:230px}
   .game-score{font-size:28px}
   .game-clicker-logo{width:64px;height:64px}
   .game-themes{grid-template-columns:1fr}
-  .category-card{max-width:calc(100vw - 32px)}
+  .section{max-width:calc(100vw - 32px);width:320px}
 }
 @media (max-width:420px){
   .brand-name{font-size:16px}
-  .topbar{padding:12px 12px}
+  .topbar{padding:12px 14px}
   footer{font-size:10px;max-width:200px}
   .fab{font-size:12.5px}
   .theme-toggle{width:38px;height:38px;font-size:18px}
   .note-window{width:calc(100vw - 32px)}
-}
-@media (max-width:360px){
-  .theme-toggle{width:34px;height:34px}
-  .theme-toggle svg{width:17px;height:17px}
-  .brand-name{font-size:15px}
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
@@ -842,13 +873,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </div>
 
   <div class="topbar-actions">
-    <button class="theme-toggle" id="resetLayoutBtn" type="button" aria-label="Сбросить позиции категорий" title="Сбросить позиции категорий">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+    <button class="theme-toggle" id="settingsBtn" type="button" aria-label="Настройки" title="Настройки">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
       </svg>
     </button>
     <button class="theme-toggle" id="gameBtn" type="button" aria-label="Игра-кликер" title="Клик-Копирка">🎮</button>
@@ -941,6 +970,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </button>
 </div>
 
+<!-- ИНФО -->
 <div class="modal-backdrop" id="infoModal">
   <div class="modal">
     <h3>Как это работает</h3>
@@ -949,34 +979,37 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок, организации кнопок по категориям и мини-игры. Все данные хранятся только в вашем браузере.</p>
 
       <h4>Категории-карточки</h4>
-      <p>Каждая категория — это плавающая карточка, которую можно перетащить в любое место рабочей области, потянув за её заголовок. Клик по карточке раскрывает или сворачивает кнопки внутри. Позиция и свёрнутость каждой категории сохраняются.</p>
+      <p>Каждая категория — плавающая карточка. Её можно перетащить в любое место рабочей области, потянув за заголовок. Позиция и свёрнутость каждой категории сохраняются между визитами.</p>
 
       <h4>Сброс позиций</h4>
-      <p>Кнопка с иконкой сетки в правом верхнем углу возвращает все категории в аккуратную сетку по центру экрана.</p>
+      <p>В настройках (⚙️ в шапке) есть кнопка «Сбросить позиции категорий» — она возвращает все карточки в исходную вертикальную стопку по центру.</p>
+
+      <h4>Размер кнопок</h4>
+      <p>Там же, в настройках, есть ползунок масштаба от 70% до 140%. Он меняет размер шрифта и отступов у всех кнопок-элементов одновременно.</p>
 
       <h4>Добавить кнопку</h4>
-      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в нужной категории, а категория автоматически раскроется и выйдет на передний план.</p>
+      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Целевая категория автоматически раскроется и выйдет на передний план.</p>
 
       <h4>Копирование</h4>
       <p>Нажмите на кнопку — текст моментально попадёт в буфер обмена. Вверху экрана появится подтверждение «Скопировано».</p>
 
       <h4>Закрепление</h4>
-      <p>Иконка булавки на кнопке переносит её в категорию «Закреплённые». Она появится как отдельная карточка.</p>
+      <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» — это отдельная карточка, которую тоже можно двигать.</p>
 
       <h4>Заметки</h4>
-      <p>Кнопка «Добавить заметку» создаёт плавающее окно, которое можно перемещать по экрану. Иконка ✏️ переключает в режим редактирования, ✓ сохраняет, ✕ удаляет. Позиция каждой заметки сохраняется.</p>
+      <p>Кнопка «Добавить заметку» создаёт плавающее окно. Иконка ✏️ переключает в режим редактирования, ✓ сохраняет, ✕ удаляет. Позиция каждой заметки сохраняется.</p>
 
       <h4>Игра «Клик-Копирка»</h4>
       <p>Кнопка 🎮 открывает мини-игру. Кликайте по логотипу, покупайте улучшения и открывайте новые фоновые темы сайта. Пассивный доход начисляется и в фоне.</p>
 
       <h4>Магазин тем</h4>
-      <p>6 тем: По умолчанию, Океан, Созвездия, Звёздное поле, Магма и Поток. Четыре из них — анимированные canvas-движки, реагирующие на курсор.</p>
+      <p>6 фоновых тем: По умолчанию, Океан, Созвездия, Звёздное поле, Магма и Поток. Четыре из них — анимированные canvas-движки, реагирующие на курсор.</p>
 
-      <h4>Темы светлая/тёмная</h4>
-      <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается отдельно от фоновой темы.</p>
+      <h4>Светлая/тёмная тема</h4>
+      <p>Переключатель в правом верхнем углу. Работает отдельно от фоновой темы.</p>
 
       <h4>Сохранение</h4>
-      <p>Все кнопки, категории, их позиции и состояния, заметки, прогресс игры и темы сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
+      <p>Все кнопки, категории, их позиции и состояния, заметки, прогресс игры, темы и масштаб сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
     </div>
     <div class="modal-actions">
       <button class="btn-primary" id="infoClose" type="button">Понятно</button>
@@ -984,18 +1017,45 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </div>
 </div>
 
+<!-- НАСТРОЙКИ -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h3>Настройки</h3>
+
+    <div class="settings-section">
+      <div class="settings-label">Размер кнопок</div>
+      <div class="scale-slider-wrap">
+        <span class="scale-a-sm">A</span>
+        <input type="range" id="scaleSlider" min="70" max="140" step="10" value="100">
+        <span class="scale-a-lg">A</span>
+        <span class="scale-value" id="scaleValue">100%</span>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Позиции категорий</div>
+      <button class="btn-secondary" id="resetLayoutBtn" type="button" style="width:100%">
+        Сбросить позиции категорий
+      </button>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-primary" id="settingsClose" type="button">Готово</button>
+    </div>
+  </div>
+</div>
+
+<!-- ИГРА -->
 <div class="modal-backdrop" id="gameModal">
   <div class="modal game-modal">
     <div class="game-head">
       <h3>🎮 Клик-Копирка</h3>
       <button class="game-close" id="gameClose" type="button" aria-label="Закрыть">✕</button>
     </div>
-
     <div class="game-score-display">
       <div class="game-score" id="gameScore">0</div>
       <div class="game-rate" id="gameRate">0 в секунду</div>
     </div>
-
     <button class="game-clicker" id="gameClicker" type="button" aria-label="Кликни">
       <svg class="game-clicker-logo" viewBox="0 0 36 36" width="72" height="72" aria-hidden="true">
         <rect x="1" y="1" width="34" height="34" rx="10.5" fill="url(#lgBg)"/>
@@ -1005,19 +1065,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       </svg>
       <span class="game-clicker-label" id="gameClickerLabel">Кликни +1</span>
     </button>
-
     <div class="game-stats">
       <div>Всего кликов<strong id="gameTotalClicks">0</strong></div>
       <div>За клик<strong id="gamePerClick">1</strong></div>
       <div>В секунду<strong id="gamePerSecond">0</strong></div>
     </div>
-
     <div class="game-section-label">🎨 Магазин тем</div>
     <div class="game-themes" id="gameThemes"></div>
-
     <div class="game-section-label">⚡ Улучшения</div>
     <div class="game-upgrades" id="gameUpgrades"></div>
-
     <div class="game-footer">
       <button class="btn-secondary" id="gameReset" type="button">Сбросить прогресс</button>
     </div>
@@ -1044,6 +1100,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var THEME_KEY = 'kopirka2.theme';
   var COMPOSER_KEY = 'kopirka2.composerCollapsed';
   var LAYOUT_KEY = 'kopirka2.layout';
+  var SCALE_KEY = 'kopirka2.scale';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
   var workspace     = document.getElementById('workspace');
@@ -1057,7 +1114,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var newCatConfirm = document.getElementById('newCatConfirm');
   var themeToggle   = document.getElementById('themeToggle');
   var gameBtn       = document.getElementById('gameBtn');
-  var resetLayoutBtn= document.getElementById('resetLayoutBtn');
+  var settingsBtn   = document.getElementById('settingsBtn');
   var toastEl       = document.getElementById('toast');
   var toastText     = document.getElementById('toastText');
   var metaTheme     = document.querySelector('meta[name="theme-color"]');
@@ -1067,6 +1124,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var infoFab       = document.getElementById('infoFab');
   var infoModal     = document.getElementById('infoModal');
   var infoClose     = document.getElementById('infoClose');
+  var settingsModal = document.getElementById('settingsModal');
+  var settingsClose = document.getElementById('settingsClose');
+  var scaleSlider   = document.getElementById('scaleSlider');
+  var scaleValue    = document.getElementById('scaleValue');
+  var resetLayoutBtn= document.getElementById('resetLayoutBtn');
   var gameModal     = document.getElementById('gameModal');
   var gameClose     = document.getElementById('gameClose');
   var gameScoreEl   = document.getElementById('gameScore');
@@ -1109,6 +1171,34 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return String(n);
   }
 
+  /* ======================= МАСШТАБ ======================= */
+  var currentScale = 1;
+  try {
+    var s = parseFloat(localStorage.getItem(SCALE_KEY));
+    if (s && s >= 0.7 && s <= 1.4) currentScale = s;
+  } catch(e) {}
+
+  function applyScale(scale, persist) {
+    document.documentElement.style.setProperty('--item-scale', scale);
+    if (scaleValue) scaleValue.textContent = Math.round(scale * 100) + '%';
+    if (scaleSlider) scaleSlider.value = Math.round(scale * 100);
+    if (persist) {
+      try { localStorage.setItem(SCALE_KEY, String(scale)); } catch(e) {}
+    }
+  }
+  applyScale(currentScale, false);
+
+  if (scaleSlider) {
+    scaleSlider.addEventListener('input', function() {
+      var s = parseInt(this.value, 10) / 100;
+      applyScale(s, false);
+    });
+    scaleSlider.addEventListener('change', function() {
+      var s = parseInt(this.value, 10) / 100;
+      applyScale(s, true);
+    });
+  }
+
   /* ======================= СОСТОЯНИЕ ======================= */
   var items = [];
   var categories = [];
@@ -1148,31 +1238,24 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
   }
 
-  /* --- Layout --- */
   var layout = {};
   var topZ = 0;
-  var firstLayoutInit = false;
-
   try {
     var rawLayout = JSON.parse(localStorage.getItem(LAYOUT_KEY));
     if (rawLayout && typeof rawLayout === 'object' && !Array.isArray(rawLayout)) {
       layout = rawLayout;
-      firstLayoutInit = true;
+      Object.keys(layout).forEach(function(k) {
+        if (layout[k] && layout[k].z > topZ) topZ = layout[k].z;
+      });
     }
   } catch (e) { layout = {}; }
-
-  Object.keys(layout).forEach(function(k) {
-    if (layout[k] && layout[k].z > topZ) topZ = layout[k].z;
-  });
 
   function saveLayout() {
     try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch (e) {}
   }
 
-  /* --- Notes --- */
   var notes = [];
   var editingNoteId = null;
-
   try {
     var rawNotes = JSON.parse(localStorage.getItem(NOTES_KEY));
     if (Array.isArray(rawNotes)) {
@@ -1195,7 +1278,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   /* ======================= ТЕМА ======================= */
   var onThemeChange = null;
-
   function applyTheme(theme, persist) {
     document.documentElement.setAttribute('data-theme', theme);
     if (metaTheme) metaTheme.setAttribute('content', theme === 'dark' ? '#000000' : '#eef1f7');
@@ -1223,7 +1305,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     introEl.classList.add('hidden');
     document.body.classList.remove('intro-open');
     setTimeout(function () { introEl.style.display = 'none'; }, 600);
-    setTimeout(reclampAll, 400);
   }
   introEl.addEventListener('click', closeIntro);
 
@@ -1269,7 +1350,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     composerCollapsed = !!collapsed;
     try { localStorage.setItem(COMPOSER_KEY, composerCollapsed ? '1' : '0'); } catch (e) {}
     applyComposerState();
-    setTimeout(reclampAll, 350);
     if (!composerCollapsed) {
       setTimeout(function () {
         if (!composerCollapsed) { autoGrow(); textEl.focus(); }
@@ -1324,6 +1404,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     '<path d="M12 17v5"/>' +
     '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
     '</svg>';
+  var CHEVRON_SVG = '<svg class="section-toggle-icon" viewBox="0 0 24 24" fill="none" ' +
+    'stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M6 9l6 6 6-6"/></svg>';
 
   /* ======================= SELECT КАТЕГОРИЙ ======================= */
   function updateCategorySelect() {
@@ -1340,8 +1423,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }
 
-  /* ======================= SECTIONS ======================= */
-  function getCurrentSections() {
+  /* ======================= СЕКЦИИ ======================= */
+  function getSections() {
     var sections = [];
     var pinned = items.filter(function(i) { return i.pinned; });
     if (pinned.length > 0) {
@@ -1351,13 +1434,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       var catItems = items.filter(function(i) {
         return !i.pinned && i.categoryId === cat.id;
       });
-      sections.push({
-        key: cat.id,
-        name: cat.name,
-        items: catItems,
-        category: cat,
-        isSpecial: false
-      });
+      sections.push({ key: cat.id, name: cat.name, items: catItems, category: cat });
     });
     var uncat = items.filter(function(i) { return !i.pinned && !i.categoryId; });
     if (uncat.length > 0) {
@@ -1366,106 +1443,41 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return sections;
   }
 
-  /* ======================= LAYOUT: helpers ======================= */
-  function workspaceSize() {
-    var W = workspace.clientWidth;
-    var H = workspace.clientHeight;
-    if (!W) W = Math.max(300, window.innerWidth - 40);
-    if (!H) H = Math.max(200, window.innerHeight - 300);
-    return { W: W, H: H };
+  function pruneLayout() {
+    var valid = {};
+    getSections().forEach(function(s) { valid[s.key] = true; });
+    Object.keys(layout).forEach(function(k) {
+      if (!valid[k]) delete layout[k];
+    });
   }
 
-  function ensureLayout(key, opts) {
-    if (layout[key]) return false;
-    opts = opts || {};
-    var size = workspaceSize();
-    var count = Object.keys(layout).length;
-    layout[key] = {
-      x: Math.max(8, Math.round(size.W / 2 - 110 + (count * 22) % 180)),
-      y: Math.max(8, Math.round(size.H / 3 + (count * 32) % 200)),
-      z: ++topZ,
-      collapsed: opts.collapsed !== undefined ? !!opts.collapsed : true
-    };
-    return true;
+  function raiseSection(key) {
+    if (!layout[key]) return;
+    topZ++;
+    layout[key].z = topZ;
+    saveLayout();
   }
 
   function focusCategory(key) {
-    if (!layout[key]) ensureLayout(key, { collapsed: false });
+    if (!layout[key]) {
+      var wsW = workspace.clientWidth || 400;
+      layout[key] = {
+        x: Math.max(8, Math.round((wsW - 320) / 2)),
+        y: 8,
+        z: ++topZ,
+        collapsed: false
+      };
+    }
     layout[key].collapsed = false;
     layout[key].z = ++topZ;
     saveLayout();
   }
 
-  function clampCard(key) {
-    var state = layout[key];
-    if (!state) return;
-    var card = workspace.querySelector('[data-key="' + key + '"]');
-    if (!card) return;
-    var size = workspaceSize();
-    var cw = card.offsetWidth;
-    var ch = card.offsetHeight;
-    var nx = Math.max(8, Math.min(state.x, size.W - cw - 8));
-    var ny = Math.max(8, Math.min(state.y, size.H - ch - 8));
-    if (nx !== state.x || ny !== state.y) {
-      state.x = nx;
-      state.y = ny;
-      card.style.left = nx + 'px';
-      card.style.top = ny + 'px';
-      saveLayout();
-    }
-  }
-
-  function reclampAll() {
-    var size = workspaceSize();
-    var changed = false;
-    Object.keys(layout).forEach(function(key) {
-      var state = layout[key];
-      var card = workspace.querySelector('[data-key="' + key + '"]');
-      if (!card) return;
-      var cw = card.offsetWidth;
-      var ch = card.offsetHeight;
-      var nx = Math.max(8, Math.min(state.x, size.W - cw - 8));
-      var ny = Math.max(8, Math.min(state.y, size.H - ch - 8));
-      if (nx !== state.x || ny !== state.y) {
-        state.x = nx;
-        state.y = ny;
-        card.style.left = nx + 'px';
-        card.style.top = ny + 'px';
-        changed = true;
-      }
-    });
-    if (changed) saveLayout();
-  }
-
-  function arrangeInGrid(sections, forceCollapse) {
-    var size = workspaceSize();
-    var W = size.W;
-    var H = size.H;
-    var count = sections.length;
-    if (count === 0) return;
-
-    var cols = count === 1 ? 1 : (count <= 4 ? 2 : (count <= 9 ? 3 : 4));
-    var rows = Math.ceil(count / cols);
-    var padX = 16;
-    var padY = 16;
-    var cellW = (W - padX * 2) / cols;
-    var cellH = (H - padY * 2) / rows;
-    var cardW = Math.min(240, cellW - 16);
-    var cardH = 48;
-
-    sections.forEach(function(sec, i) {
-      if (!layout[sec.key]) layout[sec.key] = { collapsed: true };
-      var col = i % cols;
-      var row = Math.floor(i / cols);
-      var cx = padX + col * cellW + (cellW - cardW) / 2;
-      var cy = padY + row * cellH + Math.max(0, (cellH - cardH) / 2);
-      layout[sec.key].x = Math.max(8, Math.round(cx));
-      layout[sec.key].y = Math.max(8, Math.round(cy));
-      layout[sec.key].z = i + 1;
-      if (forceCollapse) layout[sec.key].collapsed = true;
-    });
-
-    topZ = Math.max(topZ, count);
+  function toggleCollapse(key, el) {
+    if (!layout[key]) return;
+    layout[key].collapsed = !layout[key].collapsed;
+    el.classList.toggle('collapsed', layout[key].collapsed);
+    saveLayout();
   }
 
   /* ======================= РЕНДЕР ======================= */
@@ -1500,7 +1512,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       e.stopPropagation();
       item.pinned = !item.pinned;
       var targetKey = item.pinned ? '__pinned' : (item.categoryId || '__uncat');
-      ensureLayout(targetKey, { collapsed: false });
       focusCategory(targetKey);
       save();
       render();
@@ -1529,61 +1540,57 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return row;
   }
 
-  function toggleCollapse(key, card) {
-    var state = layout[key];
-    if (!state) return;
-    state.collapsed = !state.collapsed;
-    card.classList.toggle('collapsed', state.collapsed);
-    saveLayout();
-    requestAnimationFrame(function () {
-      clampCard(key);
+  function setupSectionDrag(el, key) {
+    var toggleArea = el.querySelector('.section-toggle-area');
+    if (!toggleArea) return;
+
+    toggleArea.addEventListener('click', function (e) {
+      if (el.dataset.dragging === '1') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      toggleCollapse(key, el);
     });
-  }
 
-  function setupCardDrag(card, key) {
-    var header = card.querySelector('.category-header');
-    if (!header) return;
-
-    header.addEventListener('pointerdown', function (e) {
-      if (e.target.closest('.category-del')) return;
+    el.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('.section-del')) return;
+      if (e.target.closest('button') && !e.target.closest('.section-toggle-area')) return;
       if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
-      e.preventDefault();
 
       var pointerId = e.pointerId;
       var startX = e.clientX;
       var startY = e.clientY;
-      var startLeft = layout[key] ? layout[key].x : 0;
-      var startTop = layout[key] ? layout[key].y : 0;
-      var hasMoved = false;
+      var state = layout[key];
+      if (!state) return;
+      var startLeft = state.x;
+      var startTop = state.y;
+      var moved = false;
 
-      // Bring to front on interaction
-      if (layout[key]) {
-        layout[key].z = ++topZ;
-        card.style.zIndex = layout[key].z;
-        saveLayout();
-      }
+      raiseSection(key);
+      el.style.zIndex = state.z;
+      el.dataset.dragging = '0';
 
       function onMove(ev) {
         if (ev.pointerId !== pointerId) return;
         var dx = ev.clientX - startX;
         var dy = ev.clientY - startY;
-        if (!hasMoved && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
-          hasMoved = true;
-          card.classList.add('dragging');
+        if (!moved && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+          moved = true;
+          el.classList.add('dragging');
+          el.dataset.dragging = '1';
         }
-        if (!hasMoved) return;
+        if (!moved) return;
 
-        var size = workspaceSize();
-        var cw = card.offsetWidth;
-        var ch = card.offsetHeight;
-        var nx = Math.max(0, Math.min(startLeft + dx, size.W - cw));
-        var ny = Math.max(0, Math.min(startTop + dy, size.H - ch));
-        card.style.left = nx + 'px';
-        card.style.top = ny + 'px';
-        if (layout[key]) {
-          layout[key].x = nx;
-          layout[key].y = ny;
-        }
+        var wsW = workspace.clientWidth;
+        var elW = el.offsetWidth;
+        var nx = Math.max(0, Math.min(startLeft + dx, wsW - elW));
+        var ny = Math.max(0, startTop + dy);
+
+        el.style.left = nx + 'px';
+        el.style.top = ny + 'px';
+        state.x = nx;
+        state.y = ny;
       }
 
       function onUp(ev) {
@@ -1591,113 +1598,138 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         document.removeEventListener('pointermove', onMove);
         document.removeEventListener('pointerup', onUp);
         document.removeEventListener('pointercancel', onUp);
-        try { header.releasePointerCapture(pointerId); } catch(err) {}
 
-        if (hasMoved) {
-          card.classList.remove('dragging');
+        el.classList.remove('dragging');
+        if (moved) {
           saveLayout();
-        } else {
-          toggleCollapse(key, card);
+          setTimeout(function() { el.dataset.dragging = '0'; }, 60);
         }
       }
 
-      try { header.setPointerCapture(pointerId); } catch(err) {}
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
       document.addEventListener('pointercancel', onUp);
     });
   }
 
-  function createCategoryCard(sec) {
-    ensureLayout(sec.key);
+  function createSectionEl(sec) {
+    var el = document.createElement('div');
+    el.className = 'section';
+    el.dataset.key = sec.key;
+
     var state = layout[sec.key];
+    if (state && state.collapsed) el.classList.add('collapsed');
 
-    var card = document.createElement('div');
-    card.className = 'category-card' + (state.collapsed ? ' collapsed' : '');
-    card.dataset.key = sec.key;
-    card.style.left = state.x + 'px';
-    card.style.top = state.y + 'px';
-    card.style.zIndex = state.z;
+    var head = document.createElement('div');
+    head.className = 'section-head';
 
-    var header = document.createElement('div');
-    header.className = 'category-header';
+    var toggleArea = document.createElement('button');
+    toggleArea.type = 'button';
+    toggleArea.className = 'section-toggle-area';
+    toggleArea.setAttribute('aria-label', 'Свернуть/развернуть «' + sec.name + '»');
+    toggleArea.innerHTML = CHEVRON_SVG;
 
-    var nameEl = document.createElement('span');
-    nameEl.className = 'category-name';
-    nameEl.textContent = sec.name;
+    var nameElSec = document.createElement('span');
+    nameElSec.className = 'section-name';
+    nameElSec.textContent = sec.name;
 
     var countEl = document.createElement('span');
-    countEl.className = 'category-count';
+    countEl.className = 'section-count';
     countEl.textContent = sec.items.length;
 
-    header.appendChild(nameEl);
-    header.appendChild(countEl);
+    toggleArea.appendChild(nameElSec);
+    toggleArea.appendChild(countEl);
+    head.appendChild(toggleArea);
 
     if (!sec.isSpecial && sec.category) {
-      var delCatBtn = document.createElement('button');
-      delCatBtn.type = 'button';
-      delCatBtn.className = 'category-del';
-      delCatBtn.setAttribute('aria-label', 'Удалить категорию');
-      delCatBtn.innerHTML = X_SVG;
-      delCatBtn.addEventListener('click', function (e) {
+      var delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'section-del';
+      delBtn.setAttribute('aria-label', 'Удалить категорию');
+      delBtn.innerHTML = X_SVG;
+      delBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         deleteCategory(sec.category.id);
       });
-      header.appendChild(delCatBtn);
+      head.appendChild(delBtn);
     }
 
-    var body = document.createElement('div');
-    body.className = 'category-body';
+    el.appendChild(head);
 
+    var wrap = document.createElement('div');
+    wrap.className = 'section-items';
     if (sec.items.length === 0) {
-      var empty = document.createElement('div');
-      empty.className = 'category-empty';
-      empty.textContent = 'Пусто — добавьте кнопку';
-      body.appendChild(empty);
+      var hint = document.createElement('div');
+      hint.className = 'section-empty';
+      hint.textContent = 'Пока пусто — добавьте сюда кнопку';
+      wrap.appendChild(hint);
     } else {
-      sec.items.forEach(function (it) {
-        body.appendChild(createItemEl(it));
-      });
+      sec.items.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
     }
+    el.appendChild(wrap);
 
-    card.appendChild(header);
-    card.appendChild(body);
+    setupSectionDrag(el, sec.key);
+    return el;
+  }
 
-    setupCardDrag(card, sec.key);
-
-    return card;
+  function computeDefaultLayout() {
+    var wsW = workspace.clientWidth || Math.min(400, window.innerWidth - 40);
+    var y = 8;
+    var els = workspace.querySelectorAll('.section');
+    els.forEach(function(el) {
+      var key = el.dataset.key;
+      var elW = el.offsetWidth || 320;
+      var x = Math.max(8, Math.round((wsW - elW) / 2));
+      if (!layout[key]) layout[key] = {};
+      layout[key].x = x;
+      layout[key].y = y;
+      if (!layout[key].z) layout[key].z = ++topZ;
+      y += el.offsetHeight + 8;
+    });
+    topZ += els.length;
+    saveLayout();
   }
 
   function render() {
-    var sections = getCurrentSections();
-
-    // Ensure layout for all sections
-    var changed = false;
-    if (!firstLayoutInit && sections.length > 0) {
-      // First time with new layout system — arrange all in grid
-      arrangeInGrid(sections, true);
-      changed = true;
-      firstLayoutInit = true;
-    } else {
-      sections.forEach(function(sec) {
-        if (ensureLayout(sec.key)) changed = true;
-      });
-    }
-    if (changed) saveLayout();
-
-    // Render cards
+    pruneLayout();
     workspace.innerHTML = '';
-    sections.forEach(function(sec) {
-      workspace.appendChild(createCategoryCard(sec));
-    });
 
-    // Empty state
+    var sections = getSections();
     if (sections.length === 0) {
       var emptyEl = document.createElement('div');
       emptyEl.className = 'workspace-empty';
       emptyEl.innerHTML = 'Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.';
       workspace.appendChild(emptyEl);
+      return;
     }
+
+    // Ensure layout exists for all sections
+    var needsDefaults = false;
+    sections.forEach(function(sec) {
+      if (!layout[sec.key] || typeof layout[sec.key].x !== 'number' || typeof layout[sec.key].y !== 'number') {
+        needsDefaults = true;
+      }
+    });
+
+    var els = [];
+    sections.forEach(function(sec) {
+      var el = createSectionEl(sec);
+      workspace.appendChild(el);
+      els.push({ sec: sec, el: el });
+    });
+
+    if (needsDefaults) {
+      computeDefaultLayout();
+    }
+
+    // Apply positions
+    els.forEach(function(pair) {
+      var state = layout[pair.sec.key];
+      if (!state) return;
+      pair.el.style.left = state.x + 'px';
+      pair.el.style.top = state.y + 'px';
+      pair.el.style.zIndex = state.z || 1;
+    });
   }
 
   /* ======================= ДОБАВЛЕНИЕ КНОПКИ ======================= */
@@ -1710,10 +1742,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
     items.unshift({ id: genId(), name: name, text: text, pinned: false, categoryId: categoryId });
     save();
-
-    ensureLayout(targetKey, { collapsed: false });
     focusCategory(targetKey);
-
     render();
     textEl.value = '';
     nameEl.value = '';
@@ -1734,7 +1763,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     newCatBtn.classList.toggle('open', willOpen);
     if (willOpen) { newCatInput.value = ''; newCatInput.focus(); }
   });
-
   function submitNewCategory() {
     var name = newCatInput.value.trim();
     if (!name) { shake(newCatInput); newCatInput.focus(); return; }
@@ -1744,10 +1772,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var cat = { id: genId(), name: name };
     categories.push(cat);
     save();
-
-    ensureLayout(cat.id, { collapsed: false });
     focusCategory(cat.id);
-
     updateCategorySelect();
     catSelect.value = cat.id;
     newCatRow.hidden = true;
@@ -1760,7 +1785,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   newCatInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); submitNewCategory(); }
   });
-
   function deleteCategory(id) {
     var cat = categories.find(function (c) { return c.id === id; });
     if (!cat) return;
@@ -1777,16 +1801,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Категория удалена');
   }
 
-  /* ======================= RESET LAYOUT ======================= */
-  function resetLayout() {
-    var sections = getCurrentSections();
+  /* ======================= СБРОС ПОЗИЦИЙ ======================= */
+  resetLayoutBtn.addEventListener('click', function () {
+    var sections = getSections();
     if (sections.length === 0) { showToast('Нечего упорядочивать'); return; }
-    arrangeInGrid(sections, false);
-    saveLayout();
+    Object.keys(layout).forEach(function(k) { delete layout[k]; });
     render();
+    saveLayout();
     showToast('Позиции сброшены');
-  }
-  resetLayoutBtn.addEventListener('click', resetLayout);
+  });
 
   /* ======================= ЗАМЕТКИ ======================= */
   var topZNotes = 100;
@@ -1797,20 +1820,17 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var vp = getViewportSize();
     var w = Math.min(280, vp.w - 32);
     var h = 220;
-    var maxX = Math.max(8, vp.w - w - 8);
-    var maxY = Math.max(60, vp.h - h - 8);
     return {
-      x: Math.max(8, Math.min(Math.round(x), maxX)),
-      y: Math.max(60, Math.min(Math.round(y), maxY))
+      x: Math.max(8, Math.min(Math.round(x), Math.max(8, vp.w - w - 8))),
+      y: Math.max(60, Math.min(Math.round(y), Math.max(60, vp.h - h - 8)))
     };
   }
   function defaultNotePosition(index) {
     var vp = getViewportSize();
-    var staggerX = (index * 30) % 120;
-    var staggerY = (index * 24) % 100;
-    var x = vp.w / 2 - 140 + staggerX - 60;
-    var y = vp.h / 2 - 110 + staggerY - 50;
-    return clampNotePosition(x, y);
+    return clampNotePosition(
+      vp.w / 2 - 140 + (index * 30) % 120 - 60,
+      vp.h / 2 - 110 + (index * 24) % 100 - 50
+    );
   }
 
   function createNoteElement(note) {
@@ -1848,34 +1868,26 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         var saveBtn = document.createElement('button');
         saveBtn.type = 'button';
         saveBtn.className = 'note-action-btn save';
-        saveBtn.setAttribute('aria-label', 'Сохранить');
         saveBtn.textContent = '✓';
         saveBtn.addEventListener('click', function () { commitEdit(note, el); });
-
         var cancelBtn = document.createElement('button');
         cancelBtn.type = 'button';
         cancelBtn.className = 'note-action-btn del';
-        cancelBtn.setAttribute('aria-label', 'Отменить');
         cancelBtn.textContent = '✕';
         cancelBtn.addEventListener('click', function () { cancelEdit(note, el); });
-
         actionsEl.appendChild(cancelBtn);
         actionsEl.appendChild(saveBtn);
       } else {
         var editBtn = document.createElement('button');
         editBtn.type = 'button';
         editBtn.className = 'note-action-btn';
-        editBtn.setAttribute('aria-label', 'Редактировать');
         editBtn.textContent = '✏️';
         editBtn.addEventListener('click', function () { enterEdit(note, el); });
-
         var delBtn = document.createElement('button');
         delBtn.type = 'button';
         delBtn.className = 'note-action-btn del';
-        delBtn.setAttribute('aria-label', 'Удалить');
         delBtn.textContent = '✕';
         delBtn.addEventListener('click', function () { deleteNote(note, el); });
-
         actionsEl.appendChild(editBtn);
         actionsEl.appendChild(delBtn);
       }
@@ -1933,9 +1945,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
     function onMove(ev) {
       if (ev.pointerId !== e.pointerId) return;
-      var dx = ev.clientX - startX;
-      var dy = ev.clientY - startY;
-      var p = clampNotePosition(origX + dx, origY + dy);
+      var p = clampNotePosition(origX + ev.clientX - startX, origY + ev.clientY - startY);
       el.style.left = p.x + 'px';
       el.style.top = p.y + 'px';
     }
@@ -1965,13 +1975,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var saveBtn = document.createElement('button');
     saveBtn.type = 'button';
     saveBtn.className = 'note-action-btn save';
-    saveBtn.setAttribute('aria-label', 'Сохранить');
     saveBtn.textContent = '✓';
     saveBtn.addEventListener('click', function () { commitEdit(note, el); });
     var cancelBtn = document.createElement('button');
     cancelBtn.type = 'button';
     cancelBtn.className = 'note-action-btn del';
-    cancelBtn.setAttribute('aria-label', 'Отменить');
     cancelBtn.textContent = '✕';
     cancelBtn.addEventListener('click', function () { cancelEdit(note, el); });
     actionsEl.appendChild(cancelBtn);
@@ -1992,22 +2000,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     editingNoteId = null;
     el.classList.remove('editing');
     el.querySelector('.note-view').textContent = note.text;
-    var actionsEl = el.querySelector('.note-actions');
-    actionsEl.innerHTML = '';
-    var editBtn = document.createElement('button');
-    editBtn.type = 'button';
-    editBtn.className = 'note-action-btn';
-    editBtn.setAttribute('aria-label', 'Редактировать');
-    editBtn.textContent = '✏️';
-    editBtn.addEventListener('click', function () { enterEdit(note, el); });
-    var delBtn = document.createElement('button');
-    delBtn.type = 'button';
-    delBtn.className = 'note-action-btn del';
-    delBtn.setAttribute('aria-label', 'Удалить');
-    delBtn.textContent = '✕';
-    delBtn.addEventListener('click', function () { deleteNote(note, el); });
-    actionsEl.appendChild(editBtn);
-    actionsEl.appendChild(delBtn);
+    renderNoteButtons(note, el);
     saveNotes();
     showToast('Заметка сохранена');
   }
@@ -2016,18 +2009,20 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     if (!note.text) { removeNoteById(note.id, el); return; }
     editingNoteId = null;
     el.classList.remove('editing');
+    renderNoteButtons(note, el);
+  }
+
+  function renderNoteButtons(note, el) {
     var actionsEl = el.querySelector('.note-actions');
     actionsEl.innerHTML = '';
     var editBtn = document.createElement('button');
     editBtn.type = 'button';
     editBtn.className = 'note-action-btn';
-    editBtn.setAttribute('aria-label', 'Редактировать');
     editBtn.textContent = '✏️';
     editBtn.addEventListener('click', function () { enterEdit(note, el); });
     var delBtn = document.createElement('button');
     delBtn.type = 'button';
     delBtn.className = 'note-action-btn del';
-    delBtn.setAttribute('aria-label', 'Удалить');
     delBtn.textContent = '✕';
     delBtn.addEventListener('click', function () { deleteNote(note, el); });
     actionsEl.appendChild(editBtn);
@@ -2083,8 +2078,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
-      var els = notesLayer.querySelectorAll('.note-window');
-      els.forEach(function (el) {
+      var vp = getViewportSize();
+      notesLayer.querySelectorAll('.note-window').forEach(function (el) {
         var note = notes.find(function (n) { return n.id === el.dataset.id; });
         if (!note) return;
         var p = clampNotePosition(note.x, note.y);
@@ -2094,7 +2089,21 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         el.style.top = p.y + 'px';
       });
       saveNotes();
-      reclampAll();
+
+      var wsW = workspace.clientWidth;
+      var changed = false;
+      Object.keys(layout).forEach(function(key) {
+        var state = layout[key];
+        var el = workspace.querySelector('.section[data-key="' + key + '"]');
+        if (!el) return;
+        var elW = el.offsetWidth;
+        if (state.x > wsW - elW) {
+          state.x = Math.max(0, wsW - elW);
+          el.style.left = state.x + 'px';
+          changed = true;
+        }
+      });
+      if (changed) saveLayout();
     }, 120);
   });
 
@@ -2109,7 +2118,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       document.body.classList.remove('modal-open');
     }
   }
-  [infoModal, gameModal].forEach(function (modal) {
+  [infoModal, settingsModal, gameModal].forEach(function (modal) {
     modal.addEventListener('click', function (e) {
       if (e.target === modal) closeModal(modal);
     });
@@ -2117,15 +2126,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       if (gameModal.classList.contains('open')) closeModal(gameModal);
+      else if (settingsModal.classList.contains('open')) closeModal(settingsModal);
       else if (infoModal.classList.contains('open')) closeModal(infoModal);
     }
   });
 
-  infoFab.addEventListener('click', function () {
-    openModal(infoModal);
-    setTimeout(function () { infoClose.focus(); }, 120);
-  });
+  infoFab.addEventListener('click', function () { openModal(infoModal); setTimeout(function () { infoClose.focus(); }, 120); });
   infoClose.addEventListener('click', function () { closeModal(infoModal); });
+  settingsBtn.addEventListener('click', function () { openModal(settingsModal); });
+  settingsClose.addEventListener('click', function () { closeModal(settingsModal); });
 
   /* ======================= ФОНОВЫЕ ДВИЖКИ ======================= */
   var activeBgEngine = null;
@@ -2134,11 +2143,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0;
-    var particles = [];
+    var w = 0, h = 0, particles = [], raf = null, running = true;
     var mouse = { x: -9999, y: -9999, active: false };
-    var raf = null;
-    var running = true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var dotColor = isDark ? 'rgba(180,210,255,0.9)' : 'rgba(40,80,180,0.7)';
     var lineRGB = isDark ? '160,200,255' : '40,80,180';
@@ -2230,10 +2236,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0;
-    var stars = [];
-    var raf = null;
-    var running = true;
+    var w = 0, h = 0, stars = [], raf = null, running = true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var starColor = isDark ? 'rgba(220,232,255,' : 'rgba(40,70,150,';
     var trailColor = isDark ? 'rgba(160,195,255,' : 'rgba(50,90,180,';
@@ -2319,10 +2322,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0;
-    var blobs = [];
-    var raf = null;
-    var running = true;
+    var w = 0, h = 0, blobs = [], raf = null, running = true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var blendMode = isDark ? 'lighter' : 'source-over';
     var colors = isDark
@@ -2424,10 +2424,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = 0, h = 0;
-    var particles = [];
-    var raf = null;
-    var running = true;
+    var w = 0, h = 0, particles = [], raf = null, running = true;
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var palette = isDark
       ? [[100,180,255], [200,120,255], [80,220,220], [255,150,200], [180,150,255], [120,220,180]]
@@ -2436,8 +2433,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var mouseSmooth = { x: -9999, y: -9999 };
     var mouseActive = false;
     var t0 = performance.now();
-    var NUM = 0;
-    var IR = 250, IR2 = IR * IR;
+    var NUM = 0, IR = 250, IR2 = IR * IR;
 
     function resize() {
       w = window.innerWidth; h = window.innerHeight;
@@ -2574,7 +2570,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     purchasedThemes: ['default'], activeTheme: 'default',
     lastTick: Date.now(), perClick: 1, perSecond: 0
   };
-
   try {
     var rawGame = JSON.parse(localStorage.getItem(GAME_KEY));
     if (rawGame && typeof rawGame === 'object') {
@@ -2665,8 +2660,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     gamePerSecEl.textContent = formatNum(gameState.perSecond);
     gameClickLbl.textContent = 'Кликни +' + formatNum(gameState.perClick);
 
-    var btns = gameUpgradesEl.querySelectorAll('.game-upgrade');
-    btns.forEach(function (btn) {
+    gameUpgradesEl.querySelectorAll('.game-upgrade').forEach(function (btn) {
       var id = btn.dataset.id;
       var up = UPGRADES.find(function (u) { return u.id === id; });
       if (!up) return;
@@ -2677,8 +2671,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       btn.disabled = gameState.score < cost;
     });
 
-    var themeBtns = gameThemesEl.querySelectorAll('.game-theme');
-    themeBtns.forEach(function (btn) {
+    gameThemesEl.querySelectorAll('.game-theme').forEach(function (btn) {
       var id = btn.dataset.id;
       var theme = THEMES.find(function (t) { return t.id === id; });
       if (!theme) return;
@@ -2886,7 +2879,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   updateAddState();
   renderNotes();
 
-  // Initial render after layout is ready
   requestAnimationFrame(function () {
     render();
     if (cursorGlow) {
