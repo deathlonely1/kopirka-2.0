@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
 <style>
-/* ======================= ТЕМЫ (light/dark) ======================= */
+/* ======================= ТЕМЫ ======================= */
 :root{
   color-scheme: light;
   --bg:#eef1f7;
@@ -62,8 +62,6 @@
   --modal-bg:rgba(24,24,28,.94);
   --cursor-glow:rgba(120,150,255,.28);
 }
-
-/* ======================= ФОНОВЫЕ ТЕМЫ (blobs) ======================= */
 html[data-bgtheme="ocean"]{
   --blob1:#00b4d8;--blob2:#0077b6;--blob3:#90e0ef;--blob4:#48cae4;
 }
@@ -73,17 +71,15 @@ html[data-bgtheme="ocean"][data-theme="dark"]{
 
 /* ======================= БАЗА ======================= */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html,body{height:100%;margin:0;overflow:hidden}
 body{
-  margin:0;
   font-family:'Manrope',-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
   background:var(--bg);
   color:var(--text);
-  min-height:100vh;
-  min-height:100dvh;
   display:flex;
   flex-direction:column;
-  overflow-x:hidden;
+  height:100vh;
+  height:100dvh;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   transition:background .45s ease, color .3s ease;
@@ -91,7 +87,7 @@ body{
 body.intro-open,
 body.modal-open{overflow:hidden}
 
-/* ======================= ФОН: BLOBS ======================= */
+/* ======================= ФОН ======================= */
 .bg-blobs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 .blob{
   position:absolute;border-radius:50%;filter:blur(80px);
@@ -105,36 +101,22 @@ body.modal-open{overflow:hidden}
 .blob-4{width:380px;height:380px;background:var(--blob4);top:60%;left:-8%}
 
 .cursor-glow{
-  position:fixed;
-  top:0;left:0;
-  width:440px;height:440px;
-  margin-left:-220px;margin-top:-220px;
+  position:fixed;top:0;left:0;
+  width:440px;height:440px;margin-left:-220px;margin-top:-220px;
   background:radial-gradient(circle,var(--cursor-glow) 0%,transparent 62%);
-  pointer-events:none;
-  z-index:-1;
-  will-change:transform;
+  pointer-events:none;z-index:-1;will-change:transform;
   transition:background .5s ease;
 }
-@media (hover:none){
-  .cursor-glow{display:none}
-}
+@media (hover:none){.cursor-glow{display:none}}
 
-/* ======================= ФОН: CANVAS ======================= */
 .bg-canvas{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:-1;
-  display:none;
-  pointer-events:none;
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:-1;display:none;pointer-events:none;
 }
 html[data-bgtheme="constellations"] .bg-canvas,
 html[data-bgtheme="starfield"] .bg-canvas,
 html[data-bgtheme="magma"] .bg-canvas,
-html[data-bgtheme="flow"] .bg-canvas{
-  display:block;
-}
+html[data-bgtheme="flow"] .bg-canvas{display:block}
 html[data-bgtheme="constellations"] .bg-blobs,
 html[data-bgtheme="starfield"] .bg-blobs,
 html[data-bgtheme="magma"] .bg-blobs,
@@ -142,9 +124,7 @@ html[data-bgtheme="flow"] .bg-blobs,
 html[data-bgtheme="constellations"] .cursor-glow,
 html[data-bgtheme="starfield"] .cursor-glow,
 html[data-bgtheme="magma"] .cursor-glow,
-html[data-bgtheme="flow"] .cursor-glow{
-  display:none;
-}
+html[data-bgtheme="flow"] .cursor-glow{display:none}
 
 /* ======================= ИНТРО ======================= */
 .intro{
@@ -154,9 +134,7 @@ html[data-bgtheme="flow"] .cursor-glow{
     radial-gradient(circle at 22% 18%, var(--blob1), transparent 55%),
     radial-gradient(circle at 82% 82%, var(--blob2), transparent 55%),
     var(--bg);
-  opacity:1;
-  transition:opacity .55s ease;
-  cursor:pointer;
+  opacity:1;transition:opacity .55s ease;cursor:pointer;
 }
 .intro.hidden{opacity:0;pointer-events:none}
 .intro-inner{
@@ -168,36 +146,24 @@ html[data-bgtheme="flow"] .cursor-glow{
   animation:introLogoIn .9s cubic-bezier(.2,.9,.3,1.15) both;
 }
 .intro-title{
-  font-family:'Unbounded','Manrope',sans-serif;
-  font-weight:600;
-  font-size:clamp(26px, 7vw, 38px);
-  letter-spacing:-.02em;
+  font-family:'Unbounded','Manrope',sans-serif;font-weight:600;
+  font-size:clamp(26px, 7vw, 38px);letter-spacing:-.02em;
   background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
   animation:introTextIn .8s .22s ease both;
 }
 .intro-tag{
-  font-size:14px;
-  font-weight:500;
-  color:var(--text-2);
-  max-width:320px;
-  line-height:1.45;
+  font-size:14px;font-weight:500;color:var(--text-2);
+  max-width:320px;line-height:1.45;
   animation:introTextIn .8s .48s ease both;
 }
-@keyframes introLogoIn{
-  from{opacity:0;transform:scale(.6) rotate(-8deg)}
-  to{opacity:1;transform:none}
-}
-@keyframes introTextIn{
-  from{opacity:0;transform:translateY(14px)}
-  to{opacity:1;transform:none}
-}
+@keyframes introLogoIn{from{opacity:0;transform:scale(.6) rotate(-8deg)}to{opacity:1;transform:none}}
+@keyframes introTextIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
 /* ======================= ШАПКА ======================= */
 .topbar{
-  position:sticky;top:0;z-index:20;
+  flex:0 0 auto;
+  position:relative;z-index:20;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px 20px;
   background:linear-gradient(to bottom, var(--bg) 20%, transparent);
@@ -209,16 +175,11 @@ html[data-bgtheme="flow"] .cursor-glow{
   border-radius:11px;
 }
 .brand-name{
-  font-family:'Unbounded','Manrope',sans-serif;
-  font-weight:600;
-  font-size:18px;
-  letter-spacing:-.02em;
-  line-height:1;
+  font-family:'Unbounded','Manrope',sans-serif;font-weight:600;
+  font-size:18px;letter-spacing:-.02em;line-height:1;
   white-space:nowrap;
   background:linear-gradient(120deg,var(--brand-a),var(--brand-b));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .brand-name .ver{font-size:.78em;opacity:.9}
 .topbar-actions{display:flex;align-items:center;gap:8px}
@@ -235,45 +196,45 @@ html[data-bgtheme="flow"] .cursor-glow{
   -webkit-backdrop-filter:blur(24px) saturate(180%);
   box-shadow:var(--shadow);
   transition:transform .18s ease, background .3s ease;
-  font-size:20px;
-  line-height:1;
+  font-size:20px;line-height:1;
 }
 .theme-toggle:active{transform:scale(.9)}
 .theme-toggle svg{transition:transform .45s cubic-bezier(.4,0,.2,1), opacity .3s}
 [data-theme="light"] .icon-moon{display:none}
 [data-theme="dark"]  .icon-sun{display:none}
 
-/* ======================= КОНТЕЙНЕР ======================= */
+/* ======================= MAIN / WORKSPACE ======================= */
 main{
-  flex:1 0 auto;
-  width:100%;
-  max-width:640px;
-  margin:0 auto;
-  padding:6px 20px 140px;
+  flex:1 1 auto;
   display:flex;
   flex-direction:column;
-  gap:18px;
+  overflow:hidden;
+  padding:6px 20px 20px;
+  gap:12px;
+  position:relative;
+  min-height:0;
 }
 
-/* ======================= КАРТОЧКА ВВОДА (сворачиваемая) ======================= */
+/* ======================= КАРТОЧКА ВВОДА ======================= */
 .composer{
+  flex:0 0 auto;
+  max-width:640px;
+  margin:0 auto;
+  width:100%;
   display:flex;flex-direction:column;
-  padding:14px;
-  border-radius:26px;
+  padding:14px;border-radius:26px;
   background:var(--card);
   border:1px solid var(--card-border);
   backdrop-filter:blur(30px) saturate(180%);
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
   transition:background .25s ease, border-color .25s ease, box-shadow .25s ease, padding .22s ease;
+  position:relative;z-index:5;
 }
 .composer-head{
   display:flex;align-items:center;justify-content:space-between;
-  gap:10px;
-  padding:0 2px;
-  cursor:pointer;
-  user-select:none;
-  -webkit-user-select:none;
+  gap:10px;padding:0 2px;cursor:pointer;
+  user-select:none;-webkit-user-select:none;
 }
 .composer-title{
   font-size:12.5px;font-weight:700;text-transform:uppercase;
@@ -284,47 +245,27 @@ main{
   flex:0 0 28px;width:28px;height:28px;
   border:none;border-radius:50%;
   background:var(--field);color:var(--text-2);
-  cursor:pointer;
-  display:grid;place-items:center;
-  padding:0;
+  cursor:pointer;display:grid;place-items:center;padding:0;
   transition:background .2s ease, color .2s ease;
 }
-.composer-head:hover .composer-toggle{
-  background:var(--field-hover);color:var(--text);
-}
-.composer-toggle svg{transition:transform .32s cubic-bezier(.2,.9,.3,1.05);}
-.composer-body{
-  display:flex;flex-direction:column;gap:10px;
-  margin-top:10px;
-}
-.composer:not(.collapsed) .composer-body{
-  animation:composerIn .26s cubic-bezier(.2,.9,.3,1.15);
-}
-@keyframes composerIn{
-  from{opacity:0;transform:scale(.985) translateY(-3px)}
-  to{opacity:1;transform:none}
-}
+.composer-head:hover .composer-toggle{background:var(--field-hover);color:var(--text)}
+.composer-toggle svg{transition:transform .32s cubic-bezier(.2,.9,.3,1.05)}
+.composer-body{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.composer:not(.collapsed) .composer-body{animation:composerIn .26s cubic-bezier(.2,.9,.3,1.15)}
+@keyframes composerIn{from{opacity:0;transform:scale(.985) translateY(-3px)}to{opacity:1;transform:none}}
 .composer.collapsed{
-  background:var(--field);
-  border-color:transparent;
-  box-shadow:none;
-  padding:11px 14px;
+  background:var(--field);border-color:transparent;
+  box-shadow:none;padding:11px 14px;
 }
 .composer.collapsed .composer-title{
-  text-transform:none;
-  font-size:13.5px;
-  letter-spacing:-.005em;
-  color:var(--text);
+  text-transform:none;font-size:13.5px;letter-spacing:-.005em;color:var(--text);
 }
 .composer.collapsed .composer-title::before{
-  content:'＋ ';
-  font-weight:800;
-  color:var(--accent);
-  margin-right:1px;
+  content:'＋ ';font-weight:800;color:var(--accent);margin-right:1px;
 }
-.composer.collapsed .composer-toggle{background:transparent;}
-.composer.collapsed .composer-toggle svg{transform:rotate(180deg);}
-.composer.collapsed .composer-body{display:none;}
+.composer.collapsed .composer-toggle{background:transparent}
+.composer.collapsed .composer-toggle svg{transform:rotate(180deg)}
+.composer.collapsed .composer-body{display:none}
 
 /* ======================= ПОЛЯ ======================= */
 .field{
@@ -352,13 +293,11 @@ textarea.field{
 .confirm:active{transform:scale(.93)}
 .confirm:disabled{opacity:.38;box-shadow:none;cursor:default}
 .confirm:disabled:active{transform:none}
-
 .select-wrap{position:relative;flex:1 1 auto;min-width:0;display:flex}
 .select-wrap::after{
   content:'';position:absolute;right:16px;top:50%;
   width:9px;height:9px;margin-top:-6px;transform:rotate(45deg);
-  border-right:2px solid var(--text-3);
-  border-bottom:2px solid var(--text-3);
+  border-right:2px solid var(--text-3);border-bottom:2px solid var(--text-3);
   pointer-events:none;
 }
 select.field{appearance:none;-webkit-appearance:none;padding-right:40px;cursor:pointer}
@@ -375,112 +314,153 @@ select.field option{background:var(--bg);color:var(--text)}
 .cat-add svg{transition:transform .3s ease}
 .cat-add.open svg{transform:rotate(45deg)}
 
-/* ======================= СПИСОК / СЕКЦИИ ======================= */
-.list{display:flex;flex-direction:column;gap:18px}
-
-.section{display:flex;flex-direction:column;gap:6px}
-.section-head{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-.section-toggle-area{
+/* ======================= WORKSPACE ======================= */
+.workspace{
   flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 8px;
-  margin:0;
-  border:none;
-  border-radius:10px;
-  background:transparent;
-  color:inherit;
-  font:inherit;
-  text-align:left;
-  cursor:pointer;
-  transition:background .18s ease;
-  -webkit-user-select:none;
-  user-select:none;
-}
-.section-toggle-area:hover{
-  background:var(--field);
-}
-.section-toggle-icon{
-  flex:0 0 14px;
-  width:14px;
-  height:14px;
-  color:var(--text-3);
-  transition:transform .28s cubic-bezier(.2,.9,.3,1.05), color .18s ease;
-}
-.section-toggle-area:hover .section-toggle-icon{
-  color:var(--text-2);
-}
-.section.collapsed .section-toggle-icon{
-  transform:rotate(-90deg);
-}
-.section-name{
-  font-size:12.5px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--text-2);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  min-width:0;
-}
-.section-count{
-  font-size:11px;font-weight:600;color:var(--text-3);
-  background:var(--field);padding:1px 7px;border-radius:999px;
-  flex:0 0 auto;
-  transition:background .18s ease;
-}
-.section-toggle-area:hover .section-count{
-  background:var(--card);
-}
-.section-del{
-  flex:0 0 26px;
-  width:26px;height:26px;
-  border:none;border-radius:50%;
-  background:transparent;color:var(--text-3);
-  cursor:pointer;
-  display:grid;place-items:center;
-  padding:0;
-  transition:background .2s ease, color .2s ease, transform .15s ease;
-}
-.section-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
-.section-del:active{transform:scale(.9)}
-.section-items{display:flex;flex-direction:column;gap:8px}
-.section.collapsed .section-items{display:none}
-.section-empty{
-  padding:16px;text-align:center;font-size:13px;font-weight:500;
-  color:var(--text-3);border:1.5px dashed var(--dash);border-radius:16px;
+  position:relative;
+  overflow:hidden;
+  min-height:0;
 }
 
-.item{
-  display:flex;align-items:center;gap:2px;padding:6px;border-radius:20px;
-  background:var(--card);border:1px solid var(--card-border);
+.workspace-empty{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:calc(100% - 40px);max-width:400px;
+  padding:40px 22px;text-align:center;
+  font-size:14px;font-weight:500;line-height:1.5;
+  color:var(--text-3);
+  border:1.5px dashed var(--dash);border-radius:24px;
+  pointer-events:none;
+}
+.workspace-empty.hidden{display:none}
+
+/* ======================= КАРТОЧКА КАТЕГОРИИ ======================= */
+.category-card{
+  position:absolute;
+  left:0;top:0;
+  display:flex;
+  flex-direction:column;
+  min-width:130px;
+  max-width:280px;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:20px;
   backdrop-filter:blur(30px) saturate(180%);
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
-  animation:pop .34s cubic-bezier(.2,.9,.3,1.15);
+  animation:cardIn .32s cubic-bezier(.2,.9,.3,1.15);
+  transition:box-shadow .2s ease;
+  will-change:left, top;
 }
-@keyframes pop{
-  from{opacity:0;transform:translateY(10px) scale(.97)}
-  to{opacity:1;transform:none}
+@keyframes cardIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+
+.category-card.dragging{
+  transition:none;
+  box-shadow:0 24px 60px rgba(0,0,0,.32), 0 4px 12px rgba(0,0,0,.12);
+  z-index:9999 !important;
 }
+
+.category-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 10px 10px 14px;
+  cursor:grab;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.category-card.dragging .category-header{cursor:grabbing}
+.category-header:active{cursor:grabbing}
+
+.category-name{
+  flex:1 1 auto;
+  font-size:13.5px;
+  font-weight:700;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  min-width:0;
+  color:var(--text);
+}
+.category-count{
+  flex:0 0 auto;
+  font-size:11px;
+  font-weight:600;
+  color:var(--text-3);
+  background:var(--field);
+  padding:1px 7px;
+  border-radius:999px;
+}
+.category-del{
+  flex:0 0 24px;
+  width:24px;height:24px;
+  border:none;border-radius:50%;
+  background:transparent;
+  color:var(--text-3);
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  padding:0;
+  margin-left:-2px;
+  transition:background .18s ease, color .18s ease, transform .15s ease;
+}
+.category-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
+.category-del:active{transform:scale(.9)}
+
+.category-body{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:0 8px 8px 8px;
+}
+.category-card.collapsed .category-body{display:none}
+
+.category-empty{
+  padding:14px 8px;
+  text-align:center;
+  font-size:12px;
+  font-weight:500;
+  color:var(--text-3);
+  border:1.5px dashed var(--dash);
+  border-radius:14px;
+}
+
+/* ======================= ITEM (кнопка внутри категории) ======================= */
+.item{
+  display:flex;align-items:center;gap:2px;
+  padding:4px;border-radius:12px;
+  background:var(--field);
+  border:none;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  animation:pop .3s cubic-bezier(.2,.9,.3,1.15);
+  min-width:0;
+}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .item.removing{animation:disappear .22s ease forwards}
-@keyframes disappear{to{opacity:0;transform:scale(.94);margin-bottom:-10px}}
+@keyframes disappear{to{opacity:0;transform:scale(.94);margin-bottom:-6px}}
+
 .item-main{
-  flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px;
-  text-align:left;padding:12px 14px;border:none;border-radius:14px;
-  background:transparent;color:var(--text);font-family:inherit;cursor:pointer;
+  flex:1 1 auto;min-width:0;
+  display:flex;flex-direction:column;gap:1px;
+  text-align:left;
+  padding:8px 10px;
+  border:none;border-radius:8px;
+  background:transparent;color:var(--text);
+  font-family:inherit;cursor:pointer;
   transition:background .18s ease;
 }
-.item-main:hover{background:var(--field)}
-.item-main:active{background:var(--field-hover)}
+.item-main:hover{background:var(--field-hover)}
+.item-main:active{background:var(--card-border)}
 .item-name{
-  font-size:15px;font-weight:700;letter-spacing:-.01em;
+  font-size:13px;font-weight:700;letter-spacing:-.005em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item-text{
-  font-size:12.5px;font-weight:500;color:var(--text-2);
+  font-size:11px;font-weight:500;color:var(--text-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item.copied{animation:pulse .42s ease}
@@ -488,23 +468,24 @@ select.field option{background:var(--bg);color:var(--text)}
   0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}
   100%{box-shadow:0 0 0 14px rgba(48,209,88,0)}
 }
+
 .item-pin,.item-del{
-  flex:0 0 32px;width:32px;height:32px;border:none;border-radius:50%;
-  display:grid;place-items:center;background:transparent;color:var(--text-3);
+  flex:0 0 26px;
+  width:26px;height:26px;
+  border:none;border-radius:50%;
+  display:grid;place-items:center;
+  background:transparent;
+  color:var(--text-3);
   cursor:pointer;
   transition:background .2s ease, color .2s ease, transform .15s ease;
 }
-.item-pin:hover{background:var(--field);color:var(--text)}
+.item-pin:hover{background:var(--card-border);color:var(--text)}
 .item-del:hover{background:rgba(255,59,48,.12);color:var(--danger)}
 .item-pin:active,.item-del:active{transform:scale(.88)}
 .item-pin.active{color:var(--accent)}
 .item-pin.active svg{fill:currentColor;fill-opacity:.16}
-
-.empty{
-  padding:44px 22px;text-align:center;font-size:14px;font-weight:500;
-  line-height:1.5;color:var(--text-3);
-  border:1.5px dashed var(--dash);border-radius:24px;
-}
+.item-pin svg{width:13px;height:13px}
+.item-del svg{width:12px;height:12px}
 
 /* ======================= ЗАМЕТКИ ======================= */
 .notes-layer{
@@ -525,10 +506,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
   animation:noteIn .28s cubic-bezier(.2,.9,.3,1.15);
 }
 @keyframes noteIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
-.note-window.dragging{
-  transition:none;
-  box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 12px rgba(0,0,0,.12);
-}
+.note-window.dragging{transition:none;box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 12px rgba(0,0,0,.12)}
 .note-window::before{
   content:'';position:absolute;left:0;top:14px;bottom:14px;
   width:3px;border-radius:0 3px 3px 0;
@@ -698,9 +676,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
   border-radius:12px;text-align:center;
 }
 .game-stats > div{flex:1 1 0;min-width:0}
-.game-stats strong{
-  display:block;color:var(--text);font-weight:700;font-size:13.5px;margin-top:2px;
-}
+.game-stats strong{display:block;color:var(--text);font-weight:700;font-size:13.5px;margin-top:2px}
 .game-section-label{
   font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
   color:var(--text-2);margin:8px 4px 8px;display:flex;align-items:center;gap:6px;
@@ -717,10 +693,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .game-upgrade:disabled{opacity:.55;cursor:default}
 .game-upgrade-icon{font-size:22px;flex:0 0 auto;line-height:1}
 .game-upgrade-body{flex:1 1 auto;min-width:0}
-.game-upgrade-name{
-  font-size:13px;font-weight:700;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.game-upgrade-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .game-upgrade-name .game-upgrade-level{
   font-size:10.5px;font-weight:600;color:var(--text-3);
   background:var(--card);padding:1px 6px;border-radius:999px;margin-left:4px;
@@ -748,10 +721,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 }
 .game-theme-swatch span{flex:1}
 .game-theme-body{flex:1 1 auto;min-width:0}
-.game-theme-name{
-  font-size:12.5px;font-weight:700;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
+.game-theme-name{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .game-theme-status{
   font-size:10.5px;font-weight:600;color:var(--text-2);
   margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
@@ -777,7 +747,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 
 /* ======================= ПОДВАЛ ======================= */
 footer{
-  position:fixed;left:0;bottom:0;z-index:5;
+  position:fixed;left:0;bottom:0;z-index:4;
   display:flex;flex-direction:column;align-items:flex-start;gap:1px;
   padding:8px 14px calc(10px + env(safe-area-inset-bottom));
   color:var(--text-3);font-size:11.5px;font-weight:400;
@@ -794,22 +764,29 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   40%,60%{transform:translateX(4px)}
 }
 
+/* ======================= АДАПТИВ ======================= */
 @media (max-width:640px){
-  main{padding:6px 16px 210px}
+  main{padding:6px 14px 16px}
   .fab-stack{right:14px;bottom:calc(84px + env(safe-area-inset-bottom));gap:8px}
   .fab{padding:10px 14px;font-size:13px;gap:6px}
   footer{font-size:10.5px;padding:6px 12px calc(8px + env(safe-area-inset-bottom));max-width:230px}
   .game-score{font-size:28px}
   .game-clicker-logo{width:64px;height:64px}
   .game-themes{grid-template-columns:1fr}
+  .category-card{max-width:calc(100vw - 32px)}
 }
 @media (max-width:420px){
   .brand-name{font-size:16px}
-  .topbar{padding:12px 14px}
+  .topbar{padding:12px 12px}
   footer{font-size:10px;max-width:200px}
   .fab{font-size:12.5px}
   .theme-toggle{width:38px;height:38px;font-size:18px}
   .note-window{width:calc(100vw - 32px)}
+}
+@media (max-width:360px){
+  .theme-toggle{width:34px;height:34px}
+  .theme-toggle svg{width:17px;height:17px}
+  .brand-name{font-size:15px}
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
@@ -865,6 +842,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </div>
 
   <div class="topbar-actions">
+    <button class="theme-toggle" id="resetLayoutBtn" type="button" aria-label="Сбросить позиции категорий" title="Сбросить позиции категорий">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+      </svg>
+    </button>
     <button class="theme-toggle" id="gameBtn" type="button" aria-label="Игра-кликер" title="Клик-Копирка">🎮</button>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Сменить тему">
       <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -934,8 +920,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     </div>
   </section>
 
-  <section class="list" id="list"></section>
-  <div class="empty" id="empty">Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.</div>
+  <div class="workspace" id="workspace"></div>
 </main>
 
 <footer>
@@ -963,38 +948,35 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       <h4>Что такое Копирка 2.0</h4>
       <p>Личный инструмент для быстрого копирования часто используемых текстов, хранения заметок, организации кнопок по категориям и мини-игры. Все данные хранятся только в вашем браузере.</p>
 
+      <h4>Категории-карточки</h4>
+      <p>Каждая категория — это плавающая карточка, которую можно перетащить в любое место рабочей области, потянув за её заголовок. Клик по карточке раскрывает или сворачивает кнопки внутри. Позиция и свёрнутость каждой категории сохраняются.</p>
+
+      <h4>Сброс позиций</h4>
+      <p>Кнопка с иконкой сетки в правом верхнем углу возвращает все категории в аккуратную сетку по центру экрана.</p>
+
       <h4>Добавить кнопку</h4>
-      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в списке ниже. Форму можно свернуть, нажав на её заголовок «Создать кнопку» — освободится место для списка. Состояние запоминается.</p>
+      <p>Введите текст, название (необязательно), выберите категорию и нажмите зелёную галочку ✓. Кнопка появится в нужной категории, а категория автоматически раскроется и выйдет на передний план.</p>
 
       <h4>Копирование</h4>
       <p>Нажмите на кнопку — текст моментально попадёт в буфер обмена. Вверху экрана появится подтверждение «Скопировано».</p>
 
-      <h4>Категории</h4>
-      <p>Нажмите «+» рядом с выпадающим списком, чтобы создать новую категорию. Крестик на заголовке категории удалит её — кнопки переедут в «Без категории».</p>
-
-      <h4>Сворачивание категорий</h4>
-      <p>Клик по названию категории (или по стрелке рядом) сворачивает и разворачивает её содержимое. Так можно освободить место, если в категории много кнопок. Состояние каждой категории сохраняется между визитами. Сворачивать можно и разделы «Закреплённые», «Без категории».</p>
-
       <h4>Закрепление</h4>
-      <p>Иконка булавки на кнопке переносит её в раздел «Закреплённые» наверху. Повторное нажатие открепляет.</p>
+      <p>Иконка булавки на кнопке переносит её в категорию «Закреплённые». Она появится как отдельная карточка.</p>
 
       <h4>Заметки</h4>
       <p>Кнопка «Добавить заметку» создаёт плавающее окно, которое можно перемещать по экрану. Иконка ✏️ переключает в режим редактирования, ✓ сохраняет, ✕ удаляет. Позиция каждой заметки сохраняется.</p>
 
       <h4>Игра «Клик-Копирка»</h4>
-      <p>Кнопка 🎮 в правом верхнем углу открывает мини-игру. Кликайте по логотипу, покупайте улучшения и открывайте новые фоновые темы сайта. Пассивный доход начисляется и в фоне.</p>
+      <p>Кнопка 🎮 открывает мини-игру. Кликайте по логотипу, покупайте улучшения и открывайте новые фоновые темы сайта. Пассивный доход начисляется и в фоне.</p>
 
       <h4>Магазин тем</h4>
-      <p>В игре 6 тем: По умолчанию, Океан, Созвездия, Звёздное поле, Магма и Поток. Четыре из них — полностью анимированные canvas-движки, реагирующие на курсор: Созвездия (точки тянутся к курсору и соединяются линиями), Звёздное поле (звёзды летят навстречу, точка схода следует за курсором), Магма (тёплые пятна притягиваются к курсору и светятся) и Поток (сотни частиц плывут по полю потока, а у курсора закручиваются в вихрь). Купив тему, вы можете применить её одним кликом.</p>
-
-      <h4>Живой фон</h4>
-      <p>Для базовых тем — плавно движущиеся цветные пятна и свечение за курсором. Для четырёх canvas-тем — собственные анимации, реагирующие на курсор. На мобильных всё продолжает двигаться автоматически.</p>
+      <p>6 тем: По умолчанию, Океан, Созвездия, Звёздное поле, Магма и Поток. Четыре из них — анимированные canvas-движки, реагирующие на курсор.</p>
 
       <h4>Темы светлая/тёмная</h4>
       <p>Переключатель в правом верхнем углу меняет светлую и тёмную тему. Выбор запоминается отдельно от фоновой темы.</p>
 
       <h4>Сохранение</h4>
-      <p>Все кнопки, категории, заметки, прогресс игры, купленные темы и состояние свернутых категорий сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
+      <p>Все кнопки, категории, их позиции и состояния, заметки, прогресс игры и темы сохраняются в localStorage. Привязаны к этому устройству и браузеру.</p>
     </div>
     <div class="modal-actions">
       <button class="btn-primary" id="infoClose" type="button">Понятно</button>
@@ -1061,11 +1043,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var GAME_KEY  = 'kopirka2.game';
   var THEME_KEY = 'kopirka2.theme';
   var COMPOSER_KEY = 'kopirka2.composerCollapsed';
-  var COLLAPSED_KEY = 'kopirka2.collapsedSections';
+  var LAYOUT_KEY = 'kopirka2.layout';
 
   /* ======================= ЭЛЕМЕНТЫ ======================= */
-  var listEl        = document.getElementById('list');
-  var emptyEl       = document.getElementById('empty');
+  var workspace     = document.getElementById('workspace');
   var textEl        = document.getElementById('textInput');
   var nameEl        = document.getElementById('nameInput');
   var addBtn        = document.getElementById('addBtn');
@@ -1076,6 +1057,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var newCatConfirm = document.getElementById('newCatConfirm');
   var themeToggle   = document.getElementById('themeToggle');
   var gameBtn       = document.getElementById('gameBtn');
+  var resetLayoutBtn= document.getElementById('resetLayoutBtn');
   var toastEl       = document.getElementById('toast');
   var toastText     = document.getElementById('toastText');
   var metaTheme     = document.querySelector('meta[name="theme-color"]');
@@ -1166,25 +1148,28 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     try { localStorage.setItem(CATS_KEY, JSON.stringify(categories)); } catch (e) {}
   }
 
-  /* --- Состояние свёрнутых секций --- */
-  var collapsedSections = {};
+  /* --- Layout --- */
+  var layout = {};
+  var topZ = 0;
+  var firstLayoutInit = false;
+
   try {
-    var rawCollapsed = JSON.parse(localStorage.getItem(COLLAPSED_KEY));
-    if (rawCollapsed && typeof rawCollapsed === 'object' && !Array.isArray(rawCollapsed)) {
-      collapsedSections = rawCollapsed;
+    var rawLayout = JSON.parse(localStorage.getItem(LAYOUT_KEY));
+    if (rawLayout && typeof rawLayout === 'object' && !Array.isArray(rawLayout)) {
+      layout = rawLayout;
+      firstLayoutInit = true;
     }
-  } catch (e) { collapsedSections = {}; }
+  } catch (e) { layout = {}; }
 
-  function saveCollapsed() {
-    try { localStorage.setItem(COLLAPSED_KEY, JSON.stringify(collapsedSections)); } catch (e) {}
+  Object.keys(layout).forEach(function(k) {
+    if (layout[k] && layout[k].z > topZ) topZ = layout[k].z;
+  });
+
+  function saveLayout() {
+    try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch (e) {}
   }
 
-  function setSectionCollapsed(key, collapsed) {
-    if (collapsed) collapsedSections[key] = true;
-    else delete collapsedSections[key];
-    saveCollapsed();
-  }
-
+  /* --- Notes --- */
   var notes = [];
   var editingNoteId = null;
 
@@ -1238,6 +1223,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     introEl.classList.add('hidden');
     document.body.classList.remove('intro-open');
     setTimeout(function () { introEl.style.display = 'none'; }, 600);
+    setTimeout(reclampAll, 400);
   }
   introEl.addEventListener('click', closeIntro);
 
@@ -1283,16 +1269,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     composerCollapsed = !!collapsed;
     try { localStorage.setItem(COMPOSER_KEY, composerCollapsed ? '1' : '0'); } catch (e) {}
     applyComposerState();
+    setTimeout(reclampAll, 350);
     if (!composerCollapsed) {
       setTimeout(function () {
-        if (!composerCollapsed) {
-          autoGrow();
-          textEl.focus();
-        }
+        if (!composerCollapsed) { autoGrow(); textEl.focus(); }
       }, 260);
     }
   }
-
   composerHead.addEventListener('click', function () {
     setComposerCollapsed(!composerCollapsed);
   });
@@ -1336,14 +1319,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   /* ======================= ИКОНКИ ======================= */
   var X_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
     'stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-  var PIN_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+  var PIN_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
     'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
     '<path d="M12 17v5"/>' +
     '<path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>' +
     '</svg>';
-  var CHEVRON_SVG = '<svg class="section-toggle-icon" viewBox="0 0 24 24" fill="none" ' +
-    'stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
-    '<path d="M6 9l6 6 6-6"/></svg>';
 
   /* ======================= SELECT КАТЕГОРИЙ ======================= */
   function updateCategorySelect() {
@@ -1360,9 +1340,135 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     }
   }
 
-  /* ======================= РЕНДЕР КНОПОК ======================= */
-  function preview(text) { return text.replace(/\s+/g, ' ').trim(); }
+  /* ======================= SECTIONS ======================= */
+  function getCurrentSections() {
+    var sections = [];
+    var pinned = items.filter(function(i) { return i.pinned; });
+    if (pinned.length > 0) {
+      sections.push({ key: '__pinned', name: 'Закреплённые', items: pinned, isSpecial: true });
+    }
+    categories.forEach(function(cat) {
+      var catItems = items.filter(function(i) {
+        return !i.pinned && i.categoryId === cat.id;
+      });
+      sections.push({
+        key: cat.id,
+        name: cat.name,
+        items: catItems,
+        category: cat,
+        isSpecial: false
+      });
+    });
+    var uncat = items.filter(function(i) { return !i.pinned && !i.categoryId; });
+    if (uncat.length > 0) {
+      sections.push({ key: '__uncat', name: 'Без категории', items: uncat, isSpecial: true });
+    }
+    return sections;
+  }
 
+  /* ======================= LAYOUT: helpers ======================= */
+  function workspaceSize() {
+    var W = workspace.clientWidth;
+    var H = workspace.clientHeight;
+    if (!W) W = Math.max(300, window.innerWidth - 40);
+    if (!H) H = Math.max(200, window.innerHeight - 300);
+    return { W: W, H: H };
+  }
+
+  function ensureLayout(key, opts) {
+    if (layout[key]) return false;
+    opts = opts || {};
+    var size = workspaceSize();
+    var count = Object.keys(layout).length;
+    layout[key] = {
+      x: Math.max(8, Math.round(size.W / 2 - 110 + (count * 22) % 180)),
+      y: Math.max(8, Math.round(size.H / 3 + (count * 32) % 200)),
+      z: ++topZ,
+      collapsed: opts.collapsed !== undefined ? !!opts.collapsed : true
+    };
+    return true;
+  }
+
+  function focusCategory(key) {
+    if (!layout[key]) ensureLayout(key, { collapsed: false });
+    layout[key].collapsed = false;
+    layout[key].z = ++topZ;
+    saveLayout();
+  }
+
+  function clampCard(key) {
+    var state = layout[key];
+    if (!state) return;
+    var card = workspace.querySelector('[data-key="' + key + '"]');
+    if (!card) return;
+    var size = workspaceSize();
+    var cw = card.offsetWidth;
+    var ch = card.offsetHeight;
+    var nx = Math.max(8, Math.min(state.x, size.W - cw - 8));
+    var ny = Math.max(8, Math.min(state.y, size.H - ch - 8));
+    if (nx !== state.x || ny !== state.y) {
+      state.x = nx;
+      state.y = ny;
+      card.style.left = nx + 'px';
+      card.style.top = ny + 'px';
+      saveLayout();
+    }
+  }
+
+  function reclampAll() {
+    var size = workspaceSize();
+    var changed = false;
+    Object.keys(layout).forEach(function(key) {
+      var state = layout[key];
+      var card = workspace.querySelector('[data-key="' + key + '"]');
+      if (!card) return;
+      var cw = card.offsetWidth;
+      var ch = card.offsetHeight;
+      var nx = Math.max(8, Math.min(state.x, size.W - cw - 8));
+      var ny = Math.max(8, Math.min(state.y, size.H - ch - 8));
+      if (nx !== state.x || ny !== state.y) {
+        state.x = nx;
+        state.y = ny;
+        card.style.left = nx + 'px';
+        card.style.top = ny + 'px';
+        changed = true;
+      }
+    });
+    if (changed) saveLayout();
+  }
+
+  function arrangeInGrid(sections, forceCollapse) {
+    var size = workspaceSize();
+    var W = size.W;
+    var H = size.H;
+    var count = sections.length;
+    if (count === 0) return;
+
+    var cols = count === 1 ? 1 : (count <= 4 ? 2 : (count <= 9 ? 3 : 4));
+    var rows = Math.ceil(count / cols);
+    var padX = 16;
+    var padY = 16;
+    var cellW = (W - padX * 2) / cols;
+    var cellH = (H - padY * 2) / rows;
+    var cardW = Math.min(240, cellW - 16);
+    var cardH = 48;
+
+    sections.forEach(function(sec, i) {
+      if (!layout[sec.key]) layout[sec.key] = { collapsed: true };
+      var col = i % cols;
+      var row = Math.floor(i / cols);
+      var cx = padX + col * cellW + (cellW - cardW) / 2;
+      var cy = padY + row * cellH + Math.max(0, (cellH - cardH) / 2);
+      layout[sec.key].x = Math.max(8, Math.round(cx));
+      layout[sec.key].y = Math.max(8, Math.round(cy));
+      layout[sec.key].z = i + 1;
+      if (forceCollapse) layout[sec.key].collapsed = true;
+    });
+
+    topZ = Math.max(topZ, count);
+  }
+
+  /* ======================= РЕНДЕР ======================= */
   function createItemEl(item) {
     var row = document.createElement('div');
     row.className = 'item';
@@ -1377,10 +1483,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     nameSpan.textContent = item.name;
     var textSpan = document.createElement('span');
     textSpan.className = 'item-text';
-    textSpan.textContent = preview(item.text);
+    textSpan.textContent = item.text.replace(/\s+/g, ' ').trim();
     main.appendChild(nameSpan);
     main.appendChild(textSpan);
-    main.addEventListener('click', function () { copyText(item.text, row); });
+    main.addEventListener('click', function (e) {
+      e.stopPropagation();
+      copyText(item.text, row);
+    });
 
     var pin = document.createElement('button');
     pin.type = 'button';
@@ -1390,13 +1499,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     pin.addEventListener('click', function (e) {
       e.stopPropagation();
       item.pinned = !item.pinned;
-
-      // Автоматически разворачиваем целевую секцию
       var targetKey = item.pinned ? '__pinned' : (item.categoryId || '__uncat');
-      if (collapsedSections[targetKey]) {
-        setSectionCollapsed(targetKey, false);
-      }
-
+      ensureLayout(targetKey, { collapsed: false });
+      focusCategory(targetKey);
       save();
       render();
       showToast(item.pinned ? 'Закреплено' : 'Откреплено');
@@ -1415,7 +1520,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         save();
         render();
         showToast('Удалено');
-      }, 200);
+      }, 180);
     });
 
     row.appendChild(main);
@@ -1424,126 +1529,191 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return row;
   }
 
-  function toggleSection(key) {
-    var isNowCollapsed = !collapsedSections[key];
-    setSectionCollapsed(key, isNowCollapsed);
-
-    var sec = listEl.querySelector('.section[data-section-key="' + key + '"]');
-    if (!sec) return;
-    sec.classList.toggle('collapsed', isNowCollapsed);
-    var toggleArea = sec.querySelector('.section-toggle-area');
-    if (toggleArea) {
-      toggleArea.setAttribute('aria-expanded', isNowCollapsed ? 'false' : 'true');
-    }
+  function toggleCollapse(key, card) {
+    var state = layout[key];
+    if (!state) return;
+    state.collapsed = !state.collapsed;
+    card.classList.toggle('collapsed', state.collapsed);
+    saveLayout();
+    requestAnimationFrame(function () {
+      clampCard(key);
+    });
   }
 
-  function renderSection(title, sectionItems, cat, sectionKey) {
-    var sec = document.createElement('div');
-    sec.className = 'section';
-    sec.dataset.sectionKey = sectionKey;
+  function setupCardDrag(card, key) {
+    var header = card.querySelector('.category-header');
+    if (!header) return;
 
-    var isCollapsed = !!collapsedSections[sectionKey];
-    if (isCollapsed) sec.classList.add('collapsed');
+    header.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('.category-del')) return;
+      if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+      e.preventDefault();
 
-    var head = document.createElement('div');
-    head.className = 'section-head';
+      var pointerId = e.pointerId;
+      var startX = e.clientX;
+      var startY = e.clientY;
+      var startLeft = layout[key] ? layout[key].x : 0;
+      var startTop = layout[key] ? layout[key].y : 0;
+      var hasMoved = false;
 
-    var toggleArea = document.createElement('button');
-    toggleArea.type = 'button';
-    toggleArea.className = 'section-toggle-area';
-    toggleArea.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
-    toggleArea.setAttribute('aria-label', (isCollapsed ? 'Развернуть' : 'Свернуть') + ' «' + title + '»');
-    toggleArea.innerHTML = CHEVRON_SVG;
+      // Bring to front on interaction
+      if (layout[key]) {
+        layout[key].z = ++topZ;
+        card.style.zIndex = layout[key].z;
+        saveLayout();
+      }
 
-    var nameElSec = document.createElement('span');
-    nameElSec.className = 'section-name';
-    nameElSec.textContent = title;
+      function onMove(ev) {
+        if (ev.pointerId !== pointerId) return;
+        var dx = ev.clientX - startX;
+        var dy = ev.clientY - startY;
+        if (!hasMoved && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+          hasMoved = true;
+          card.classList.add('dragging');
+        }
+        if (!hasMoved) return;
+
+        var size = workspaceSize();
+        var cw = card.offsetWidth;
+        var ch = card.offsetHeight;
+        var nx = Math.max(0, Math.min(startLeft + dx, size.W - cw));
+        var ny = Math.max(0, Math.min(startTop + dy, size.H - ch));
+        card.style.left = nx + 'px';
+        card.style.top = ny + 'px';
+        if (layout[key]) {
+          layout[key].x = nx;
+          layout[key].y = ny;
+        }
+      }
+
+      function onUp(ev) {
+        if (ev.pointerId !== pointerId) return;
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        document.removeEventListener('pointercancel', onUp);
+        try { header.releasePointerCapture(pointerId); } catch(err) {}
+
+        if (hasMoved) {
+          card.classList.remove('dragging');
+          saveLayout();
+        } else {
+          toggleCollapse(key, card);
+        }
+      }
+
+      try { header.setPointerCapture(pointerId); } catch(err) {}
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+      document.addEventListener('pointercancel', onUp);
+    });
+  }
+
+  function createCategoryCard(sec) {
+    ensureLayout(sec.key);
+    var state = layout[sec.key];
+
+    var card = document.createElement('div');
+    card.className = 'category-card' + (state.collapsed ? ' collapsed' : '');
+    card.dataset.key = sec.key;
+    card.style.left = state.x + 'px';
+    card.style.top = state.y + 'px';
+    card.style.zIndex = state.z;
+
+    var header = document.createElement('div');
+    header.className = 'category-header';
+
+    var nameEl = document.createElement('span');
+    nameEl.className = 'category-name';
+    nameEl.textContent = sec.name;
 
     var countEl = document.createElement('span');
-    countEl.className = 'section-count';
-    countEl.textContent = sectionItems.length;
+    countEl.className = 'category-count';
+    countEl.textContent = sec.items.length;
 
-    toggleArea.appendChild(nameElSec);
-    toggleArea.appendChild(countEl);
+    header.appendChild(nameEl);
+    header.appendChild(countEl);
 
-    toggleArea.addEventListener('click', function () {
-      toggleSection(sectionKey);
-    });
-
-    head.appendChild(toggleArea);
-
-    if (cat) {
-      var delBtn = document.createElement('button');
-      delBtn.type = 'button';
-      delBtn.className = 'section-del';
-      delBtn.setAttribute('aria-label', 'Удалить категорию');
-      delBtn.innerHTML = X_SVG;
-      delBtn.addEventListener('click', function (e) {
+    if (!sec.isSpecial && sec.category) {
+      var delCatBtn = document.createElement('button');
+      delCatBtn.type = 'button';
+      delCatBtn.className = 'category-del';
+      delCatBtn.setAttribute('aria-label', 'Удалить категорию');
+      delCatBtn.innerHTML = X_SVG;
+      delCatBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        deleteCategory(cat.id);
+        deleteCategory(sec.category.id);
       });
-      head.appendChild(delBtn);
+      header.appendChild(delCatBtn);
     }
 
-    sec.appendChild(head);
+    var body = document.createElement('div');
+    body.className = 'category-body';
 
-    var wrap = document.createElement('div');
-    wrap.className = 'section-items';
-    if (sectionItems.length === 0) {
-      var hint = document.createElement('div');
-      hint.className = 'section-empty';
-      hint.textContent = 'Пока пусто — добавьте сюда кнопку';
-      wrap.appendChild(hint);
+    if (sec.items.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'category-empty';
+      empty.textContent = 'Пусто — добавьте кнопку';
+      body.appendChild(empty);
     } else {
-      sectionItems.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
+      sec.items.forEach(function (it) {
+        body.appendChild(createItemEl(it));
+      });
     }
-    sec.appendChild(wrap);
-    return sec;
+
+    card.appendChild(header);
+    card.appendChild(body);
+
+    setupCardDrag(card, sec.key);
+
+    return card;
   }
 
   function render() {
-    listEl.innerHTML = '';
-    if (items.length === 0 && categories.length === 0) {
-      emptyEl.style.display = 'block';
-      return;
-    }
-    emptyEl.style.display = 'none';
-    var pinned = items.filter(function (i) { return i.pinned; });
-    var hasOthers = pinned.length > 0 || categories.length > 0;
-    if (pinned.length > 0) {
-      listEl.appendChild(renderSection('Закреплённые', pinned, null, '__pinned'));
-    }
-    categories.forEach(function (cat) {
-      var catItems = items.filter(function (i) { return !i.pinned && i.categoryId === cat.id; });
-      listEl.appendChild(renderSection(cat.name, catItems, cat, cat.id));
-    });
-    var uncat = items.filter(function (i) { return !i.pinned && !i.categoryId; });
-    if (hasOthers) {
-      if (uncat.length > 0) {
-        listEl.appendChild(renderSection('Без категории', uncat, null, '__uncat'));
-      }
+    var sections = getCurrentSections();
+
+    // Ensure layout for all sections
+    var changed = false;
+    if (!firstLayoutInit && sections.length > 0) {
+      // First time with new layout system — arrange all in grid
+      arrangeInGrid(sections, true);
+      changed = true;
+      firstLayoutInit = true;
     } else {
-      var wrap = document.createElement('div');
-      wrap.className = 'section-items';
-      uncat.forEach(function (it) { wrap.appendChild(createItemEl(it)); });
-      listEl.appendChild(wrap);
+      sections.forEach(function(sec) {
+        if (ensureLayout(sec.key)) changed = true;
+      });
+    }
+    if (changed) saveLayout();
+
+    // Render cards
+    workspace.innerHTML = '';
+    sections.forEach(function(sec) {
+      workspace.appendChild(createCategoryCard(sec));
+    });
+
+    // Empty state
+    if (sections.length === 0) {
+      var emptyEl = document.createElement('div');
+      emptyEl.className = 'workspace-empty';
+      emptyEl.innerHTML = 'Пока пусто.<br>Добавьте первый текст — и кнопка появится здесь.';
+      workspace.appendChild(emptyEl);
     }
   }
 
+  /* ======================= ДОБАВЛЕНИЕ КНОПКИ ======================= */
   function addItem() {
     var text = textEl.value.trim();
     if (!text) { shake(textEl); textEl.focus(); return; }
     var name = nameEl.value.trim() || 'Копировать';
     var categoryId = catSelect.value || null;
-
-    // Автоматически разворачиваем целевую секцию
     var targetKey = categoryId || '__uncat';
-    if (collapsedSections[targetKey]) {
-      setSectionCollapsed(targetKey, false);
-    }
 
     items.unshift({ id: genId(), name: name, text: text, pinned: false, categoryId: categoryId });
     save();
+
+    ensureLayout(targetKey, { collapsed: false });
+    focusCategory(targetKey);
+
     render();
     textEl.value = '';
     nameEl.value = '';
@@ -1564,6 +1734,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     newCatBtn.classList.toggle('open', willOpen);
     if (willOpen) { newCatInput.value = ''; newCatInput.focus(); }
   });
+
   function submitNewCategory() {
     var name = newCatInput.value.trim();
     if (!name) { shake(newCatInput); newCatInput.focus(); return; }
@@ -1573,6 +1744,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var cat = { id: genId(), name: name };
     categories.push(cat);
     save();
+
+    ensureLayout(cat.id, { collapsed: false });
+    focusCategory(cat.id);
+
     updateCategorySelect();
     catSelect.value = cat.id;
     newCatRow.hidden = true;
@@ -1585,6 +1760,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   newCatInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); submitNewCategory(); }
   });
+
   function deleteCategory(id) {
     var cat = categories.find(function (c) { return c.id === id; });
     if (!cat) return;
@@ -1594,20 +1770,27 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     if (!ok) return;
     items.forEach(function (i) { if (i.categoryId === id) i.categoryId = null; });
     categories = categories.filter(function (c) { return c.id !== id; });
-    // Чистим состояние свёрнутости
-    if (collapsedSections[id]) {
-      delete collapsedSections[id];
-      saveCollapsed();
-    }
+    if (layout[id]) { delete layout[id]; saveLayout(); }
     save();
     updateCategorySelect();
     render();
     showToast('Категория удалена');
   }
 
+  /* ======================= RESET LAYOUT ======================= */
+  function resetLayout() {
+    var sections = getCurrentSections();
+    if (sections.length === 0) { showToast('Нечего упорядочивать'); return; }
+    arrangeInGrid(sections, false);
+    saveLayout();
+    render();
+    showToast('Позиции сброшены');
+  }
+  resetLayoutBtn.addEventListener('click', resetLayout);
+
   /* ======================= ЗАМЕТКИ ======================= */
-  var topZ = 100;
-  notes.forEach(function (n) { if (n.z > topZ) topZ = n.z; });
+  var topZNotes = 100;
+  notes.forEach(function (n) { if (n.z > topZNotes) topZNotes = n.z; });
 
   function getViewportSize() { return { w: window.innerWidth, h: window.innerHeight }; }
   function clampNotePosition(x, y) {
@@ -1723,22 +1906,22 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     });
 
     el.addEventListener('pointerdown', function () {
-      if (parseInt(el.style.zIndex) !== topZ) {
-        topZ++;
-        el.style.zIndex = String(topZ);
-        note.z = topZ;
+      if (parseInt(el.style.zIndex) !== topZNotes) {
+        topZNotes++;
+        el.style.zIndex = String(topZNotes);
+        note.z = topZNotes;
         saveNotes();
       }
     });
     header.addEventListener('pointerdown', function (e) {
       if (e.target.closest('button')) return;
-      startDrag(e, note, el);
+      startNoteDrag(e, note, el);
     });
 
     return el;
   }
 
-  function startDrag(e, note, el) {
+  function startNoteDrag(e, note, el) {
     e.preventDefault();
     var rect = el.getBoundingClientRect();
     var startX = e.clientX;
@@ -1746,16 +1929,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var origX = rect.left;
     var origY = rect.top;
     el.classList.add('dragging');
-    el.setPointerCapture(e.pointerId);
+    try { el.setPointerCapture(e.pointerId); } catch(err) {}
 
     function onMove(ev) {
+      if (ev.pointerId !== e.pointerId) return;
       var dx = ev.clientX - startX;
       var dy = ev.clientY - startY;
       var p = clampNotePosition(origX + dx, origY + dy);
       el.style.left = p.x + 'px';
       el.style.top = p.y + 'px';
     }
-    function onEnd() {
+    function onEnd(ev) {
+      if (ev.pointerId !== e.pointerId) return;
       el.classList.remove('dragging');
       el.removeEventListener('pointermove', onMove);
       el.removeEventListener('pointerup', onEnd);
@@ -1885,7 +2070,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var p = clampNotePosition(vp.w / 2 - 140 + offset - 70, vp.h / 2 - 110 + offset - 50);
     var note = {
       id: genId(), text: '', createdAt: Date.now(),
-      x: p.x, y: p.y, z: ++topZ
+      x: p.x, y: p.y, z: ++topZNotes
     };
     notes.unshift(note);
     editingNoteId = note.id;
@@ -1909,6 +2094,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         el.style.top = p.y + 'px';
       });
       saveNotes();
+      reclampAll();
     }, 120);
   });
 
@@ -1941,10 +2127,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   });
   infoClose.addEventListener('click', function () { closeModal(infoModal); });
 
-  /* ======================= КАНВАС-ДВИЖКИ ФОНОВ ======================= */
+  /* ======================= ФОНОВЫЕ ДВИЖКИ ======================= */
   var activeBgEngine = null;
 
-  // ---- Созвездия ----
   function startConstellations() {
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
@@ -1954,127 +2139,79 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var mouse = { x: -9999, y: -9999, active: false };
     var raf = null;
     var running = true;
-
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var dotColor = isDark ? 'rgba(180,210,255,0.9)' : 'rgba(40,80,180,0.7)';
     var lineRGB = isDark ? '160,200,255' : '40,80,180';
 
     function resize() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initParticles();
-    }
-    function initParticles() {
       var count = Math.min(110, Math.max(40, Math.floor((w * h) / 18000)));
       particles = [];
       for (var i = 0; i < count; i++) {
         particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
           r: 1.2 + Math.random() * 1.6
         });
       }
     }
     function onPointer(e) {
-      if (e.touches && e.touches.length) {
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
-      } else if (typeof e.clientX === 'number') {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      }
+      if (e.touches && e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+      else if (typeof e.clientX === 'number') { mouse.x = e.clientX; mouse.y = e.clientY; }
       mouse.active = true;
     }
     function onLeave() { mouse.active = false; }
-
     function drawFrame() {
       ctx.clearRect(0, 0, w, h);
       var i, j, p, a, b, dx, dy, d2;
-      var linkDist = 140;
-      var linkDist2 = linkDist * linkDist;
-
+      var linkDist = 140, linkDist2 = linkDist * linkDist;
       for (i = 0; i < particles.length; i++) {
         p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
+        p.x += p.vx; p.y += p.vy;
         if (mouse.active) {
-          dx = mouse.x - p.x;
-          dy = mouse.y - p.y;
-          d2 = dx * dx + dy * dy;
+          dx = mouse.x - p.x; dy = mouse.y - p.y; d2 = dx * dx + dy * dy;
           if (d2 < 32400 && d2 > 1) {
             var dist = Math.sqrt(d2);
             var force = (180 - dist) / 180 * 0.05;
-            p.vx += (dx / dist) * force;
-            p.vy += (dy / dist) * force;
+            p.vx += (dx / dist) * force; p.vy += (dy / dist) * force;
           }
         }
-        p.vx *= 0.992;
-        p.vy *= 0.992;
+        p.vx *= 0.992; p.vy *= 0.992;
         var sp2 = p.vx * p.vx + p.vy * p.vy;
-        if (sp2 > 2.25) {
-          var sp = Math.sqrt(sp2);
-          p.vx = p.vx / sp * 1.5;
-          p.vy = p.vy / sp * 1.5;
-        }
-        if (sp2 < 0.04) {
-          p.vx += (Math.random() - 0.5) * 0.15;
-          p.vy += (Math.random() - 0.5) * 0.15;
-        }
-        if (p.x < -30) p.x = w + 30;
-        else if (p.x > w + 30) p.x = -30;
-        if (p.y < -30) p.y = h + 30;
-        else if (p.y > h + 30) p.y = -30;
+        if (sp2 > 2.25) { var sp = Math.sqrt(sp2); p.vx = p.vx / sp * 1.5; p.vy = p.vy / sp * 1.5; }
+        if (sp2 < 0.04) { p.vx += (Math.random() - 0.5) * 0.15; p.vy += (Math.random() - 0.5) * 0.15; }
+        if (p.x < -30) p.x = w + 30; else if (p.x > w + 30) p.x = -30;
+        if (p.y < -30) p.y = h + 30; else if (p.y > h + 30) p.y = -30;
       }
-
       ctx.lineWidth = 1;
       for (i = 0; i < particles.length; i++) {
         a = particles[i];
         for (j = i + 1; j < particles.length; j++) {
           b = particles[j];
-          dx = a.x - b.x;
-          dy = a.y - b.y;
-          d2 = dx * dx + dy * dy;
+          dx = a.x - b.x; dy = a.y - b.y; d2 = dx * dx + dy * dy;
           if (d2 < linkDist2) {
             var alpha = (1 - d2 / linkDist2) * 0.4;
             ctx.strokeStyle = 'rgba(' + lineRGB + ',' + alpha.toFixed(3) + ')';
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
       }
       ctx.fillStyle = dotColor;
       for (i = 0; i < particles.length; i++) {
-        p = particles[i];
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
+        p = particles[i]; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
       }
     }
-    function tick() {
-      if (!running) return;
-      drawFrame();
-      raf = requestAnimationFrame(tick);
-    }
-
+    function tick() { if (!running) return; drawFrame(); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onPointer, { passive: true });
     window.addEventListener('pointerdown', onPointer, { passive: true });
     window.addEventListener('pointerleave', onLeave);
     window.addEventListener('pointercancel', onLeave);
-
-    if (prefersReducedMotion) drawFrame();
-    else tick();
-
+    if (prefersReducedMotion) drawFrame(); else tick();
     return {
       stop: function () {
         running = false;
@@ -2089,7 +2226,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     };
   }
 
-  // ---- Звёздное поле ----
   function startStarfield() {
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
@@ -2098,52 +2234,30 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var stars = [];
     var raf = null;
     var running = true;
-
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var starColor = isDark ? 'rgba(220,232,255,' : 'rgba(40,70,150,';
     var trailColor = isDark ? 'rgba(160,195,255,' : 'rgba(50,90,180,';
     var glowColor  = isDark ? 'rgba(120,160,255,' : 'rgba(80,120,220,';
     var glowAlpha  = isDark ? 0.14 : 0.10;
-
     var SPEED = 0.011;
     var targetMouse = { x: 0.5, y: 0.5 };
     var smoothMouse = { x: 0.5, y: 0.5 };
 
-    function getStarCount() {
-      if (w < 900) return Math.min(180, Math.max(90, Math.floor(w * h / 15000)));
-      return Math.min(320, Math.max(180, Math.floor(w * h / 11000)));
-    }
-    function initStars() {
-      var count = getStarCount();
+    function resize() {
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var count = Math.min(320, Math.max(120, Math.floor(w * h / 12000)));
       stars = [];
       for (var i = 0; i < count; i++) {
         var z0 = Math.random() * 0.95 + 0.05;
-        stars.push({
-          x: (Math.random() - 0.5),
-          y: (Math.random() - 0.5),
-          z: z0,
-          pz: Math.min(1, z0 + 0.012)
-        });
+        stars.push({ x: (Math.random() - 0.5), y: (Math.random() - 0.5), z: z0, pz: Math.min(1, z0 + 0.012) });
       }
-    }
-    function resize() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initStars();
     }
     function onPointer(e) {
-      if (e.touches && e.touches.length) {
-        targetMouse.x = e.touches[0].clientX / w;
-        targetMouse.y = e.touches[0].clientY / h;
-      } else if (typeof e.clientX === 'number') {
-        targetMouse.x = e.clientX / w;
-        targetMouse.y = e.clientY / h;
-      }
+      if (e.touches && e.touches.length) { targetMouse.x = e.touches[0].clientX / w; targetMouse.y = e.touches[0].clientY / h; }
+      else if (typeof e.clientX === 'number') { targetMouse.x = e.clientX / w; targetMouse.y = e.clientY / h; }
     }
     function drawFrame() {
       smoothMouse.x += (targetMouse.x - smoothMouse.x) * 0.07;
@@ -2154,75 +2268,41 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       var glow = ctx.createRadialGradient(vpx, vpy, 0, vpx, vpy, Math.max(w, h) * 0.45);
       glow.addColorStop(0, glowColor + glowAlpha + ')');
       glow.addColorStop(1, glowColor + '0)');
-      ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, w, h);
-      var cursorSx = targetMouse.x * w;
-      var cursorSy = targetMouse.y * h;
+      ctx.fillStyle = glow; ctx.fillRect(0, 0, w, h);
+      var cx = targetMouse.x * w, cy = targetMouse.y * h;
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i];
-        s.pz = s.z;
-        s.z -= SPEED;
-        if (s.z <= 0.03) {
-          s.x = (Math.random() - 0.5);
-          s.y = (Math.random() - 0.5);
-          s.z = 1;
-          s.pz = 1;
-        }
+        s.pz = s.z; s.z -= SPEED;
+        if (s.z <= 0.03) { s.x = (Math.random() - 0.5); s.y = (Math.random() - 0.5); s.z = 1; s.pz = 1; }
         if (!s.pz || s.pz <= 0.03) s.pz = Math.min(1, s.z + 0.011);
-        var invZ = 1 / s.z;
-        var invPz = 1 / s.pz;
-        var sx = s.x * invZ * w * 0.5 + vpx;
-        var sy = s.y * invZ * h * 0.5 + vpy;
-        var px = s.x * invPz * w * 0.5 + vpx;
-        var py = s.y * invPz * h * 0.5 + vpy;
+        var sx = s.x / s.z * w * 0.5 + vpx;
+        var sy = s.y / s.z * h * 0.5 + vpy;
+        var px = s.x / s.pz * w * 0.5 + vpx;
+        var py = s.y / s.pz * h * 0.5 + vpy;
         if (sx < -80 || sx > w + 80 || sy < -80 || sy > h + 80) continue;
-        var size = (1 - s.z) * 2.8;
-        if (size < 0.3) size = 0.3;
-        var alpha = Math.min(1, (1 - s.z) * 1.15);
-        if (alpha < 0.05) alpha = 0.05;
-        var dxc = sx - cursorSx;
-        var dyc = sy - cursorSy;
-        var dc2 = dxc * dxc + dyc * dyc;
-        if (dc2 < 28000) {
-          var dc = Math.sqrt(dc2) || 1;
+        var size = (1 - s.z) * 2.8; if (size < 0.3) size = 0.3;
+        var alpha = Math.min(1, (1 - s.z) * 1.15); if (alpha < 0.05) alpha = 0.05;
+        var dcc = (sx - cx) * (sx - cx) + (sy - cy) * (sy - cy);
+        if (dcc < 28000) {
+          var dc = Math.sqrt(dcc) || 1;
           var boost = (1 - dc / 167) * 0.55;
-          if (boost > 0) {
-            size *= (1 + boost * 0.6);
-            alpha = Math.min(1, alpha + boost * 0.35);
-          }
+          if (boost > 0) { size *= (1 + boost * 0.6); alpha = Math.min(1, alpha + boost * 0.35); }
         }
         ctx.strokeStyle = trailColor + (alpha * 0.55).toFixed(3) + ')';
         ctx.lineWidth = Math.max(0.4, size * 0.75);
         ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(px, py);
-        ctx.lineTo(sx, sy);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(sx, sy); ctx.stroke();
         ctx.fillStyle = starColor + alpha.toFixed(3) + ')';
-        ctx.beginPath();
-        ctx.arc(sx, sy, Math.max(0.3, size * 0.5), 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.3, size * 0.5), 0, Math.PI * 2); ctx.fill();
       }
     }
-    function tick() {
-      if (!running) return;
-      drawFrame();
-      raf = requestAnimationFrame(tick);
-    }
-
+    function tick() { if (!running) return; drawFrame(); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onPointer, { passive: true });
     window.addEventListener('pointerdown', onPointer, { passive: true });
-
-    if (prefersReducedMotion) {
-      smoothMouse.x = targetMouse.x;
-      smoothMouse.y = targetMouse.y;
-      drawFrame();
-    } else {
-      tick();
-    }
-
+    if (prefersReducedMotion) { smoothMouse.x = targetMouse.x; smoothMouse.y = targetMouse.y; drawFrame(); }
+    else tick();
     return {
       stop: function () {
         running = false;
@@ -2235,7 +2315,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     };
   }
 
-  // ---- Магма ----
   function startMagma() {
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
@@ -2244,56 +2323,41 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var blobs = [];
     var raf = null;
     var running = true;
-
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var blendMode = isDark ? 'lighter' : 'source-over';
     var colors = isDark
       ? ['rgba(255,80,30,A)', 'rgba(255,40,80,A)', 'rgba(255,150,40,A)', 'rgba(230,60,180,A)', 'rgba(255,200,80,A)']
       : ['rgba(255,140,90,A)', 'rgba(255,100,140,A)', 'rgba(255,180,90,A)', 'rgba(220,100,180,A)', 'rgba(255,160,120,A)'];
-
     var mouse = { x: -9999, y: -9999 };
     var mouseSmooth = { x: -9999, y: -9999 };
     var mouseActive = false;
 
     function resize() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      if (blobs.length === 0) initBlobs();
-    }
-    function initBlobs() {
-      blobs = [];
-      for (var i = 0; i < 9; i++) {
-        blobs.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          baseR: 120 + Math.random() * 110,
-          r: 0,
-          color: colors[i % colors.length],
-          phase: Math.random() * Math.PI * 2,
-          speedX: (Math.random() - 0.5) * 0.5,
-          speedY: (Math.random() - 0.5) * 0.5,
-          pulseSpeed: 0.001 + Math.random() * 0.0015,
-          pulseAmp: 0.08 + Math.random() * 0.10
-        });
+      if (blobs.length === 0) {
+        for (var i = 0; i < 9; i++) {
+          blobs.push({
+            x: Math.random() * w, y: Math.random() * h,
+            baseR: 120 + Math.random() * 110, r: 0,
+            color: colors[i % colors.length],
+            phase: Math.random() * Math.PI * 2,
+            speedX: (Math.random() - 0.5) * 0.5,
+            speedY: (Math.random() - 0.5) * 0.5,
+            pulseSpeed: 0.001 + Math.random() * 0.0015,
+            pulseAmp: 0.08 + Math.random() * 0.10
+          });
+        }
       }
     }
     function onPointer(e) {
-      if (e.touches && e.touches.length) {
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
-      } else if (typeof e.clientX === 'number') {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      }
+      if (e.touches && e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+      else if (typeof e.clientX === 'number') { mouse.x = e.clientX; mouse.y = e.clientY; }
       mouseActive = true;
     }
     function onLeave() { mouseActive = false; }
-
     function drawFrame(t) {
       ctx.clearRect(0, 0, w, h);
       if (mouseActive) {
@@ -2302,33 +2366,27 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         mouseSmooth.y += (mouse.y - mouseSmooth.y) * 0.08;
       }
       ctx.globalCompositeOperation = blendMode;
-      var i;
-      for (i = 0; i < blobs.length; i++) {
+      for (var i = 0; i < blobs.length; i++) {
         var b = blobs[i];
         b.x += b.speedX + Math.sin(t * 0.0006 + b.phase) * 0.4;
         b.y += b.speedY + Math.cos(t * 0.0008 + b.phase * 1.4) * 0.4;
         if (mouseActive && mouseSmooth.x > -1000) {
-          var mdx = mouseSmooth.x - b.x;
-          var mdy = mouseSmooth.y - b.y;
+          var mdx = mouseSmooth.x - b.x, mdy = mouseSmooth.y - b.y;
           var md = Math.sqrt(mdx * mdx + mdy * mdy) || 1;
           var attract = Math.max(0, 1 - md / 550);
           b.x += (mdx / md) * attract * 2.6;
           b.y += (mdy / md) * attract * 2.6;
         }
         var margin = b.baseR;
-        if (b.x < -margin) b.x = w + margin;
-        if (b.x > w + margin) b.x = -margin;
-        if (b.y < -margin) b.y = h + margin;
-        if (b.y > h + margin) b.y = -margin;
+        if (b.x < -margin) b.x = w + margin; if (b.x > w + margin) b.x = -margin;
+        if (b.y < -margin) b.y = h + margin; if (b.y > h + margin) b.y = -margin;
         b.r = b.baseR * (1 + Math.sin(t * b.pulseSpeed + b.phase) * b.pulseAmp);
         var grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
         grad.addColorStop(0, b.color.replace('A', isDark ? '0.6' : '0.55'));
         grad.addColorStop(0.45, b.color.replace('A', isDark ? '0.28' : '0.22'));
         grad.addColorStop(1, b.color.replace('A', '0'));
         ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
       }
       if (mouseActive && mouseSmooth.x > -1000) {
         var cr = 220;
@@ -2336,29 +2394,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         cg.addColorStop(0, isDark ? 'rgba(255,210,150,0.45)' : 'rgba(255,150,120,0.28)');
         cg.addColorStop(0.5, isDark ? 'rgba(255,150,90,0.18)' : 'rgba(255,170,140,0.12)');
         cg.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = cg;
-        ctx.beginPath();
-        ctx.arc(mouseSmooth.x, mouseSmooth.y, cr, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(mouseSmooth.x, mouseSmooth.y, cr, 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalCompositeOperation = 'source-over';
     }
-    function tick(now) {
-      if (!running) return;
-      drawFrame(now);
-      raf = requestAnimationFrame(tick);
-    }
-
+    function tick(now) { if (!running) return; drawFrame(now); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onPointer, { passive: true });
     window.addEventListener('pointerdown', onPointer, { passive: true });
     window.addEventListener('pointerleave', onLeave);
     window.addEventListener('pointercancel', onLeave);
-
-    if (prefersReducedMotion) drawFrame(performance.now());
-    else raf = requestAnimationFrame(tick);
-
+    if (prefersReducedMotion) drawFrame(performance.now()); else raf = requestAnimationFrame(tick);
     return {
       stop: function () {
         running = false;
@@ -2373,7 +2420,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     };
   }
 
-  // ---- Поток ----
   function startFlow() {
     var canvas = bgCanvas;
     var ctx = canvas.getContext('2d');
@@ -2382,39 +2428,28 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var particles = [];
     var raf = null;
     var running = true;
-
     var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     var palette = isDark
       ? [[100,180,255], [200,120,255], [80,220,220], [255,150,200], [180,150,255], [120,220,180]]
       : [[40,100,200], [140,60,180], [0,140,160], [200,60,120], [100,60,180], [30,140,100]];
-
     var mouse = { x: -9999, y: -9999 };
     var mouseSmooth = { x: -9999, y: -9999 };
     var mouseActive = false;
     var t0 = performance.now();
     var NUM = 0;
-    var INTERACT_R = 250;
-    var INTERACT_R2 = INTERACT_R * INTERACT_R;
+    var IR = 250, IR2 = IR * IR;
 
     function resize() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       NUM = Math.min(800, Math.max(400, Math.floor((w * h) / 2200)));
-      initParticles();
-    }
-    function initParticles() {
       particles = [];
       for (var i = 0; i < NUM; i++) {
         var c = palette[Math.floor(Math.random() * palette.length)];
         particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          px: 0, py: 0,
+          x: Math.random() * w, y: Math.random() * h, px: 0, py: 0,
           speed: 0.7 + Math.random() * 1.3,
           color: 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',',
           age: Math.floor(Math.random() * 200),
@@ -2423,66 +2458,47 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       }
     }
     function onPointer(e) {
-      if (e.touches && e.touches.length) {
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
-      } else if (typeof e.clientX === 'number') {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      }
+      if (e.touches && e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+      else if (typeof e.clientX === 'number') { mouse.x = e.clientX; mouse.y = e.clientY; }
       mouseActive = true;
     }
     function onLeave() { mouseActive = false; }
-
     function flowAngle(x, y, t) {
-      return (
-        Math.sin(x * 0.0025 + t * 0.0004) * 1.2 +
-        Math.cos(y * 0.0035 - t * 0.0003) * 1.2 +
-        Math.sin((x + y) * 0.0018 + t * 0.0002) * 0.8
-      );
+      return Math.sin(x * 0.0025 + t * 0.0004) * 1.2 +
+             Math.cos(y * 0.0035 - t * 0.0003) * 1.2 +
+             Math.sin((x + y) * 0.0018 + t * 0.0002) * 0.8;
     }
-
     function drawFrame(now) {
       var t = now - t0;
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = 'rgba(0,0,0,0.055)';
       ctx.fillRect(0, 0, w, h);
       ctx.globalCompositeOperation = 'source-over';
-
       if (mouseActive) {
         if (mouseSmooth.x < -1000) { mouseSmooth.x = mouse.x; mouseSmooth.y = mouse.y; }
         mouseSmooth.x += (mouse.x - mouseSmooth.x) * 0.15;
         mouseSmooth.y += (mouse.y - mouseSmooth.y) * 0.15;
       }
-
-      ctx.lineCap = 'round';
-      ctx.lineWidth = 1.3;
-
+      ctx.lineCap = 'round'; ctx.lineWidth = 1.3;
       for (var i = 0; i < particles.length; i++) {
         var p = particles[i];
         var angle = flowAngle(p.x, p.y, t);
         if (mouseActive && mouseSmooth.x > -1000) {
-          var dx = mouseSmooth.x - p.x;
-          var dy = mouseSmooth.y - p.y;
+          var dx = mouseSmooth.x - p.x, dy = mouseSmooth.y - p.y;
           var d2 = dx * dx + dy * dy;
-          if (d2 < INTERACT_R2 && d2 > 60) {
+          if (d2 < IR2 && d2 > 60) {
             var d = Math.sqrt(d2);
-            var prox = 1 - d / INTERACT_R;
-            var tx = -dy / d;
-            var ty = dx / d;
-            var rx = dx / d;
-            var ry = dy / d;
-            var ax = tx * 0.92 + rx * 0.32;
-            var ay = ty * 0.92 + ry * 0.32;
-            var bx = Math.cos(angle);
-            var by = Math.sin(angle);
+            var prox = 1 - d / IR;
+            var tx = -dy / d, ty = dx / d;
+            var rx = dx / d, ry = dy / d;
+            var ax = tx * 0.92 + rx * 0.32, ay = ty * 0.92 + ry * 0.32;
+            var bx = Math.cos(angle), by = Math.sin(angle);
             var vx = bx * (1 - prox) + ax * prox;
             var vy = by * (1 - prox) + ay * prox;
             angle = Math.atan2(vy, vx);
           }
         }
-        p.px = p.x;
-        p.py = p.y;
+        p.px = p.x; p.py = p.y;
         p.x += Math.cos(angle) * p.speed;
         p.y += Math.sin(angle) * p.speed;
         p.age++;
@@ -2493,39 +2509,23 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
             else if (p.x > w) { p.x = -5; p.y = Math.random() * h; }
             else if (p.y < 0) { p.y = h + 5; p.x = Math.random() * w; }
             else { p.y = -5; p.x = Math.random() * w; }
-          } else {
-            p.x = Math.random() * w;
-            p.y = Math.random() * h;
-          }
-          p.px = p.x;
-          p.py = p.y;
-          p.age = 0;
+          } else { p.x = Math.random() * w; p.y = Math.random() * h; }
+          p.px = p.x; p.py = p.y; p.age = 0;
         }
         var alpha = Math.min(1, p.age / 25) * Math.min(1, (p.life - p.age) / 70);
         if (alpha < 0.05) continue;
         ctx.strokeStyle = p.color + alpha.toFixed(2) + ')';
-        ctx.beginPath();
-        ctx.moveTo(p.px, p.py);
-        ctx.lineTo(p.x, p.y);
-        ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(p.px, p.py); ctx.lineTo(p.x, p.y); ctx.stroke();
       }
     }
-    function tick(now) {
-      if (!running) return;
-      drawFrame(now);
-      raf = requestAnimationFrame(tick);
-    }
-
+    function tick(now) { if (!running) return; drawFrame(now); raf = requestAnimationFrame(tick); }
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', onPointer, { passive: true });
     window.addEventListener('pointerdown', onPointer, { passive: true });
     window.addEventListener('pointerleave', onLeave);
     window.addEventListener('pointercancel', onLeave);
-
-    if (prefersReducedMotion) drawFrame(performance.now());
-    else raf = requestAnimationFrame(tick);
-
+    if (prefersReducedMotion) drawFrame(performance.now()); else raf = requestAnimationFrame(tick);
     return {
       stop: function () {
         running = false;
@@ -2582,23 +2582,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       gameState.totalClicks = Number(rawGame.totalClicks) || 0;
       gameState.upgrades = (rawGame.upgrades && typeof rawGame.upgrades === 'object') ? rawGame.upgrades : {};
       gameState.purchasedThemes = Array.isArray(rawGame.purchasedThemes) && rawGame.purchasedThemes.length > 0
-        ? rawGame.purchasedThemes.slice()
-        : ['default'];
+        ? rawGame.purchasedThemes.slice() : ['default'];
       gameState.activeTheme = typeof rawGame.activeTheme === 'string' ? rawGame.activeTheme : 'default';
       gameState.lastTick = Date.now();
     }
-  } catch (e) { /* дефолт */ }
+  } catch (e) {}
 
   var idRemap = {
-    'forest': 'constellations',
-    'aurora': 'starfield',
-    'waves': 'starfield',
-    'sunset': 'magma',
-    'galaxy': 'flow'
+    'forest': 'constellations', 'aurora': 'starfield', 'waves': 'starfield',
+    'sunset': 'magma', 'galaxy': 'flow'
   };
   if (Array.isArray(gameState.purchasedThemes)) {
-    var seen = {};
-    var migrated = [];
+    var seen = {}, migrated = [];
     for (var mi = 0; mi < gameState.purchasedThemes.length; mi++) {
       var nid = idRemap[gameState.purchasedThemes[mi]] || gameState.purchasedThemes[mi];
       if (!seen[nid]) { seen[nid] = true; migrated.push(nid); }
@@ -2606,19 +2601,15 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     gameState.purchasedThemes = migrated;
   }
   if (idRemap[gameState.activeTheme]) gameState.activeTheme = idRemap[gameState.activeTheme];
-
   if (gameState.purchasedThemes.indexOf('default') === -1) gameState.purchasedThemes.unshift('default');
   if (gameState.purchasedThemes.indexOf(gameState.activeTheme) === -1) gameState.activeTheme = 'default';
 
   function saveGame() {
     try {
       localStorage.setItem(GAME_KEY, JSON.stringify({
-        score: gameState.score,
-        totalClicks: gameState.totalClicks,
-        upgrades: gameState.upgrades,
-        purchasedThemes: gameState.purchasedThemes,
-        activeTheme: gameState.activeTheme,
-        lastSaved: Date.now()
+        score: gameState.score, totalClicks: gameState.totalClicks,
+        upgrades: gameState.upgrades, purchasedThemes: gameState.purchasedThemes,
+        activeTheme: gameState.activeTheme, lastSaved: Date.now()
       }));
     } catch (e) {}
   }
@@ -2629,27 +2620,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       if (THEMES[i].id === themeId) { theme = THEMES[i]; break; }
     }
     if (!theme) theme = THEMES[0];
-
-    if (activeBgEngine) {
-      try { activeBgEngine.stop(); } catch (e) {}
-      activeBgEngine = null;
-    }
-
-    if (theme.id === 'default') {
-      document.documentElement.removeAttribute('data-bgtheme');
-    } else {
-      document.documentElement.setAttribute('data-bgtheme', theme.id);
-    }
-
-    if (theme.engine === 'constellations') {
-      activeBgEngine = startConstellations();
-    } else if (theme.engine === 'starfield') {
-      activeBgEngine = startStarfield();
-    } else if (theme.engine === 'magma') {
-      activeBgEngine = startMagma();
-    } else if (theme.engine === 'flow') {
-      activeBgEngine = startFlow();
-    }
+    if (activeBgEngine) { try { activeBgEngine.stop(); } catch (e) {} activeBgEngine = null; }
+    if (theme.id === 'default') document.documentElement.removeAttribute('data-bgtheme');
+    else document.documentElement.setAttribute('data-bgtheme', theme.id);
+    if (theme.engine === 'constellations') activeBgEngine = startConstellations();
+    else if (theme.engine === 'starfield') activeBgEngine = startStarfield();
+    else if (theme.engine === 'magma') activeBgEngine = startMagma();
+    else if (theme.engine === 'flow') activeBgEngine = startFlow();
   }
 
   onThemeChange = function () {
@@ -2657,9 +2634,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     for (var i = 0; i < THEMES.length; i++) {
       if (THEMES[i].id === gameState.activeTheme) { cur = THEMES[i]; break; }
     }
-    if (cur && cur.engine !== 'blobs') {
-      applyBgTheme(gameState.activeTheme);
-    }
+    if (cur && cur.engine !== 'blobs') applyBgTheme(gameState.activeTheme);
   };
 
   function getUpgradeLevel(id) { return Math.max(0, Math.floor(Number(gameState.upgrades[id]) || 0)); }
@@ -2668,10 +2643,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return Math.floor(up.costBase * Math.pow(1.85, lvl));
   }
   function recalcGameStats() {
-    var baseClick = 1;
-    var baseAuto = 0;
-    var clickMult = 1;
-    var autoMult = 1;
+    var baseClick = 1, baseAuto = 0, clickMult = 1, autoMult = 1;
     UPGRADES.forEach(function (up) {
       var lvl = getUpgradeLevel(up.id);
       if (!lvl) return;
@@ -2714,16 +2686,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       var owned = gameState.purchasedThemes.indexOf(id) !== -1;
       var active = gameState.activeTheme === id;
       btn.classList.toggle('active', active);
-      if (active) {
-        statusEl.textContent = '✓ Активна';
-        btn.disabled = true;
-      } else if (owned) {
-        statusEl.textContent = 'Применить';
-        btn.disabled = false;
-      } else {
-        statusEl.textContent = '🔒 ' + formatNum(theme.price);
-        btn.disabled = gameState.score < theme.price;
-      }
+      if (active) { statusEl.textContent = '✓ Активна'; btn.disabled = true; }
+      else if (owned) { statusEl.textContent = 'Применить'; btn.disabled = false; }
+      else { statusEl.textContent = '🔒 ' + formatNum(theme.price); btn.disabled = gameState.score < theme.price; }
     });
   }
 
@@ -2774,7 +2739,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function onThemeClick(theme) {
     if (gameState.activeTheme === theme.id) return;
     var owned = gameState.purchasedThemes.indexOf(theme.id) !== -1;
-
     if (!owned) {
       if (gameState.score < theme.price) { showToast('Недостаточно очков'); return; }
       var ok = true;
@@ -2784,7 +2748,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       gameState.score -= theme.price;
       gameState.purchasedThemes.push(theme.id);
     }
-
     gameState.activeTheme = theme.id;
     applyBgTheme(theme.id);
     saveGame();
@@ -2875,7 +2838,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   });
   gameClose.addEventListener('click', function () { closeModal(gameModal); });
 
-  /* ======================= BLOBS (живой фон) ======================= */
+  /* ======================= BLOBS ======================= */
   var blobs = Array.prototype.slice.call(document.querySelectorAll('.blob'));
   var blobConfigs = [
     { speed: 0.16, phase: 0.0, ampX: 40, ampY: 30, parallax: 60 },
@@ -2918,19 +2881,18 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 
   /* ======================= ИНИЦИАЛИЗАЦИЯ ======================= */
   applyBgTheme(gameState.activeTheme);
-
   updateCategorySelect();
   autoGrow();
   updateAddState();
-  render();
   renderNotes();
-  renderUpgrades();
-  renderThemes();
-  updateGameUI();
 
-  if (cursorGlow) {
-    cursorGlow.style.transform = 'translate(' + glowSmooth.x + 'px, ' + glowSmooth.y + 'px)';
-  }
+  // Initial render after layout is ready
+  requestAnimationFrame(function () {
+    render();
+    if (cursorGlow) {
+      cursorGlow.style.transform = 'translate(' + glowSmooth.x + 'px, ' + glowSmooth.y + 'px)';
+    }
+  });
 })();
 </script>
 </body>
