@@ -66,13 +66,10 @@ body.intro-open,body.modal-open{overflow:hidden}
 .blob-2{width:470px;height:470px;background:var(--blob2);bottom:-180px;right:-150px}
 .blob-3{width:440px;height:440px;background:var(--blob3);top:32%;left:48%}
 .blob-4{width:380px;height:380px;background:var(--blob4);top:60%;left:-8%}
-
 .cursor-glow{
-  position:fixed;top:0;left:0;
-  width:440px;height:440px;margin-left:-220px;margin-top:-220px;
+  position:fixed;top:0;left:0;width:440px;height:440px;margin-left:-220px;margin-top:-220px;
   background:radial-gradient(circle,var(--cursor-glow) 0%,transparent 62%);
-  pointer-events:none;z-index:-1;will-change:transform;
-  transition:background .5s ease;
+  pointer-events:none;z-index:-1;will-change:transform;transition:background .5s ease;
 }
 @media (hover:none){.cursor-glow{display:none}}
 .bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;display:none;pointer-events:none}
@@ -90,8 +87,7 @@ html[data-bgtheme="magma"] .cursor-glow,
 html[data-bgtheme="flow"] .cursor-glow{display:none}
 
 .intro{
-  position:fixed;inset:0;z-index:9999;
-  display:grid;place-items:center;
+  position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
   background:
     radial-gradient(circle at 22% 18%, var(--blob1), transparent 55%),
     radial-gradient(circle at 82% 82%, var(--blob2), transparent 55%),
@@ -113,7 +109,8 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 @keyframes introTextIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
 .topbar{
-  position:sticky;top:0;z-index:20;
+  flex:0 0 auto;
+  position:sticky;top:0;z-index:60;
   display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px 20px;
   background:linear-gradient(to bottom, var(--bg) 20%, transparent);
@@ -131,10 +128,8 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 
 .theme-toggle{
   flex:0 0 auto;width:42px;height:42px;border-radius:50%;
-  display:grid;place-items:center;
-  border:1px solid var(--card-border);
-  background:var(--card);color:var(--text);
-  cursor:pointer;
+  display:grid;place-items:center;border:1px solid var(--card-border);
+  background:var(--card);color:var(--text);cursor:pointer;
   backdrop-filter:blur(24px) saturate(180%);
   -webkit-backdrop-filter:blur(24px) saturate(180%);
   box-shadow:var(--shadow);
@@ -146,14 +141,18 @@ html[data-bgtheme="flow"] .cursor-glow{display:none}
 [data-theme="light"] .icon-moon{display:none}
 [data-theme="dark"]  .icon-sun{display:none}
 
+/* main — только композер */
 main{
-  flex:1 0 auto;width:100%;max-width:640px;
-  margin:0 auto;padding:6px 20px 100px;
-  display:flex;flex-direction:column;gap:18px;
+  flex:0 0 auto;
+  width:100%;max-width:640px;
+  margin:0 auto;
+  padding:6px 20px 12px;
+  display:block;
 }
 
 .composer{
-  flex:0 0 auto;
+  position:relative;
+  z-index:100;
   display:flex;flex-direction:column;
   padding:14px;border-radius:26px;
   background:var(--card);
@@ -162,7 +161,6 @@ main{
   -webkit-backdrop-filter:blur(30px) saturate(180%);
   box-shadow:var(--shadow);
   transition:background .25s ease, border-color .25s ease, box-shadow .25s ease, padding .22s ease;
-  position:relative;z-index:100;
 }
 .composer-head{
   display:flex;align-items:center;justify-content:space-between;
@@ -236,18 +234,19 @@ select.field option{background:var(--bg);color:var(--text)}
 .cat-add svg{transition:transform .3s ease}
 .cat-add.open svg{transform:rotate(45deg)}
 
-/* WORKSPACE */
+/* LAYER для категорий — на весь viewport */
 .workspace{
-  position:relative;
-  flex:1 0 auto;
-  min-height:400px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding:0;
+  position:fixed;
+  inset:0;
+  z-index:15;
+  pointer-events:none;
+  overflow:hidden;
 }
+
 .workspace-empty{
-  position:absolute;left:50%;top:40px;
-  transform:translateX(-50%);
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
   width:calc(100% - 40px);max-width:400px;
   padding:40px 22px;text-align:center;
   font-size:14px;font-weight:500;line-height:1.5;
@@ -256,7 +255,7 @@ select.field option{background:var(--bg);color:var(--text)}
   pointer-events:none;
 }
 
-/* SECTION */
+/* СЕКЦИЯ — плавает по всему экрану */
 .section{
   position:absolute;
   width:380px;
@@ -266,17 +265,20 @@ select.field option{background:var(--bg);color:var(--text)}
   background:var(--field);
   border:1px solid var(--card-border);
   box-shadow:var(--shadow);
-  transition:box-shadow .2s ease, transform .2s ease, background .2s ease;
+  transition:box-shadow .2s ease, background .2s ease;
   animation:sectionIn .3s cubic-bezier(.2,.9,.3,1.15);
+  pointer-events:auto;
   will-change:left, top;
+  touch-action:none;
 }
 @keyframes sectionIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 .section.dragging{
   transition:none;
   box-shadow:0 20px 50px rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.12);
   background:var(--card);
-  transform:scale(1.01);
+  z-index:50 !important;
 }
+
 .section-head{display:flex;align-items:center;gap:4px;user-select:none;-webkit-user-select:none}
 .section-toggle-area{
   flex:1 1 auto;min-width:0;
@@ -362,17 +364,13 @@ select.field option{background:var(--bg);color:var(--text)}
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .item.copied{animation:pulse .42s ease}
-@keyframes pulse{
-  0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}
-  100%{box-shadow:0 0 0 14px rgba(48,209,88,0)}
-}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(48,209,88,.55)}100%{box-shadow:0 0 0 14px rgba(48,209,88,0)}}
 .item-pin,.item-del{
   flex:0 0 calc(32px * var(--item-scale));
   width:calc(32px * var(--item-scale));
   height:calc(32px * var(--item-scale));
   border:none;border-radius:50%;
-  display:grid;place-items:center;
-  background:transparent;color:var(--text-3);
+  display:grid;place-items:center;background:transparent;color:var(--text-3);
   cursor:pointer;
   transition:background .2s ease, color .2s ease, transform .15s ease;
 }
@@ -394,8 +392,7 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
   box-shadow:0 18px 50px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.08);
   backdrop-filter:blur(24px) saturate(180%);
   -webkit-backdrop-filter:blur(24px) saturate(180%);
-  pointer-events:auto;display:flex;flex-direction:column;
-  user-select:none;
+  pointer-events:auto;display:flex;flex-direction:column;user-select:none;
   animation:noteIn .28s cubic-bezier(.2,.9,.3,1.15);
 }
 @keyframes noteIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
@@ -518,7 +515,6 @@ body.modal-open .notes-layer{opacity:0;pointer-events:none}
 .info-content h4:first-child{margin-top:0}
 .info-content p{margin:0;font-size:13.5px;line-height:1.55;color:var(--text-2);font-weight:500}
 
-/* SETTINGS */
 .settings-section{margin-bottom:18px}
 .settings-section:last-of-type{margin-bottom:0}
 .settings-label{
@@ -670,7 +666,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
 }
 
 @media (max-width:640px){
-  main{padding:6px 16px 200px}
+  main{padding:6px 16px 12px}
   .fab-stack{right:14px;bottom:calc(84px + env(safe-area-inset-bottom));gap:8px}
   .fab{padding:10px 14px;font-size:13px;gap:6px}
   footer{font-size:10.5px;padding:6px 12px calc(8px + env(safe-area-inset-bottom));max-width:230px}
@@ -771,7 +767,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       </button>
     </div>
     <div class="composer-body">
-      <textarea id="textInput" class="field" rows="1" placeholder="Текст, который будет копироваться…" aria-label="Текст для копирования"></textarea>
+      <textarea id="textInput" class="field" rows="1" placeholder="Текст, который будет копироваться…"></textarea>
       <div class="row">
         <input id="nameInput" class="field" type="text" placeholder="Название кнопки" autocomplete="off" spellcheck="false">
         <button id="addBtn" class="confirm" type="button" aria-label="Добавить кнопку" disabled>
@@ -803,8 +799,9 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       </div>
     </div>
   </section>
-  <div class="workspace" id="workspace"></div>
 </main>
+
+<div class="workspace" id="workspace"></div>
 
 <footer>
   <span>Идея взята из разработки Ивана Першина</span>
@@ -822,17 +819,16 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </button>
 </div>
 
-<!-- INFO -->
 <div class="modal-backdrop" id="infoModal">
   <div class="modal">
     <h3>Как это работает</h3>
     <div class="info-content">
       <h4>Что такое Копирка 2.0</h4>
       <p>Личный инструмент для быстрого копирования текстов, хранения заметок и мини-игры. Все данные хранятся только в вашем браузере.</p>
-      <h4>Категории</h4>
-      <p>Каждая категория — карточка, которую можно перетащить за заголовок. Клик по заголовку сворачивает/разворачивает её. Позиции сохраняются.</p>
+      <h4>Категории — плавают по экрану</h4>
+      <p>Каждую категорию можно перетащить за заголовок в любое место экрана. Клик по заголовку сворачивает/разворачивает её. Позиции сохраняются между визитами.</p>
       <h4>Сброс позиций</h4>
-      <p>В настройках (⚙️) — кнопка «Сбросить позиции категорий». Возвращает все карточки в исходный вертикальный столбик по центру.</p>
+      <p>В настройках (⚙️) — кнопка «Сбросить позиции категорий». Возвращает все карточки в исходный вертикальный столбик по центру, под формой создания.</p>
       <h4>Размер кнопок</h4>
       <p>Там же ползунок 70%–140%. Меняет размер шрифта и отступов у кнопок-элементов.</p>
       <h4>Копирование</h4>
@@ -850,7 +846,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </div>
 </div>
 
-<!-- SETTINGS -->
 <div class="modal-backdrop" id="settingsModal">
   <div class="modal">
     <h3>Настройки</h3>
@@ -871,7 +866,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   </div>
 </div>
 
-<!-- GAME -->
 <div class="modal-backdrop" id="gameModal">
   <div class="modal game-modal">
     <div class="game-head">
@@ -924,7 +918,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var GAME_KEY  = 'kopirka2.game';
   var THEME_KEY = 'kopirka2.theme';
   var COMPOSER_KEY = 'kopirka2.composerCollapsed';
-  var LAYOUT_KEY = 'kopirka2.layout.v3'; // НОВЫЙ КЛЮЧ — старые координаты не цепляются
+  var LAYOUT_KEY = 'kopirka2.layout.v4'; // новый ключ
   var SCALE_KEY = 'kopirka2.scale';
 
   var workspace     = document.getElementById('workspace');
@@ -979,9 +973,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     n = Math.floor(n);
     if (!isFinite(n)) return '∞';
     if (n < 1000) return String(n);
-    var units = [
-      {v:1e3,s:'K'},{v:1e6,s:'M'},{v:1e9,s:'B'},{v:1e12,s:'T'},{v:1e15,s:'Qa'},{v:1e18,s:'Qi'}
-    ];
+    var units = [{v:1e3,s:'K'},{v:1e6,s:'M'},{v:1e9,s:'B'},{v:1e12,s:'T'},{v:1e15,s:'Qa'},{v:1e18,s:'Qi'}];
     for (var i = units.length - 1; i >= 0; i--) {
       if (n >= units[i].v) { var x = n/units[i].v; return (x < 10 ? x.toFixed(1) : Math.floor(x)) + units[i].s; }
     }
@@ -999,8 +991,8 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   applyScale(currentScale, false);
   if (scaleSlider) {
-    scaleSlider.addEventListener('input', function() { applyScale(parseInt(this.value, 10)/100, false); });
-    scaleSlider.addEventListener('change', function() { applyScale(parseInt(this.value, 10)/100, true); });
+    scaleSlider.addEventListener('input', function() { applyScale(parseInt(this.value,10)/100, false); });
+    scaleSlider.addEventListener('change', function() { applyScale(parseInt(this.value,10)/100, true); });
   }
 
   /* ДАННЫЕ */
@@ -1015,13 +1007,10 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       });
     }
   } catch(e) { items = []; }
-
   try {
     var rawCats = JSON.parse(localStorage.getItem(CATS_KEY));
     if (Array.isArray(rawCats)) {
-      categories = rawCats.map(function(c) {
-        return { id: c.id || genId(), name: c.name || 'Без названия' };
-      });
+      categories = rawCats.map(function(c) { return { id: c.id || genId(), name: c.name || 'Без названия' }; });
     }
   } catch(e) { categories = []; }
 
@@ -1040,15 +1029,11 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     var rawLayout = JSON.parse(localStorage.getItem(LAYOUT_KEY));
     if (rawLayout && typeof rawLayout === 'object' && !Array.isArray(rawLayout)) {
       layout = rawLayout;
-      Object.keys(layout).forEach(function(k) {
-        if (layout[k] && layout[k].z > topZ) topZ = layout[k].z;
-      });
+      Object.keys(layout).forEach(function(k){ if (layout[k] && layout[k].z > topZ) topZ = layout[k].z; });
     }
   } catch(e) { layout = {}; }
 
-  function saveLayout() {
-    try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch(e) {}
-  }
+  function saveLayout() { try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout)); } catch(e) {} }
 
   var notes = [], editingNoteId = null;
   try {
@@ -1095,6 +1080,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     introEl.classList.add('hidden');
     document.body.classList.remove('intro-open');
     setTimeout(function() { introEl.style.display = 'none'; }, 600);
+    setTimeout(reclampAllSections, 400);
   }
   introEl.addEventListener('click', closeIntro);
 
@@ -1117,7 +1103,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   }
   function updateAddState() { addBtn.disabled = textEl.value.trim().length === 0; }
   textEl.addEventListener('input', function(){ autoGrow(); updateAddState(); });
-
   function shake(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
 
   /* КОМПОЗЕР */
@@ -1192,17 +1177,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   function getSections() {
     var sections = [];
     var pinned = items.filter(function(i){ return i.pinned; });
-    if (pinned.length > 0) {
-      sections.push({ key: '__pinned', name: 'Закреплённые', items: pinned, isSpecial: true });
-    }
+    if (pinned.length > 0) sections.push({ key: '__pinned', name: 'Закреплённые', items: pinned, isSpecial: true });
     categories.forEach(function(cat) {
       var catItems = items.filter(function(i){ return !i.pinned && i.categoryId === cat.id; });
       sections.push({ key: cat.id, name: cat.name, items: catItems, category: cat });
     });
     var uncat = items.filter(function(i){ return !i.pinned && !i.categoryId; });
-    if (uncat.length > 0) {
-      sections.push({ key: '__uncat', name: 'Без категории', items: uncat, isSpecial: true });
-    }
+    if (uncat.length > 0) sections.push({ key: '__uncat', name: 'Без категории', items: uncat, isSpecial: true });
     return sections;
   }
 
@@ -1218,6 +1199,51 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     layout[key].collapsed = !layout[key].collapsed;
     el.classList.toggle('collapsed', layout[key].collapsed);
     saveLayout();
+  }
+
+  /* КЛАМП */
+  function getBounds() {
+    var topbarH = 70;
+    var tb = document.querySelector('.topbar');
+    if (tb) {
+      var r = tb.getBoundingClientRect();
+      topbarH = Math.max(0, r.bottom);
+    }
+    return {
+      vw: window.innerWidth,
+      vh: window.innerHeight,
+      minX: 8,
+      maxX: window.innerWidth - 8,
+      minY: topbarH + 8,
+      maxY: window.innerHeight - 8
+    };
+  }
+
+  function clampPos(x, y, elW, elH) {
+    var b = getBounds();
+    var nx = Math.max(b.minX, Math.min(x, b.maxX - elW));
+    var ny = Math.max(b.minY, Math.min(y, b.maxY - elH));
+    return { x: Math.round(nx), y: Math.round(ny) };
+  }
+
+  function reclampAllSections() {
+    var changed = false;
+    Object.keys(layout).forEach(function(key) {
+      var el = workspace.querySelector('.section[data-key="' + key + '"]');
+      if (!el) return;
+      var st = layout[key];
+      if (!st || typeof st.x !== 'number' || typeof st.y !== 'number') return;
+      var elW = el.offsetWidth || 320;
+      var elH = el.offsetHeight || 100;
+      var p = clampPos(st.x, st.y, elW, elH);
+      if (p.x !== st.x || p.y !== st.y) {
+        st.x = p.x; st.y = p.y;
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+        changed = true;
+      }
+    });
+    if (changed) saveLayout();
   }
 
   /* РЕНДЕР */
@@ -1314,14 +1340,13 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
           el.dataset.dragging = '1';
         }
         if (!moved) return;
-        var wsW = workspace.clientWidth;
         var elW = el.offsetWidth;
-        var nx = Math.max(0, Math.min(startLeft + dx, wsW - elW));
-        var ny = Math.max(0, startTop + dy);
-        el.style.left = nx + 'px';
-        el.style.top = ny + 'px';
-        state.x = nx;
-        state.y = ny;
+        var elH = el.offsetHeight;
+        var p = clampPos(startLeft + dx, startTop + dy, elW, elH);
+        el.style.left = p.x + 'px';
+        el.style.top = p.y + 'px';
+        state.x = p.x;
+        state.y = p.y;
       }
       function onUp(ev) {
         if (ev.pointerId !== pointerId) return;
@@ -1395,21 +1420,29 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     return el;
   }
 
-  /* Раскладка столбиком по центру — как в исходной версии */
-  function computeDefaultLayout() {
-    var wsW = workspace.clientWidth || Math.min(400, window.innerWidth - 40);
-    var y = 8;
-    var sections = getSections();
-    sections.forEach(function(sec) {
-      var el = workspace.querySelector('.section[data-key="' + sec.key + '"]');
-      if (!el) return;
+  /* Раскладка столбиком по центру — под composer */
+  function computeDefaultLayout(pairs) {
+    var composerRect = composerEl.getBoundingClientRect();
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var startY = Math.max(composerRect.bottom + 12, 80);
+    if (startY > vh - 100) startY = Math.max(80, composerRect.bottom + 4);
+
+    var y = startY;
+    pairs.forEach(function(pair) {
+      var el = pair.el;
       var elW = el.offsetWidth || 320;
-      var x = Math.max(8, Math.round((wsW - elW) / 2));
-      if (!layout[sec.key]) layout[sec.key] = {};
-      layout[sec.key].x = x;
-      layout[sec.key].y = y;
-      if (!layout[sec.key].z) layout[sec.key].z = ++topZ;
-      y += el.offsetHeight + 8;
+      var elH = el.offsetHeight || 100;
+      var x = Math.max(8, Math.round((vw - elW) / 2));
+      var ny = Math.min(y, vh - elH - 8);
+      if (!layout[pair.sec.key]) layout[pair.sec.key] = {};
+      layout[pair.sec.key].x = x;
+      layout[pair.sec.key].y = Math.round(ny);
+      if (!layout[pair.sec.key].z) layout[pair.sec.key].z = ++topZ;
+      el.style.left = x + 'px';
+      el.style.top = Math.round(ny) + 'px';
+      el.style.zIndex = layout[pair.sec.key].z;
+      y += elH + 8;
     });
     saveLayout();
   }
@@ -1425,14 +1458,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       return;
     }
 
-    // 1) Проверяем, что для всех секций есть валидные числовые координаты
-    var needsDefaults = false;
-    sections.forEach(function(sec) {
-      var s = layout[sec.key];
-      if (!s || typeof s.x !== 'number' || typeof s.y !== 'number') needsDefaults = true;
-    });
-
-    // 2) Создаём и вставляем DOM
     var pairs = [];
     sections.forEach(function(sec) {
       var el = createSectionEl(sec);
@@ -1440,22 +1465,31 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       pairs.push({ sec: sec, el: el });
     });
 
-    // 3) Если хоть одна секция без координат — выстроить ВСЕ в столбик
-    if (needsDefaults) {
-      computeDefaultLayout();
-    }
-
-    // 4) Применить позиции
-    pairs.forEach(function(pair) {
-      var st = layout[pair.sec.key];
-      if (!st) return;
-      pair.el.style.left = (st.x || 0) + 'px';
-      pair.el.style.top = (st.y || 0) + 'px';
-      pair.el.style.zIndex = st.z || 1;
+    var b = getBounds();
+    var needsDefaults = false;
+    sections.forEach(function(sec) {
+      var st = layout[sec.key];
+      if (!st || typeof st.x !== 'number' || typeof st.y !== 'number') { needsDefaults = true; return; }
+      if (st.x < 0 || st.x > b.vw || st.y < 0 || st.y > b.vh) { needsDefaults = true; }
     });
+
+    if (needsDefaults) {
+      computeDefaultLayout(pairs);
+    } else {
+      pairs.forEach(function(pair) {
+        var st = layout[pair.sec.key];
+        var elW = pair.el.offsetWidth || 320;
+        var elH = pair.el.offsetHeight || 100;
+        var p = clampPos(st.x, st.y, elW, elH);
+        if (p.x !== st.x || p.y !== st.y) { st.x = p.x; st.y = p.y; saveLayout(); }
+        pair.el.style.left = p.x + 'px';
+        pair.el.style.top = p.y + 'px';
+        pair.el.style.zIndex = st.z || 1;
+      });
+    }
   }
 
-  /* ДОБАВИТЬ КНОПКУ */
+  /* ДОБАВИТЬ */
   function addItem() {
     var text = textEl.value.trim();
     if (!text) { shake(textEl); textEl.focus(); return; }
@@ -1523,7 +1557,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     showToast('Категория удалена');
   }
 
-  /* СБРОС ПОЗИЦИЙ */
+  /* СБРОС */
   resetLayoutBtn.addEventListener('click', function() {
     var sections = getSections();
     if (sections.length === 0) { showToast('Нечего упорядочивать'); return; }
@@ -1691,14 +1725,12 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     saveNotes();
     showToast('Заметка сохранена');
   }
-
   function cancelEdit(note, el) {
     if (!note.text) { removeNoteById(note.id, el); return; }
     editingNoteId = null;
     el.classList.remove('editing');
     renderNoteButtons(note, el);
   }
-
   function renderNoteButtons(note, el) {
     var actionsEl = el.querySelector('.note-actions');
     actionsEl.innerHTML = '';
@@ -1710,7 +1742,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
     delBtn.addEventListener('click', function(){ deleteNote(note, el); });
     actionsEl.appendChild(editBtn); actionsEl.appendChild(delBtn);
   }
-
   function deleteNote(note, el) {
     var ok = true;
     try { ok = window.confirm('Удалить эту заметку?'); } catch(e) { ok = true; }
@@ -1755,7 +1786,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
   var resizeTimer = null;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function(){
+    resizeTimer = setTimeout(function() {
       var vp = getViewportSize();
       notesLayer.querySelectorAll('.note-window').forEach(function(el) {
         var note = notes.find(function(n){ return n.id === el.dataset.id; });
@@ -1765,21 +1796,7 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
         el.style.left = p.x + 'px'; el.style.top = p.y + 'px';
       });
       saveNotes();
-
-      var wsW = workspace.clientWidth;
-      var changed = false;
-      Object.keys(layout).forEach(function(key){
-        var state = layout[key];
-        var el = workspace.querySelector('.section[data-key="' + key + '"]');
-        if (!el || typeof state.x !== 'number') return;
-        var elW = el.offsetWidth;
-        if (state.x > wsW - elW) {
-          state.x = Math.max(0, wsW - elW);
-          el.style.left = state.x + 'px';
-          changed = true;
-        }
-      });
-      if (changed) saveLayout();
+      reclampAllSections();
     }, 120);
   });
 
@@ -1799,7 +1816,6 @@ footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:
       else if (infoModal.classList.contains('open')) closeModal(infoModal);
     }
   });
-
   infoFab.addEventListener('click', function(){ openModal(infoModal); setTimeout(function(){ infoClose.focus(); }, 120); });
   infoClose.addEventListener('click', function(){ closeModal(infoModal); });
   settingsBtn.addEventListener('click', function(){ openModal(settingsModal); });
